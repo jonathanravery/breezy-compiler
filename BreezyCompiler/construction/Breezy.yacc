@@ -20,22 +20,17 @@ import java.io.*;
 
 %%
 
-start	: program	{
-			System.out.println("//import Brezzy_Classes_Here.*;");
-
-			System.out.println("public class BreezyProgram {\n");
-			System.out.println($1.sval);
-			System.out.println("}");
-			ba.DumpFile($1.sval);
-			}
+start	: 	NEWLINE program	{ba.DumpFile($2.sval);}
+	|	program		{ba.DumpFile($1.sval);}
 
 
-program	:		method 		{$$.sval= $1.sval;}
+program		:	method 		{$$.sval= $1.sval;}
 		|	program method	{$$.sval = $1.sval + $2.sval;}
 		;
 
 
-method	: 	COMMENT NEWLINE
+method	: 	method NEWLINE		{$$.sval = $1.sval;}
+	|	COMMENT NEWLINE
     		FUNCTION IDENTIFIER NEWLINE
     		RETURNS type NEWLINE
     		ACCEPTS params NEWLINE
