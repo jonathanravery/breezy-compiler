@@ -26,10 +26,10 @@ public class BreezyAssist {
         try {
             FileWriter fw = new FileWriter(fileName + ".java");
 
-            fw.write("//import Brezzy_Classes_Here.*;\n");
+            fw.write("import libs.*;\n");
             fw.write("public class " + fileName + "{\n");
             fw.write(s);
-            System.out.println("}");
+            fw.write("\n}");
             fw.close();
         } catch (IOException ex) {
             Logger.getLogger(BreezyAssist.class.getName()).log(Level.SEVERE, null, ex);
