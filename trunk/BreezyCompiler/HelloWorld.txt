@@ -1,0 +1,7 @@
+/*Main Function*/
+function main
+returns nothing
+accepts nothing
+begin
+	WriteLineToScreen("HelloWorld");
+end
