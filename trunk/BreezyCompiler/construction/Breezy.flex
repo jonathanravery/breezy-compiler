@@ -47,14 +47,13 @@ EndOfLineComment = "//" {InputCharacter}* {LineTerminator}
 
 %%
 
-{LineTerminator}		{pl("NEWLINE"); ln++; yyparser.yylval = new ParserVal(""); return yyparser.NEWLINE;}
 {Comment}			{p("COMMENT");	return yyparser.COMMENT;}
-accepts				{p("ACCEPTS");	return yyparser.ACCEPTS;}
-begin				{p("BEGIN");	return yyparser.BEGIN;}
+{LineTerminator}accepts		{p("ACCEPTS");	return yyparser.ACCEPTS;}
+begin{LineTerminator}		{pl("BEGIN");	return yyparser.BEGIN;}
 boolean				{p("BOOLEAN");	return yyparser.BOOLEAN;}
 each				{p("EACH");	return yyparser.EACH;}
 else				{p("ELSE");	return yyparser.ELSE;}
-end				{p("END");	return yyparser.END;}
+end				{pl("END");	return yyparser.END;}
 false				{p("FALSE");	return yyparser.FALSE;}
 for				{p("FOR");	return yyparser.FOR;}
 function			{p("FUNCTION");	return yyparser.FUNCTION;}
@@ -62,7 +61,7 @@ if				{p("IF");	return yyparser.IF;}
 nothing				{p("NOTHING");	return yyparser.NOTHING;}
 number				{p("NUMBER");	return yyparser.NUMBER;}
 return				{p("RETURN");	return yyparser.RETURN;}
-returns				{p("RETURNS");	return yyparser.RETURNS;}
+{LineTerminator}returns		{p("RETURNS");	return yyparser.RETURNS;}
 string				{p("STRING");	return yyparser.STRING;}
 true				{p("TRUE");	return yyparser.TRUE;}
 while				{p("WHILE");	return yyparser.WHILE;}
@@ -83,11 +82,12 @@ while				{p("WHILE");	return yyparser.WHILE;}
 "("					{p("LPAREN");	return yyparser.LPAREN;}
 ")"					{p("RPAREN");	return yyparser.RPAREN;}
 ":"					{p("COLON");	return yyparser.COLON;}
-";"					{p("SEMICOLON");	return yyparser.SEMICOLON;}
+";"{LineTerminator}			{pl("SEMICOLON");	return yyparser.SEMICOLON;}
 ","					{p("COMMA");	return yyparser.COMMA;}
 \.					{p("DOT");	return yyparser.DOT;}
 [a-zA-Z][a-zA-Z0-9]*			{p(yytext());	yyparser.yylval = new ParserVal(yytext()); return yyparser.IDENTIFIER;}
 \"([^\"]|\\\")*\"			{p(yytext());	yyparser.yylval = new ParserVal(yytext()); return yyparser.QUOTE;}
 -?{digit}*(\.{digit}+)?			{p("NUMERIC");	yyparser.yylval = new ParserVal(yytext()); return yyparser.NUMERIC;}
+{LineTerminator}			{pl("");}
 {WhiteSpace}				{}
 .					{p("WHO KNOWS");	return 0;}

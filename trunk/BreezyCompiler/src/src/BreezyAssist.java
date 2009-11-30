@@ -26,8 +26,9 @@ public class BreezyAssist {
         try {
             FileWriter fw = new FileWriter(fileName + ".java");
 
-            fw.write("import libs.*;\n");
-            fw.write("public class " + fileName + "{\n");
+            //TODO: REMOVE
+            fw.write("import src.BreezyDefault;\n\n");
+            fw.write("public class " + fileName + " extends BreezyDefault{\n");
             fw.write(s);
             fw.write("\n}");
             fw.close();
