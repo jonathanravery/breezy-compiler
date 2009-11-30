@@ -1,8 +1,37 @@
 
 /*Main Function*/
-function main
-returns nothing
+function main2
+returns nothing 
 accepts nothing
 begin 
-	WriteToScreen("HelloWorld");
+	string helloWorld;
+	helloWorld = "HelloWorld";
+	printHelloWorld(helloWorld, test, x);
+end
+
+
+
+//New Function
+function printHelloWorld
+returns string
+accepts string s, number x
+begin
+	WriteToScreen(s);
+	return x;
+end
+	
+
+
+
+/*Main Function*/
+function main
+returns number
+accepts nothing
+begin 
+	WriteToScreen("Hello World");
+	if(true)
+	begin
+		number x;
+		x = 5;
+	end if
 end

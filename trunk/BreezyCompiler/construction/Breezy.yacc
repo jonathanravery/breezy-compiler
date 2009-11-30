@@ -30,7 +30,7 @@ program		:	method 		{$$.sval= $1.sval;}
 method	: 	COMMENT
     		FUNCTION IDENTIFIER
     		RETURNS type
-    		ACCEPTS params
+    		ACCEPTS aparams
     		BEGIN
 		body
 		END 	{ $$.sval = "public static " + $5.sval + " " + 
@@ -38,12 +38,46 @@ method	: 	COMMENT
 	;
 
 
-body	:	function_declaration		{$$.sval = $1.sval;}
+body	:	statement	{$$.sval = $1.sval;}
+	|	body statement	{$$.sval = $1.sval + $2.sval;}
 	;
 
 
+statement	:	function_declaration		{$$.sval = $1.sval;}
+		|	type_declaration		{$$.sval = $1.sval;}
+		|	type_initialization		{$$.sval = $1.sval;}
+		|	return_statement		{$$.sval = $1.sval;}
+		|	if_statement			{$$.sval = $1.sval;}
+		;
+
+if_statement	:	IF LPAREN condition RPAREN
+			BEGIN
+			body
+			END IF	{ $$.sval = "if(" + $3.sval + "){\n" + $6.sval + "}\n";}
+		;
+
+return_statement	:	RETURN IDENTIFIER SEMICOLON	{$$.sval = "return " + $2.sval + ";\n";}
+			|	RETURN function_declaration	{$$.sval = "return " + $2.sval + "\n";}
+			;
+
+type_initialization	:	IDENTIFIER EQUALS QUOTE SEMICOLON	{$$.sval = $1.sval + " = " + $3.sval + ";\n";}
+			|	IDENTIFIER EQUALS NUMERIC SEMICOLON	{$$.sval = $1.sval + " = " + $3.sval + ";\n";}
+			|	IDENTIFIER EQUALS IDENTIFIER SEMICOLON	{$$.sval = $1.sval + " = " + $3.sval + ";\n";}
+			;
+
+type_declaration	:	type IDENTIFIER SEMICOLON	{$$.sval = $1.sval + " " + $2.sval + ";\n";}
+			;
+
 function_declaration	:	IDENTIFIER LPAREN params RPAREN SEMICOLON {$$.sval = $1.sval + "(" + $3.sval + ");\n";}
 			;
+
+condition	:	
+
+
+aparams	:	NOTHING				{$$.sval = "";}
+	|	type IDENTIFIER			{$$.sval = $1.sval + " " + $2.sval;}
+	|	aparams COMMA type IDENTIFIER	{$$.sval = $1.sval + ", " + $3.sval + " " + $4.sval;}
+	;
 
 
 params	:	IDENTIFIER			{$$.sval = $1.sval;}
@@ -61,7 +95,7 @@ type		:	BOOLEAN		{$$.sval = "boolean";}
 		;
 
 
-expression	:	bool_exp	{$$ = $1;}
+condition	:	bool_exp	{$$ = $1;}
 		;
 
 
