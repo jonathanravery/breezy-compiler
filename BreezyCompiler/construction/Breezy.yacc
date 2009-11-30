@@ -11,7 +11,6 @@ import java.io.*;
 %token PLUS MINUS MUL DIV MOD EQUAL REL_OP_LE REL_OP_LT REL_OP_GE REL_OP_GT EQUALS LOG_OP_EQUAL LOG_OP_AND LOG_OP_OR LOG_OP_NOT
 %token LPAREN RPAREN COLON SEMICOLON COMMA DOT
 %token TRUE FALSE
-%token NEWLINE
 %token IDENTIFIER
 %token BOOLEAN
 %token STRING
@@ -20,8 +19,7 @@ import java.io.*;
 
 %%
 
-start	: 	NEWLINE program	{ba.DumpFile($2.sval);}
-	|	program		{ba.DumpFile($1.sval);}
+start	: 	program		{ba.DumpFile($1.sval);}
 
 
 program		:	method 		{$$.sval= $1.sval;}
@@ -29,15 +27,14 @@ program		:	method 		{$$.sval= $1.sval;}
 		;
 
 
-method	: 	method NEWLINE		{$$.sval = $1.sval;}
-	|	COMMENT NEWLINE
-    		FUNCTION IDENTIFIER NEWLINE
-    		RETURNS type NEWLINE
-    		ACCEPTS params NEWLINE
-    		BEGIN NEWLINE
+method	: 	COMMENT
+    		FUNCTION IDENTIFIER
+    		RETURNS type
+    		ACCEPTS params
+    		BEGIN
 		body
-		END 	{ $$.sval = "public static " + $7.sval + " " + 
-					$4.sval + "(" + $10.sval + ")" + "{\n" + $14.sval + "}"; }
+		END 	{ $$.sval = "public static " + $5.sval + " " + 
+					$3.sval + "(" + $7.sval + ")" + "{\n" + $9.sval + "}"; }
 	;
 
 
@@ -45,7 +42,7 @@ body	:	function_declaration		{$$.sval = $1.sval;}
 	;
 
 
-function_declaration	:	IDENTIFIER LPAREN params RPAREN SEMICOLON NEWLINE	{$$.sval = $1.sval + "(" + $3.sval + ");\n";}
+function_declaration	:	IDENTIFIER LPAREN params RPAREN SEMICOLON {$$.sval = $1.sval + "(" + $3.sval + ");\n";}
 			;
 
 
@@ -53,7 +50,7 @@ params	:	IDENTIFIER			{$$.sval = $1.sval;}
 	|	QUOTE				{$$.sval = $1.sval;}
 	|	NUMERIC				{$$.sval = $1.sval;}
 	|	params COMMA IDENTIFIER		{$$.sval = $1.sval + "," + $3.sval;}
-	|	NOTHING				{$$.sval = $1.sval;}
+	|	NOTHING				{$$.sval = "";}
 	;
 
 
