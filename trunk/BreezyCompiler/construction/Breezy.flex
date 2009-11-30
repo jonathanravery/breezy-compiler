@@ -49,7 +49,7 @@ EndOfLineComment = "//" {InputCharacter}* {LineTerminator}
 
 {Comment}			{p("COMMENT");	return yyparser.COMMENT;}
 {LineTerminator}accepts		{p("ACCEPTS");	return yyparser.ACCEPTS;}
-begin{LineTerminator}		{pl("BEGIN");	return yyparser.BEGIN;}
+{LineTerminator}begin		{pl("BEGIN");	return yyparser.BEGIN;}
 boolean				{p("BOOLEAN");	return yyparser.BOOLEAN;}
 each				{p("EACH");	return yyparser.EACH;}
 else				{p("ELSE");	return yyparser.ELSE;}
