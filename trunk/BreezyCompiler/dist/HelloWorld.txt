@@ -1,6 +1,0 @@
-function main
-accepts nothing
-returns nothing
-begin
-	WriteLineToScreen("HelloWorld");
-end
