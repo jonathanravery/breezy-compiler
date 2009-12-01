@@ -36,4 +36,11 @@ public class BreezyAssist {
             Logger.getLogger(BreezyAssist.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
+    public boolean checkFunctionEnding(String expected, String actual){
+        if(expected.equals(actual))
+            return true;
+        else
+            return false;
+    }
 }

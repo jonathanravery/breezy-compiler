@@ -33,8 +33,12 @@ method	: 	COMMENT
     		ACCEPTS aparams
     		BEGIN
 		body
-		END IDENTIFIER	{ $$.sval = "public static " + $5.sval + " " +
+		END IDENTIFIER	{ if(ba.checkFunctionEnding($3.sval,$11.sval)){$$.sval = "public static " + $5.sval + " " +
 					$3.sval + "(" + $7.sval + ")" + "{\n" + $9.sval + "}"; }
+                                  else{
+                                        System.err.println("Check function ending");
+                                        $$.sval = "";}
+                                 }
 	;
 
 
