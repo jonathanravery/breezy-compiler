@@ -33,7 +33,7 @@ method	: 	COMMENT
     		ACCEPTS aparams
     		BEGIN
 		body
-		END 	{ $$.sval = "public static " + $5.sval + " " + 
+		END IDENTIFIER	{ $$.sval = "public static " + $5.sval + " " +
 					$3.sval + "(" + $7.sval + ")" + "{\n" + $9.sval + "}"; }
 	;
 
