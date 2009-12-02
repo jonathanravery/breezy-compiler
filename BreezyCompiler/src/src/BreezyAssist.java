@@ -6,6 +6,7 @@
 package src;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -14,6 +15,8 @@ import java.util.logging.Logger;
  * @author Leighton Minor
  */
 public class BreezyAssist {
+
+    private static ArrayList<String> errorList = new ArrayList<String>();
 
     public BreezyAssist() {
     }
@@ -37,10 +40,34 @@ public class BreezyAssist {
         }
     }
 
+    public String createFunction(String id, String retType, String params, String body, String id2){
+        String retFunction;
+
+        if(checkFunctionEnding(id,id2) == false)
+            return "";
+
+        if(id.equals("main")){
+            if(params.equals("")){
+
+            }
+            else{
+                String[] paramList = params.split(" ");
+                for(int i = 0; i< paramList.length; i=i+2){
+                    
+                }
+            }
+        }
+
+        retFunction = "public static " + retType + " " + id + "(" + params + ")" + "{\n" + body + "}";
+        return retFunction;
+    }
+
     public boolean checkFunctionEnding(String expected, String actual){
         if(expected.equals(actual))
             return true;
-        else
+        else{
+            errorList.add("Function ended mismatch: Expeced " + expected + " but actual " + actual);
             return false;
+        }
     }
 }
