@@ -12,6 +12,7 @@ import java.io.*;
 %token LPAREN RPAREN COLON SEMICOLON COMMA DOT
 %token TRUE FALSE
 %token IDENTIFIER
+%token ARRAY
 %token BOOLEAN
 %token STRING
 %token NUMBER
