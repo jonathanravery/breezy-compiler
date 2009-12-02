@@ -22,6 +22,8 @@ public class BreezyDefault {
 	// pick up where it left off
 	private Hashtable<String, BufferedReader> readers;
 
+        private static BreezyProg bp;
+        public static void main(String[] args){bp.main("", 5);}
 	// public String ReadCharacterFromScreen();
 
 	/**
@@ -150,7 +152,7 @@ public class BreezyDefault {
 		return all;
 	}
 
-	public void WriteToScreen(String text) {
+	public static void WriteToScreen(String text) {
 		System.out.print(text);
 	}
 

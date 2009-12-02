@@ -34,12 +34,7 @@ method	: 	COMMENT
     		ACCEPTS aparams
     		BEGIN
 		body
-		END IDENTIFIER	{ if(ba.checkFunctionEnding($3.sval,$11.sval)){$$.sval = "public static " + $5.sval + " " +
-					$3.sval + "(" + $7.sval + ")" + "{\n" + $9.sval + "}"; }
-                                  else{
-                                        System.err.println("Check function ending");
-                                        $$.sval = "";}
-                                 }
+		END IDENTIFIER	{ $$.sval = ba.createFunction($3.sval,$5.sval,$7.sval,$9.sval,$11.sval); }
 	;
 
 
@@ -123,11 +118,13 @@ protected Parser(Reader r) {
 
 private BreezyAssist ba;
 
-public static void main(String args[]) throws IOException {
-	Parser yyparser = new Parser(new FileReader(args[0]));
+public static void main(String args[]){
 	try{
+	Parser yyparser = new Parser(new FileReader(args[0]));
 		yyparser.yyparse();  
-	}catch(Exception e){
-		e.printStackTrace();
+	}catch(IOException e){
+            e.printStackTrace();
+        }catch(Exception e){
+            e.printStackTrace();
 	}  
 }
