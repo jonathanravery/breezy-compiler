@@ -76,8 +76,6 @@ type_declaration	:	type IDENTIFIER SEMICOLON	{$$.sval = $1.sval + " " + $2.sval 
 function_declaration	:	IDENTIFIER LPAREN params RPAREN SEMICOLON {$$.sval = $1.sval + "(" + $3.sval + ");\n";}
 			;
 
-condition	:	
-
 
 aparams	:	NOTHING				{$$.sval = "";}
 	|	type IDENTIFIER			{$$.sval = $1.sval + " " + $2.sval;}
@@ -93,7 +91,7 @@ params	:	IDENTIFIER			{$$.sval = $1.sval;}
 	;
 
 
-type		:	BOOLEAN		{$$.sval = "boolean";}
+type		:       BOOLEAN		{$$.sval = "boolean";}
 		|	STRING		{$$.sval = "String";}
 		|	NUMBER		{$$.sval = "double";}
 		|	NOTHING		{$$.sval = "void";}

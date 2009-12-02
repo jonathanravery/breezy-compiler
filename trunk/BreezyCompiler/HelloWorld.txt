@@ -29,6 +29,9 @@ accepts string s, number x
 begin
         array TestArray;
         TestArray.add(10);
+        array number2;
+        number2.add(TestArray);
+        TestArray.add("Peter");
 	WriteToScreen(s);
 	return x;
 end objectTest
@@ -41,6 +44,7 @@ function main
 returns number
 accepts nothing
 begin
+        number2.add(9);
 	WriteToScreen("Hello World");
 	if(true)
 	begin
