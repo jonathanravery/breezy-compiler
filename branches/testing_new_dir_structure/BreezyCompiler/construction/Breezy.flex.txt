@@ -1,0 +1,84 @@
+package breezy;
+
+import java_cup.runtime.*;
+%%
+
+%unicode
+%cup
+%line
+%column
+
+%{
+//Authored by Leighton, Jack, Jon, Ian, Elena, Clement 
+//Adapted from pltsnow project by Jon, Cesar, Vinay, Sharadh
+
+//ncc=		[^#|]|\n
+//#\|(#|{ncc})*\|\|*({ncc}(#|{ncc})*\|\|*)*#	{ln++; yyparser.yylval = new ParserVal(""); return yyparser.NEWLINE;}
+
+  private static Parser yyparser;
+  public int ln = 0;
+
+  /* constructor taking an additional parser object */
+  public Yylex(java.io.Reader r, Parser yyparser) {
+    this(r);
+    this.yyparser = yyparser;
+  }
+%}
+
+digit=		[0-9]
+
+/* comments and line terminators from JFlex Manual*/
+
+LineTerminator = \r|\n|\r\n
+InputCharacter = [^\r\n]
+WhiteSpace = {LineTerminator} | [ \t\f]
+
+Comment = {TraditionalComment} | {EndOfLineComment}
+TraditionalComment = "/*" [^*] ~"*/" | "/*" "*"+ "/"
+EndOfLineComment = "//" {InputCharacter}* {LineTerminator}
+
+%%
+
+{LineTerminator}		{ln++; yyparser.yylval = new ParserVal(""); return yyparser.NEWLINE;}
+{Comment}			{	return yyparser.COMMENT;}
+accepts				{	return yyparser.ACCEPTS;}
+begin				{	return yyparser.BEGIN;}
+boolean				{	return yyparser.BOOLEAN;}
+each				{	return yyparser.EACH;}
+else				{	return yyparser.ELSE;}
+end				{	return yyparser.END;}
+false				{	return yyparser.FALSE;}
+for				{	return yyparser.FOR;}
+function			{	return yyparser.FUNCTION;}
+if				{	return yyparser.IF;}
+number				{	return yyparser.NUMBER;}
+return				{	return yyparser.RETURN;}
+returns				{	return yyparser.RETURNS;}
+string				{	return yyparser.STRING;}
+true				{	return yyparser.TRUE;}
+while				{	return yyparser.WHILE;}
+"+"					{	return yyparser.PLUS;}
+"-"					{	return yyparser.MINUS;}
+"*"					{	return yyparser.MUL;}
+"/"					{	return yyparser.DIV;}
+"%"					{	return yyparser.MODULO;}
+"<="					{	return yyparser.REL_OP_LE;}
+"<"					{	return yyparser.REL_OP_LT;}
+">="					{	return yyparser.REL_OP_GE;}
+">"					{	return yyparser.REL_OP_GT;}
+"="					{	return yyparser.EQUALS;}
+"EQUAL"					{	return yyparser.LOG_OP_EQUAL;}
+"AND"					{	return yyparser.LOG_OP_AND;}
+"OR"					{	return yyparser.LOG_OP_OR;}
+"NOT"					{	return yyparser.LOG_OP_NOT;}
+"("					{	return yyparser.LPAREN;}
+")"					{	return yyparser.RPAREN;}
+":"					{	return yyparser.COLON;}
+";"					{	return yyparser.SEMICOLON;}
+","					{	return yyparser.COMMA;}
+\.					{	return yyparser.DOT;}
+[a-zA-Z][a-zA-Z0-9]*			{	yyparser.yylval = new ParserVal(yytext()); return yyparser.IDENTIFIER;}
+\"([^\"]|\\\")*\"			{	yyparser.yylval = new ParserVal(yytext()); return yyparser.STRING;}
+-?{digit}*(\.{digit}+)?			{	yyparser.yylval = new ParserVal(yytext()); return yyparser.NUMERIC;}
+{WhiteSpace}				{ return yyparser.WHITESPACE;}
+.					{ return 0;}
