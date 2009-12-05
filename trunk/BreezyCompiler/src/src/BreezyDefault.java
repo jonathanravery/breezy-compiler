@@ -22,9 +22,23 @@ public class BreezyDefault {
 	// pick up where it left off
 	private Hashtable<String, BufferedReader> readers;
 
-        private static BreezyProg bp;
-        public static void main(String[] args){bp.main("", 5);}
-	// public String ReadCharacterFromScreen();
+	// I thought we decided against doing this, in favor of some speciailzed code & a "super main" in the BreezyProg class
+	// private static BreezyProg bp;
+	// public static void main(String[] args){bp.main("", 5);}
+
+	/**
+	 * Read a single character from standard input
+	 */
+	public String ReadCharacterFromScreen() {
+		int tmp;
+		try {
+			tmp = System.in.read();
+		} catch (IOException ioe) {
+			// TODO: Error handling
+			return "";
+		}
+		return new String(new char[] { (char) tmp });
+	}
 
 	/**
 	 * ReadLineFromScreen reads & returns a single line from standard input
@@ -152,10 +166,25 @@ public class BreezyDefault {
 		return all;
 	}
 
+	/**
+	 * Write a string of text to standard out. This method is used by the character, line, and all versions,
+	 * which would not have been created in the first place, had we thought it through before promising
+	 * them in the tutorial.
+	 * 
+	 * @param text The text to write to stdout
+	 */
 	public static void WriteToScreen(String text) {
 		System.out.print(text);
 	}
 
+	/**
+	 * Write a string of text to a file. This method is used by the character, line, and all verions, which
+	 * would not have been created in the first place, had we thought it through before promising them in
+	 * the tutorial
+	 * 
+	 * @param text The text to write to a file
+	 * @param filename The name of the file to write the text to
+	 */
 	public void WriteToFile(String text, String filename) {
 		PrintWriter pw = null;
 		try {
@@ -167,14 +196,89 @@ public class BreezyDefault {
 		pw.write(text);
 	}
 
+	/**
+	 * Write a single character to standard out.
+	 * @param text
+	 */
+	public static void WriteCharacterToScreen(String text)
+	{
+		BreezyDefault.WriteToScreen(text.substring(0, 1));
+	}
+	
+	/**
+	 * Write a line of text to standard out
+	 * @param text
+	 */
+	public static void WriteLineToScreen(String text)
+	{
+		String[] lines = text.split("\n");
+		BreezyDefault.WriteToScreen(lines[0] + "\n");
+	}
+	
+	/**
+	 * Write some text to standard out
+	 * @param text
+	 */
+	public static void WriteAllToScreen(String text)
+	{
+		BreezyDefault.WriteToScreen(text);
+	}
+	
+	/**
+	 * Write a single character to a file
+	 * @param text
+	 * @param filename
+	 */
+	public void WriteCharacterToFile(String text, String filename)
+	{
+		this.WriteToFile(text.substring(0, 1), filename);
+	}
+	
+	/**
+	 * Write a line of text to a file
+	 * @param text
+	 * @param filename
+	 */
+	public void WriteLineToFile(String text, String filename)
+	{
+		String[] lines = text.split("\n");
+		this.WriteToFile(lines[0] + "\n", filename);
+	}
+	
+	/**
+	 * Write some text to a file
+	 * @param text
+	 * @param filename
+	 */
+	public void WriteAllToFile(String text, String filename)
+	{
+		this.WriteToFile(text, filename);
+	}
+	
+	/**
+	 * Convert a string into a number
+	 * @param numstring
+	 * @return
+	 */
 	public double StringToNumber(String numstring) {
 		return Double.parseDouble(numstring);
 	}
 
+	/**
+	 * Convert a number into a string
+	 * @param number
+	 * @return
+	 */
 	public String NumberToString(double number) {
 		return Double.toString(number);
 	}
 
+	/**
+	 * Convert a number into a string, up to a certain number of digits
+	 * @param number
+	 * @param maxDigits
+	 * @return
+	 */
 	public String NumberToString(double number, int maxDigits) {
 		String num;
 
@@ -210,5 +314,4 @@ public class BreezyDefault {
 		// Return it
 		return br;
 	}
-
 }
