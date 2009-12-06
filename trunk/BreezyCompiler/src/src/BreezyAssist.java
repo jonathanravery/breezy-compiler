@@ -17,6 +17,7 @@ import java.util.logging.Logger;
 public class BreezyAssist {
 
     private static ArrayList<String> errorList = new ArrayList<String>();
+    private static boolean mainCreated = false;
 
     public BreezyAssist() {
     }
@@ -41,25 +42,45 @@ public class BreezyAssist {
     }
 
     public String createFunction(String id, String retType, String params, String body, String id2){
-        String retFunction;
+        String retFunction = "";
 
+        //Check and see if block ends with correct ending
         if(checkFunctionEnding(id,id2) == false)
             return "";
 
         if(id.equals("main")){
-            if(params.equals("")){
-
+            if(!mainCreated){
+                return createMain(retType,params,body);
             }
             else{
-                String[] paramList = params.split(" ");
-                for(int i = 0; i< paramList.length; i=i+2){
-                    
-                }
+                //Error.  User has two main functions
+                return "";
+            }
+        }
+        else{
+            retFunction = "public static " + retType + " " + id + "(" + params + ")" + "{\n" + body + "}";
+        }
+
+        
+        return retFunction;
+    }
+
+    private String createMain(String retType, String params, String body){
+        String ret = "main bla";
+
+        if(params.equals("")){
+            String func = "public static void main(String[] args){main();}\n\n";
+            String main = "public static " + retType + " main(){ " + body + "}\n\n";
+            ret = func + main;
+        }
+        else{
+            String[] paramList = params.split(" ");
+            for(int i = 0; i< paramList.length; i=i+2){
+
             }
         }
 
-        retFunction = "public static " + retType + " " + id + "(" + params + ")" + "{\n" + body + "}";
-        return retFunction;
+        return ret;
     }
 
     public boolean checkFunctionEnding(String expected, String actual){
