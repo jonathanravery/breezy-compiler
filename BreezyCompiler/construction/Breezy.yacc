@@ -59,6 +59,8 @@ if_statement	:	IF LPAREN condition RPAREN
 		;
 
 return_statement	:	RETURN IDENTIFIER SEMICOLON	{$$.sval = "return " + $2.sval + ";\n";}
+			|	RETURN NUMERIC SEMICOLON	{$$.sval = "return " + $2.sval + ";\n";}
+			|	RETURN QUOTE SEMICOLON		{$$.sval = "return " + $2.sval + ";\n";}
 			|	RETURN function_declaration	{$$.sval = "return " + $2.sval + "\n";}
 			;
 
@@ -83,8 +85,8 @@ aparams	:	NOTHING				{$$.sval = "";}
 params	:	IDENTIFIER			{$$.sval = $1.sval;}
 	|	QUOTE				{$$.sval = $1.sval;}
 	|	NUMERIC				{$$.sval = $1.sval;}
-	|	params COMMA IDENTIFIER		{$$.sval = $1.sval + "," + $3.sval;}
 	|	NOTHING				{$$.sval = "";}
+	|	params COMMA params 		{$$.sval = $1.sval + "," + $3.sval;}
 	;
 
 
