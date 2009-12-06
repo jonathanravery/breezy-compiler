@@ -70,4 +70,12 @@ public class BreezyAssist {
             return false;
         }
     }
+    
+    public String createComplexType(String type, String name) {
+    	return "ArrayList " + name + " = new ArrayList();\n";
+    }
+    
+    public String createComplexTypeMethodInvocation(String objectName, String methodName, String params) {
+    	return objectName + "." + methodName + "(" + params + ");\n";
+    }
 }

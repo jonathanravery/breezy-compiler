@@ -31,7 +31,14 @@ begin
 	return x;
 end objectTest
 
-
+//Testing arrays
+function arrayTest
+returns nothing
+accepts string s, number x
+begin
+	array testArray;
+	testArray.add("test");
+end arrayTest
 
 
 /*Main Function*/
