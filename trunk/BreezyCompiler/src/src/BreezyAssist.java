@@ -66,21 +66,38 @@ public class BreezyAssist {
     }
 
     private String createMain(String retType, String params, String body){
-        String ret = "main bla";
+        String systemMain = "";
+        String userMain = "public static " + retType + " main(" + params + ")" + "{\n" + body + "}";
 
         if(params.equals("")){
-            String func = "public static void main(String[] args){main();}\n\n";
-            String main = "public static " + retType + " main(){ " + body + "}\n\n";
-            ret = func + main;
+            systemMain = "public static void main(String[] args){main();}\n\n";
         }
         else{
             String[] paramList = params.split(" ");
-            for(int i = 0; i< paramList.length; i=i+2){
 
+            systemMain = "public static void main(String[] args){main(";
+            if(paramList[0].equals("String")){
+                systemMain = systemMain.concat("args[0]");
             }
+            else if(paramList[0].equals("double")){
+                systemMain = systemMain.concat("Double.parseDouble(args[0])");
+            }
+            else //error
+                System.out.println("Error:  Accepts parameters in main function");
+            for(int i = 1; i< (paramList.length)/2; i++){
+                if(paramList[i*2].equals("String")){
+                    systemMain = systemMain.concat(",args["+i+"]");
+                }
+                else if(paramList[i*2].equals("double")){
+                    systemMain = systemMain.concat(",Double.parseDouble(args["+i+"])");
+                }
+                else //error
+                    System.out.println("Error:  Accepts parameters in main function");
+            }
+            systemMain = systemMain.concat(");}\n");
         }
 
-        return ret;
+        return systemMain + userMain;
     }
 
     public boolean checkFunctionEnding(String expected, String actual){
