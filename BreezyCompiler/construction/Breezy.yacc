@@ -8,7 +8,8 @@ import java.io.*;
 
 %token COMMENT
 %token ACCEPTS BEGIN BOOLEAN EACH ELSE END FOR FUNCTION IF NOTHING NUMERIC QUOTE RETURN RETURNS WHILE
-%token PLUS MINUS MUL DIV MOD EQUAL REL_OP_LE REL_OP_LT REL_OP_GE REL_OP_GT EQUALS LOG_OP_EQUAL LOG_OP_AND LOG_OP_OR LOG_OP_NOT
+%token PLUS MINUS EQUAL REL_OP_LE REL_OP_LT REL_OP_GE REL_OP_GT EQUALS LOG_OP_EQUAL LOG_OP_AND LOG_OP_OR LOG_OP_NOT
+%token MUL DIV MOD
 %token LPAREN RPAREN COLON SEMICOLON COMMA DOT
 %token TRUE FALSE
 %token IDENTIFIER
@@ -24,8 +25,8 @@ start	: 	program		{ba.DumpFile($1.sval);}
 
 
 program		:	method 		{$$.sval= $1.sval;}
-		|	program method	{$$.sval = $1.sval + $2.sval;}
-		;
+			|	program method	{$$.sval = $1.sval + $2.sval;}
+			;
 
 
 method	: 	COMMENT
@@ -33,9 +34,9 @@ method	: 	COMMENT
     		RETURNS return_type
     		ACCEPTS aparams
     		BEGIN
-		body
-		END IDENTIFIER	{ $$.sval = ba.createFunction($3.sval,$5.sval,$7.sval,$9.sval,$11.sval); }
-	;
+			body
+			END IDENTIFIER	{ $$.sval = ba.createFunction($3.sval,$5.sval,$7.sval,$9.sval,$11.sval); }
+		;
 
 
 body    :       declarations
@@ -53,7 +54,7 @@ declarations    :   type_declaration SEMICOLON                           {$$.sva
 
 
 type_declaration	:	type IDENTIFIER	{$$.sval = $1.sval + " " + $2.sval;}
-			;
+					;
 
 
 /*Add all kinds of type assignments here!*/
@@ -68,68 +69,89 @@ control_body	:	statement               {$$.sval = $1.sval;}
 
 
 statement	:	function_declaration		{$$.sval = $1.sval;}
-		|	type_declaration		{$$.sval = $1.sval;}
-		|	complex_type_declaration		{$$.sval = $1.sval;}
-		|	complex_type_method_invocation	{$$.sval = $1.sval;}
-		|	type_initialization		{$$.sval = $1.sval;}
-		|	return_statement		{$$.sval = $1.sval;}
-		|	if_statement			{$$.sval = $1.sval;}
-		;
+			|	complex_type_declaration		{$$.sval = $1.sval;}
+			|	complex_type_method_invocation	{$$.sval = $1.sval;}
+			|	type_initialization		{$$.sval = $1.sval;}
+			|	return_statement		{$$.sval = $1.sval;}
+			|	if_statement			{$$.sval = $1.sval;}
+			|	arith_exp SEMICOLON			{$$.sval = $1.sval + ";\n";}
+			;
 
 if_statement	:	IF LPAREN condition RPAREN
-			BEGIN
-			body
-			END IF	{ $$.sval = "if(" + $3.sval + "){\n" + $6.sval + "}\n";}
-		;
+					BEGIN
+					body
+					END IF	{ $$.sval = "if(" + $3.sval + "){\n" + $6.sval + "}\n";}
+				;
 
 return_statement	:	RETURN IDENTIFIER SEMICOLON	{$$.sval = "return " + $2.sval + ";\n";}
-			|	RETURN NUMERIC SEMICOLON	{$$.sval = "return " + $2.sval + ";\n";}
-			|	RETURN QUOTE SEMICOLON		{$$.sval = "return " + $2.sval + ";\n";}
-			|	RETURN function_declaration	{$$.sval = "return " + $2.sval + "\n";}
-			;
+					|	RETURN NUMERIC SEMICOLON	{$$.sval = "return " + $2.sval + ";\n";}
+					|	RETURN QUOTE SEMICOLON		{$$.sval = "return " + $2.sval + ";\n";}
+					|	RETURN function_declaration	{$$.sval = "return " + $2.sval + "\n";}
+					;
 
 type_initialization	:	IDENTIFIER EQUALS QUOTE SEMICOLON	{$$.sval = $1.sval + " = " + $3.sval + ";\n";}
-			|	IDENTIFIER EQUALS NUMERIC SEMICOLON	{$$.sval = $1.sval + " = " + $3.sval + ";\n";}
-			|	IDENTIFIER EQUALS IDENTIFIER SEMICOLON	{$$.sval = $1.sval + " = " + $3.sval + ";\n";}
-			;
+					|	IDENTIFIER EQUALS NUMERIC SEMICOLON	{$$.sval = $1.sval + " = " + $3.sval + ";\n";}
+					|	IDENTIFIER EQUALS IDENTIFIER SEMICOLON	{$$.sval = $1.sval + " = " + $3.sval + ";\n";}
+					;
 
 function_declaration	:	IDENTIFIER LPAREN params RPAREN SEMICOLON {$$.sval = $1.sval + "(" + $3.sval + ");\n";}
-			;
+						;
 
 
 aparams	:	NOTHING				{$$.sval = "";}
-	|	type IDENTIFIER			{$$.sval = $1.sval + " " + $2.sval;}
-	|	aparams COMMA type IDENTIFIER	{$$.sval = $1.sval + ", " + $3.sval + " " + $4.sval;}
-	;
+		|	type IDENTIFIER			{$$.sval = $1.sval + " " + $2.sval;}
+		|	aparams COMMA type IDENTIFIER	{$$.sval = $1.sval + ", " + $3.sval + " " + $4.sval;}
+		;
 
 
 params	:	IDENTIFIER			{$$.sval = $1.sval;}
-	|	QUOTE				{$$.sval = $1.sval;}
-	|	NUMERIC				{$$.sval = $1.sval;}
-	|	NOTHING				{$$.sval = "";}
-	|	params COMMA params 		{$$.sval = $1.sval + "," + $3.sval;}
-	;
+		|	QUOTE				{$$.sval = $1.sval;}
+		|	NUMERIC				{$$.sval = $1.sval;}
+		|	NOTHING				{$$.sval = "";}
+		|	params COMMA params 		{$$.sval = $1.sval + "," + $3.sval;}
+		;
 
 
 type		:       BOOLEAN		{$$.sval = "boolean";}
-		|	STRING		{$$.sval = "String";}
-		|	NUMBER		{$$.sval = "double";}
-		;
+			|	STRING		{$$.sval = "String";}
+			|	NUMBER		{$$.sval = "double";}
+			;
 
 return_type     :       type            {$$.sval = $1.sval;}
                 |       NOTHING         {$$.sval = "void";}
 		
 complex_type_declaration	:	ARRAY IDENTIFIER SEMICOLON	{$$.sval = ba.createComplexType($1.sval, $2.sval);}
-		;
+							;
 		
 complex_type_method_invocation
 		:	IDENTIFIER DOT IDENTIFIER LPAREN params RPAREN SEMICOLON {$$.sval = ba.createComplexTypeMethodInvocation($1.sval, $3.sval, $5.sval);}
 		|	IDENTIFIER DOT IDENTIFIER LPAREN RPAREN SEMICOLON {$$.sval = ba.createComplexTypeMethodInvocation($1.sval, $3.sval, null);}
 		;
 
+arith_exp	: 	arith_exp PLUS term {$$.sval = $1.sval + "+" + $3.sval; }
+			|	arith_exp MINUS term {$$.sval = $1.sval + " - " + $3.sval; }
+			|	term	 {$$.sval = $1.sval;}
+			;
+			
+term		:	term MUL unary {$$.sval = $1.sval + " * " + $3.sval; }
+			|	term DIV unary {$$.sval = $1.sval + " / " + $3.sval; }
+			|	term MOD unary {$$.sval = $1.sval + " % " + $3.sval; }
+			|	unary	 {$$.sval = $1.sval;}
+			;
+
+unary		:	MINUS unary { $$.sval = " -"+ $2.sval;}
+			|	factor	 {$$.sval = $1.sval;}
+			;
+
+factor 		: 	LPAREN arith_exp RPAREN	{$$.sval = " ( " + $2.sval + " ) "; }
+			|	NUMERIC		{ $$.sval = $1.sval; }
+			|	IDENTIFIER		{ $$.sval = $1.sval; }
+			|	function_declaration { $$.sval = $1.sval; }
+			;
 
 condition	:	bool_exp	{$$ = $1;}
 		;
+
 
 
 bool_exp	:	bool_exp LOG_OP_OR bool_exp {$$.sval = $1.sval + " || " + $3.sval; }
