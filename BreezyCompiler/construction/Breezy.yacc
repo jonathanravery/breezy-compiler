@@ -63,6 +63,7 @@ type_declaration	:	STRING IDENTIFIER	{$$.sval = "String " + $2.sval;}
 type_declaration_assignment :   STRING IDENTIFIER EQUALS string_exp   {$$.sval = $1.sval + $2.sval + " = " + $4.sval;}
                             |   NUMBER IDENTIFIER EQUALS arith_exp {$$.sval = $1.sval + $2.sval + " = " + $4.sval;}
                             |   BOOLEAN IDENTIFIER EQUALS bool_exp  {$$.sval = $1.sval + $2.sval + " = " + $4.sval;}
+                            |	ARRAY IDENTIFIER EQUALS LEFT_SQUARE_PAREN params RIGHT_SQUARE_PAREN	{$$.sval = ba.createComplexType("ArrayList", $2.sval, $5.sval);}
                             ;
 
 
@@ -75,6 +76,7 @@ complex_type_method_invocation
 
 control_body	:	statement               {$$.sval = $1.sval;}
                 |	control_body statement	{$$.sval = $1.sval + $2.sval;}
+                |	{$$.sval = "";};
                 ;
 
 
