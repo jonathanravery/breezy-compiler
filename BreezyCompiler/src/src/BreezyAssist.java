@@ -32,6 +32,7 @@ public class BreezyAssist {
 
             //TODO: REMOVE
             fw.write("import src.BreezyDefault;\n\n");
+            fw.write("import java.io.*;\n\n");
             fw.write("public class " + fileName + " extends BreezyDefault{\n");
             fw.write(s);
             fw.write("\n}");
