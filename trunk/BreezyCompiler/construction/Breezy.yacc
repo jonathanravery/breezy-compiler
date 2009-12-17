@@ -30,7 +30,7 @@ program		:	method 		{$$.sval= $1.sval;}
 
 method	: 	COMMENT
     		FUNCTION IDENTIFIER
-    		RETURNS type
+    		RETURNS return_type
     		ACCEPTS aparams
     		BEGIN
 		body
@@ -38,9 +38,33 @@ method	: 	COMMENT
 	;
 
 
-body	:	statement	{$$.sval = $1.sval;}
-	|	body statement	{$$.sval = $1.sval + $2.sval;}
-	;
+body    :       declarations
+                control_body            {$$.sval = $1.sval + $2.sval;}
+        |                               {$$.sval = "";}
+        ;
+
+
+declarations    :   type_declaration SEMICOLON                           {$$.sval = $1.sval + ";\n";}
+                |   type_declaration_assignment SEMICOLON                {$$.sval = $1.sval + ";\n";}
+                |   type_declaration  SEMICOLON           declarations   {$$.sval = $1.sval + $2.sval + ";\n";}
+                |   type_declaration_assignment SEMICOLON declarations   {$$.sval = $1.sval + $2.sval + ";\n";}
+                |                                                        {$$.sval = "";}
+                ;
+
+
+type_declaration	:	type IDENTIFIER	{$$.sval = $1.sval + " " + $2.sval;}
+			;
+
+
+/*Add all kinds of type assignments here!*/
+type_declaration_assignment :   type_declaration EQUALS QUOTE   {$$.sval = $1.sval + " = " + $3.sval;}
+                            |   type_declaration EQUALS NUMERIC {$$.sval = $1.sval + " = " + $3.sval;}
+                            ;
+
+
+control_body	:	statement               {$$.sval = $1.sval;}
+                |	control_body statement	{$$.sval = $1.sval + $2.sval;}
+                ;
 
 
 statement	:	function_declaration		{$$.sval = $1.sval;}
@@ -69,9 +93,6 @@ type_initialization	:	IDENTIFIER EQUALS QUOTE SEMICOLON	{$$.sval = $1.sval + " =
 			|	IDENTIFIER EQUALS IDENTIFIER SEMICOLON	{$$.sval = $1.sval + " = " + $3.sval + ";\n";}
 			;
 
-type_declaration	:	type IDENTIFIER SEMICOLON	{$$.sval = $1.sval + " " + $2.sval + ";\n";}
-			;
-
 function_declaration	:	IDENTIFIER LPAREN params RPAREN SEMICOLON {$$.sval = $1.sval + "(" + $3.sval + ");\n";}
 			;
 
@@ -93,8 +114,10 @@ params	:	IDENTIFIER			{$$.sval = $1.sval;}
 type		:       BOOLEAN		{$$.sval = "boolean";}
 		|	STRING		{$$.sval = "String";}
 		|	NUMBER		{$$.sval = "double";}
-		|	NOTHING		{$$.sval = "void";}
 		;
+
+return_type     :       type            {$$.sval = $1.sval;}
+                |       NOTHING         {$$.sval = "void";}
 		
 complex_type_declaration	:	ARRAY IDENTIFIER SEMICOLON	{$$.sval = ba.createComplexType($1.sval, $2.sval);}
 		;

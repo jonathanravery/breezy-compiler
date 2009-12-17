@@ -208,92 +208,97 @@ public final static short NUMBER=299;
 public final static short YYERRCODE=256;
 final static short yylhs[] = {                           -1,
     0,    1,    1,    2,    5,    5,    6,    6,    6,    6,
-    6,    6,    6,   13,   12,   12,   12,   12,   11,   11,
-   11,    8,    7,    4,    4,    4,   15,   15,   15,   15,
-   15,    3,    3,    3,    3,    9,   10,   10,   14,   16,
-   16,
+    6,    8,    9,    9,    7,    7,   11,   11,   11,   11,
+   11,   11,   11,   17,   16,   16,   16,   16,   15,   15,
+   15,   12,    4,    4,    4,   19,   19,   19,   19,   19,
+   10,   10,   10,    3,    3,   13,   14,   14,   18,   20,
+   20,
 };
 final static short yylen[] = {                            2,
-    1,    1,    2,   11,    1,    2,    1,    1,    1,    1,
+    1,    1,    2,   11,    2,    0,    2,    2,    3,    3,
+    0,    2,    3,    3,    1,    2,    1,    1,    1,    1,
     1,    1,    1,    8,    3,    3,    3,    2,    4,    4,
-    4,    3,    5,    1,    2,    4,    1,    1,    1,    1,
-    3,    1,    1,    1,    1,    3,    7,    6,    1,    1,
+    4,    5,    1,    2,    4,    1,    1,    1,    1,    3,
+    1,    1,    1,    1,    1,    3,    7,    6,    1,    1,
     1,
 };
 final static short yydefred[] = {                         0,
-    0,    0,    0,    2,    0,    3,    0,    0,   32,   35,
-   33,   34,    0,    0,    0,    0,    0,   25,    0,    0,
-    0,    0,    0,    0,    0,    0,    5,    7,    8,    9,
-   10,   11,   12,   13,    0,    0,    0,    0,    0,   18,
-    0,    0,    0,    0,    0,    0,    6,   26,   40,   41,
-    0,   39,   16,   17,   15,    0,    0,    0,   30,   29,
-   28,   27,    0,    0,   36,   22,    4,    0,   20,   19,
-   21,    0,    0,    0,    0,   23,    0,    0,    0,    0,
-   38,    0,    0,   37,   14,
+    0,    0,    0,    2,    0,    3,    0,    0,   41,   45,
+   42,   43,    0,   44,    0,   33,    0,    0,    0,    0,
+   34,    0,    0,    0,    0,    0,    0,    0,    0,    0,
+    0,    0,    0,   18,   15,   17,   19,   20,   21,   22,
+   23,    0,    0,    0,   12,   35,    4,    0,    0,    0,
+    0,   28,    0,    0,    0,    0,   16,   14,   13,    9,
+   10,   50,   51,    0,   49,   26,   27,   25,    0,    0,
+    0,   39,   38,   37,   36,    0,    0,   46,    0,   30,
+   29,   31,    0,    0,    0,    0,   32,    0,    0,    0,
+    0,   48,    0,    0,   47,   24,
 };
 final static short yydgoto[] = {                          2,
-    3,    4,   25,   17,   26,   27,   28,   29,   30,   31,
-   32,   33,   34,   51,   63,   52,
+    3,    4,   13,   17,   22,   23,   33,   24,   25,   26,
+   35,   36,   37,   38,   39,   40,   41,   64,   76,   65,
 };
-final static short yysindex[] = {                      -252,
- -262,    0, -252,    0, -281,    0, -239, -250,    0,    0,
-    0,    0, -224, -242,    0, -277, -257,    0, -246, -250,
- -247, -222, -260, -228, -220, -259,    0,    0,    0,    0,
-    0,    0,    0,    0, -216, -268, -255, -218, -221,    0,
- -205, -238, -215, -208, -206, -212,    0,    0,    0,    0,
- -203,    0,    0,    0,    0, -204, -201, -199,    0,    0,
-    0,    0, -223, -200,    0,    0,    0, -166,    0,    0,
-    0, -197, -238, -207, -246,    0, -196, -194, -217, -254,
-    0, -193, -171,    0,    0,
+final static short yysindex[] = {                      -227,
+ -221,    0, -227,    0, -237,    0, -197, -258,    0,    0,
+    0,    0, -183,    0, -256,    0, -243, -220, -253, -253,
+    0, -186, -260, -268, -213, -217, -215, -214, -205, -240,
+ -280, -212, -260,    0,    0,    0,    0,    0,    0,    0,
+    0, -250, -253, -253,    0,    0,    0, -228, -206, -204,
+ -230,    0, -216, -242, -210, -203,    0,    0,    0,    0,
+    0,    0,    0, -200,    0,    0,    0,    0, -201, -199,
+ -198,    0,    0,    0,    0, -229, -194,    0, -168,    0,
+    0,    0, -196, -242, -234, -253,    0, -195, -193, -224,
+ -167,    0, -192, -166,    0,    0,
 };
 final static short yyrindex[] = {                         0,
-    0,    0,   99,    0,    0,    0,    0,    0,    0,    0,
-    0,    0,    0,    0, -237,    0,    0,    0,    0,    0,
+    0,    0,  101,    0,    0,    0,    0,    0,    0,    0,
+    0,    0,    0,    0,    0,    0,    0,    0, -249,    0,
+    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
+    0,    0, -161,    0,    0,    0,    0,    0,    0,    0,
+    0,    0, -265, -246,    0,    0,    0,    0,    0,    0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-    0,    0,    0,    0,    0,    0, -189,    0,    0,    0,
-    0,    0,    0,    0,    0,
+    0,    0,    0,    0,    0, -249,    0, -185,    0,    0,
+    0,    0,    0,    0,    0,    0,
 };
 final static short yygindex[] = {                         0,
-    0,   98,   57,    0,   27,  -26,   81,    0,    0,    0,
-    0,    0,    0,    0,    5,    0,
+    0,  100,    0,    0,   19,   27,    0,  -11,    0,   49,
+   73,   77,    0,    0,    0,    0,    0,    0,  -12,    0,
 };
-final static int YYTABLESIZE=103;
+final static int YYTABLESIZE=107;
 static short yytable[];
 static { yytable();}
 static void yytable(){
-yytable = new short[]{                         47,
-    9,   19,    5,   46,    1,    9,   21,   10,   83,    9,
-   22,   21,   10,    9,    7,   22,   10,    9,   18,   21,
-   10,   24,   41,   22,   15,   49,   50,   42,   59,   60,
-   61,    8,   43,   14,   20,   53,   23,   24,   11,   12,
-   36,   23,   24,   11,   12,   37,   38,   11,   12,   23,
-   24,   11,   12,   47,   24,   11,   12,   62,   35,   59,
-   60,   61,   56,   57,   13,   72,   42,   44,   73,   55,
-   16,   82,   54,   39,   73,   45,   35,   77,   79,   48,
-   64,   78,   65,   67,   66,   68,   69,   74,   62,   70,
-   58,   71,   75,   76,   85,   73,   81,   84,    1,   31,
-    6,   80,   40,
+yytable = new short[]{                          9,
+    7,    9,   53,    9,    7,   29,    9,   54,   10,   30,
+   16,   34,   55,    6,   42,   19,   11,   58,   59,    8,
+   11,   34,   43,    8,   72,   73,   74,   49,   50,    1,
+    7,    7,   72,   73,   74,   31,   32,   11,   12,   11,
+   12,   11,   12,    5,   11,   12,   11,   11,   20,    8,
+    8,   69,   70,   75,   89,   51,   14,   54,    7,   83,
+   68,   75,   84,   18,   93,   62,   63,   84,   27,   60,
+   61,   88,   90,    8,   15,   21,   28,   44,   45,   71,
+   46,   47,   48,   56,   66,   77,   67,   78,   79,   80,
+   86,   81,   82,   85,   87,   94,   84,   92,   95,   96,
+    1,    5,    6,   40,   91,   57,   52,
 };
 }
 static short yycheck[];
 static { yycheck(); }
 static void yycheck() {
-yycheck = new short[] {                         26,
-  260,  259,  265,  263,  257,  260,  266,  267,  263,  260,
-  270,  266,  267,  260,  296,  270,  267,  260,  296,  266,
-  267,  259,  283,  270,  267,  294,  295,  288,  267,  268,
-  269,  271,  293,  258,  292,  291,  296,  297,  298,  299,
-  288,  296,  297,  298,  299,  268,  269,  298,  299,  296,
-  297,  298,  299,   80,  292,  298,  299,  296,  296,  267,
-  268,  269,  268,  269,    8,  289,  288,  296,  292,  291,
-   14,  289,  291,  296,  292,  296,   20,   73,   74,  296,
-  296,  289,  291,  296,  291,  289,  291,  288,  296,  291,
-  296,  291,  259,  291,  266,  292,  291,  291,    0,  289,
-    3,   75,   22,
+yycheck = new short[] {                        260,
+  266,  260,  283,  260,  270,  266,  260,  288,  267,  270,
+  267,   23,  293,  263,  283,  259,  266,  268,  269,  266,
+  270,   33,  291,  270,  267,  268,  269,  268,  269,  257,
+  296,  297,  267,  268,  269,  296,  297,  298,  299,  298,
+  299,  298,  299,  265,  298,  299,  296,  297,  292,  296,
+  297,  268,  269,  296,  289,  296,    8,  288,  296,  289,
+  291,  296,  292,   15,  289,  294,  295,  292,   20,   43,
+   44,   84,   85,  271,  258,  296,  263,  291,  296,  296,
+  296,  296,  288,  296,  291,  296,  291,  291,  289,  291,
+  259,  291,  291,  288,  291,  263,  292,  291,  291,  266,
+    0,  263,    3,  289,   86,   33,   30,
 };
 }
 final static short YYFINAL=2;
@@ -327,9 +332,19 @@ final static String yyrule[] = {
 "start : program",
 "program : method",
 "program : program method",
-"method : COMMENT FUNCTION IDENTIFIER RETURNS type ACCEPTS aparams BEGIN body END IDENTIFIER",
-"body : statement",
-"body : body statement",
+"method : COMMENT FUNCTION IDENTIFIER RETURNS return_type ACCEPTS aparams BEGIN body END IDENTIFIER",
+"body : declarations control_body",
+"body :",
+"declarations : type_declaration SEMICOLON",
+"declarations : type_declaration_assignment SEMICOLON",
+"declarations : type_declaration SEMICOLON declarations",
+"declarations : type_declaration_assignment SEMICOLON declarations",
+"declarations :",
+"type_declaration : type IDENTIFIER",
+"type_declaration_assignment : type_declaration EQUALS QUOTE",
+"type_declaration_assignment : type_declaration EQUALS NUMERIC",
+"control_body : statement",
+"control_body : control_body statement",
 "statement : function_declaration",
 "statement : type_declaration",
 "statement : complex_type_declaration",
@@ -345,7 +360,6 @@ final static String yyrule[] = {
 "type_initialization : IDENTIFIER EQUALS QUOTE SEMICOLON",
 "type_initialization : IDENTIFIER EQUALS NUMERIC SEMICOLON",
 "type_initialization : IDENTIFIER EQUALS IDENTIFIER SEMICOLON",
-"type_declaration : type IDENTIFIER SEMICOLON",
 "function_declaration : IDENTIFIER LPAREN params RPAREN SEMICOLON",
 "aparams : NOTHING",
 "aparams : type IDENTIFIER",
@@ -358,7 +372,8 @@ final static String yyrule[] = {
 "type : BOOLEAN",
 "type : STRING",
 "type : NUMBER",
-"type : NOTHING",
+"return_type : type",
+"return_type : NOTHING",
 "complex_type_declaration : ARRAY IDENTIFIER SEMICOLON",
 "complex_type_method_invocation : IDENTIFIER DOT IDENTIFIER LPAREN params RPAREN SEMICOLON",
 "complex_type_method_invocation : IDENTIFIER DOT IDENTIFIER LPAREN RPAREN SEMICOLON",
@@ -367,7 +382,7 @@ final static String yyrule[] = {
 "bool_exp : FALSE",
 };
 
-//#line 119 "Breezy.yacc"
+//#line 142 "Breezy.yacc"
 
 void yyerror(String s){
 	System.out.println(s);
@@ -392,7 +407,7 @@ public static void main(String args[]){
             e.printStackTrace();
 	}  
 }
-//#line 321 "Parser.java"
+//#line 336 "Parser.java"
 //###############################################################
 // method: yylexdebug : check lexer state
 //###############################################################
@@ -563,154 +578,194 @@ case 4:
 { yyval.sval = ba.createFunction(val_peek(8).sval,val_peek(6).sval,val_peek(4).sval,val_peek(2).sval,val_peek(0).sval); }
 break;
 case 5:
-//#line 41 "Breezy.yacc"
-{yyval.sval = val_peek(0).sval;}
-break;
-case 6:
 //#line 42 "Breezy.yacc"
 {yyval.sval = val_peek(1).sval + val_peek(0).sval;}
 break;
+case 6:
+//#line 43 "Breezy.yacc"
+{yyval.sval = "";}
+break;
 case 7:
-//#line 46 "Breezy.yacc"
-{yyval.sval = val_peek(0).sval;}
+//#line 47 "Breezy.yacc"
+{yyval.sval = val_peek(1).sval + ";\n";}
 break;
 case 8:
-//#line 47 "Breezy.yacc"
-{yyval.sval = val_peek(0).sval;}
+//#line 48 "Breezy.yacc"
+{yyval.sval = val_peek(1).sval + ";\n";}
 break;
 case 9:
-//#line 48 "Breezy.yacc"
-{yyval.sval = val_peek(0).sval;}
+//#line 49 "Breezy.yacc"
+{yyval.sval = val_peek(2).sval + val_peek(1).sval + ";\n";}
 break;
 case 10:
-//#line 49 "Breezy.yacc"
-{yyval.sval = val_peek(0).sval;}
+//#line 50 "Breezy.yacc"
+{yyval.sval = val_peek(2).sval + val_peek(1).sval + ";\n";}
 break;
 case 11:
-//#line 50 "Breezy.yacc"
-{yyval.sval = val_peek(0).sval;}
+//#line 51 "Breezy.yacc"
+{yyval.sval = "";}
 break;
 case 12:
-//#line 51 "Breezy.yacc"
-{yyval.sval = val_peek(0).sval;}
-break;
-case 13:
-//#line 52 "Breezy.yacc"
-{yyval.sval = val_peek(0).sval;}
-break;
-case 14:
-//#line 58 "Breezy.yacc"
-{ yyval.sval = "if(" + val_peek(5).sval + "){\n" + val_peek(2).sval + "}\n";}
-break;
-case 15:
-//#line 61 "Breezy.yacc"
-{yyval.sval = "return " + val_peek(1).sval + ";\n";}
-break;
-case 16:
-//#line 62 "Breezy.yacc"
-{yyval.sval = "return " + val_peek(1).sval + ";\n";}
-break;
-case 17:
-//#line 63 "Breezy.yacc"
-{yyval.sval = "return " + val_peek(1).sval + ";\n";}
-break;
-case 18:
-//#line 64 "Breezy.yacc"
-{yyval.sval = "return " + val_peek(0).sval + "\n";}
-break;
-case 19:
-//#line 67 "Breezy.yacc"
-{yyval.sval = val_peek(3).sval + " = " + val_peek(1).sval + ";\n";}
-break;
-case 20:
-//#line 68 "Breezy.yacc"
-{yyval.sval = val_peek(3).sval + " = " + val_peek(1).sval + ";\n";}
-break;
-case 21:
-//#line 69 "Breezy.yacc"
-{yyval.sval = val_peek(3).sval + " = " + val_peek(1).sval + ";\n";}
-break;
-case 22:
-//#line 72 "Breezy.yacc"
-{yyval.sval = val_peek(2).sval + " " + val_peek(1).sval + ";\n";}
-break;
-case 23:
-//#line 75 "Breezy.yacc"
-{yyval.sval = val_peek(4).sval + "(" + val_peek(2).sval + ");\n";}
-break;
-case 24:
-//#line 79 "Breezy.yacc"
-{yyval.sval = "";}
-break;
-case 25:
-//#line 80 "Breezy.yacc"
+//#line 55 "Breezy.yacc"
 {yyval.sval = val_peek(1).sval + " " + val_peek(0).sval;}
 break;
+case 13:
+//#line 60 "Breezy.yacc"
+{yyval.sval = val_peek(2).sval + " = " + val_peek(0).sval;}
+break;
+case 14:
+//#line 61 "Breezy.yacc"
+{yyval.sval = val_peek(2).sval + " = " + val_peek(0).sval;}
+break;
+case 15:
+//#line 65 "Breezy.yacc"
+{yyval.sval = val_peek(0).sval;}
+break;
+case 16:
+//#line 66 "Breezy.yacc"
+{yyval.sval = val_peek(1).sval + val_peek(0).sval;}
+break;
+case 17:
+//#line 70 "Breezy.yacc"
+{yyval.sval = val_peek(0).sval;}
+break;
+case 18:
+//#line 71 "Breezy.yacc"
+{yyval.sval = val_peek(0).sval;}
+break;
+case 19:
+//#line 72 "Breezy.yacc"
+{yyval.sval = val_peek(0).sval;}
+break;
+case 20:
+//#line 73 "Breezy.yacc"
+{yyval.sval = val_peek(0).sval;}
+break;
+case 21:
+//#line 74 "Breezy.yacc"
+{yyval.sval = val_peek(0).sval;}
+break;
+case 22:
+//#line 75 "Breezy.yacc"
+{yyval.sval = val_peek(0).sval;}
+break;
+case 23:
+//#line 76 "Breezy.yacc"
+{yyval.sval = val_peek(0).sval;}
+break;
+case 24:
+//#line 82 "Breezy.yacc"
+{ yyval.sval = "if(" + val_peek(5).sval + "){\n" + val_peek(2).sval + "}\n";}
+break;
+case 25:
+//#line 85 "Breezy.yacc"
+{yyval.sval = "return " + val_peek(1).sval + ";\n";}
+break;
 case 26:
-//#line 81 "Breezy.yacc"
-{yyval.sval = val_peek(3).sval + ", " + val_peek(1).sval + " " + val_peek(0).sval;}
+//#line 86 "Breezy.yacc"
+{yyval.sval = "return " + val_peek(1).sval + ";\n";}
 break;
 case 27:
-//#line 85 "Breezy.yacc"
-{yyval.sval = val_peek(0).sval;}
+//#line 87 "Breezy.yacc"
+{yyval.sval = "return " + val_peek(1).sval + ";\n";}
 break;
 case 28:
-//#line 86 "Breezy.yacc"
-{yyval.sval = val_peek(0).sval;}
+//#line 88 "Breezy.yacc"
+{yyval.sval = "return " + val_peek(0).sval + "\n";}
 break;
 case 29:
-//#line 87 "Breezy.yacc"
-{yyval.sval = val_peek(0).sval;}
+//#line 91 "Breezy.yacc"
+{yyval.sval = val_peek(3).sval + " = " + val_peek(1).sval + ";\n";}
 break;
 case 30:
-//#line 88 "Breezy.yacc"
-{yyval.sval = "";}
+//#line 92 "Breezy.yacc"
+{yyval.sval = val_peek(3).sval + " = " + val_peek(1).sval + ";\n";}
 break;
 case 31:
-//#line 89 "Breezy.yacc"
-{yyval.sval = val_peek(2).sval + "," + val_peek(0).sval;}
+//#line 93 "Breezy.yacc"
+{yyval.sval = val_peek(3).sval + " = " + val_peek(1).sval + ";\n";}
 break;
 case 32:
-//#line 93 "Breezy.yacc"
-{yyval.sval = "boolean";}
+//#line 96 "Breezy.yacc"
+{yyval.sval = val_peek(4).sval + "(" + val_peek(2).sval + ");\n";}
 break;
 case 33:
-//#line 94 "Breezy.yacc"
-{yyval.sval = "String";}
+//#line 100 "Breezy.yacc"
+{yyval.sval = "";}
 break;
 case 34:
-//#line 95 "Breezy.yacc"
-{yyval.sval = "double";}
+//#line 101 "Breezy.yacc"
+{yyval.sval = val_peek(1).sval + " " + val_peek(0).sval;}
 break;
 case 35:
-//#line 96 "Breezy.yacc"
-{yyval.sval = "void";}
+//#line 102 "Breezy.yacc"
+{yyval.sval = val_peek(3).sval + ", " + val_peek(1).sval + " " + val_peek(0).sval;}
 break;
 case 36:
-//#line 99 "Breezy.yacc"
-{yyval.sval = ba.createComplexType(val_peek(2).sval, val_peek(1).sval);}
+//#line 106 "Breezy.yacc"
+{yyval.sval = val_peek(0).sval;}
 break;
 case 37:
-//#line 103 "Breezy.yacc"
-{yyval.sval = ba.createComplexTypeMethodInvocation(val_peek(6).sval, val_peek(4).sval, val_peek(2).sval);}
+//#line 107 "Breezy.yacc"
+{yyval.sval = val_peek(0).sval;}
 break;
 case 38:
-//#line 104 "Breezy.yacc"
-{yyval.sval = ba.createComplexTypeMethodInvocation(val_peek(5).sval, val_peek(3).sval, null);}
+//#line 108 "Breezy.yacc"
+{yyval.sval = val_peek(0).sval;}
 break;
 case 39:
-//#line 108 "Breezy.yacc"
-{yyval = val_peek(0);}
+//#line 109 "Breezy.yacc"
+{yyval.sval = "";}
 break;
 case 40:
-//#line 112 "Breezy.yacc"
-{yyval.sval = "true";}
+//#line 110 "Breezy.yacc"
+{yyval.sval = val_peek(2).sval + "," + val_peek(0).sval;}
 break;
 case 41:
-//#line 113 "Breezy.yacc"
+//#line 114 "Breezy.yacc"
+{yyval.sval = "boolean";}
+break;
+case 42:
+//#line 115 "Breezy.yacc"
+{yyval.sval = "String";}
+break;
+case 43:
+//#line 116 "Breezy.yacc"
+{yyval.sval = "double";}
+break;
+case 44:
+//#line 119 "Breezy.yacc"
+{yyval.sval = val_peek(0).sval;}
+break;
+case 45:
+//#line 120 "Breezy.yacc"
+{yyval.sval = "void";}
+break;
+case 46:
+//#line 122 "Breezy.yacc"
+{yyval.sval = ba.createComplexType(val_peek(2).sval, val_peek(1).sval);}
+break;
+case 47:
+//#line 126 "Breezy.yacc"
+{yyval.sval = ba.createComplexTypeMethodInvocation(val_peek(6).sval, val_peek(4).sval, val_peek(2).sval);}
+break;
+case 48:
+//#line 127 "Breezy.yacc"
+{yyval.sval = ba.createComplexTypeMethodInvocation(val_peek(5).sval, val_peek(3).sval, null);}
+break;
+case 49:
+//#line 131 "Breezy.yacc"
+{yyval = val_peek(0);}
+break;
+case 50:
+//#line 135 "Breezy.yacc"
+{yyval.sval = "true";}
+break;
+case 51:
+//#line 136 "Breezy.yacc"
 {yyval.sval = "false";}
 break;
-//#line 634 "Parser.java"
+//#line 689 "Parser.java"
 //########## END OF USER-SUPPLIED ACTIONS ##########
     }//switch
     //#### Now let's reduce... ####
