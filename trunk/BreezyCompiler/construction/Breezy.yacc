@@ -13,7 +13,7 @@ import java.io.*;
 %token LPAREN RPAREN COLON SEMICOLON COMMA DOT
 %token TRUE FALSE
 %token IDENTIFIER
-%token ARRAY
+%token ARRAY HASH
 %token BOOLEAN
 %token STRING
 %token NUMBER
@@ -120,7 +120,11 @@ type		:       BOOLEAN		{$$.sval = "boolean";}
 return_type     :       type            {$$.sval = $1.sval;}
                 |       NOTHING         {$$.sval = "void";}
 		
-complex_type_declaration	:	ARRAY IDENTIFIER SEMICOLON	{$$.sval = ba.createComplexType($1.sval, $2.sval);}
+complex_type	: ARRAY
+				| HASH
+				;
+				
+complex_type_declaration	:	complex_type IDENTIFIER SEMICOLON	{$$.sval = ba.createComplexType($1.ival, $2.sval);}
 							;
 		
 complex_type_method_invocation
