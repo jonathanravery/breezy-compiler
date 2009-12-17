@@ -25,12 +25,10 @@ package src;
 
   //Print to console
   private void p(String s){
-	if(verbose)
             System.out.print(s + " ");
   }
   //Print line to console
   private void pl(String s){
-        if(verbose)
             System.out.println(s);
   }
 %}
