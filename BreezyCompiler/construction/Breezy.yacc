@@ -52,9 +52,9 @@ declarations    :   type_declaration SEMICOLON                           {System
 
 
 type_declaration	:	STRING IDENTIFIER	{$$.sval = $1.sval + " " + $2.sval;}
-			:	BOOLEAN IDENTIFIER	{$$.sval = $1.sval + " " + $2.sval;}
-			:	NUMBER IDENTIFIER	{$$.sval = $1.sval + " " + $2.sval;}
-			:	ARRAY IDENTIFIER	{$$.sval = ba.createComplexType($1.sval, $2.sval);}
+			|	BOOLEAN IDENTIFIER	{$$.sval = $1.sval + " " + $2.sval;}
+			|	NUMBER IDENTIFIER	{$$.sval = $1.sval + " " + $2.sval;}
+			|	ARRAY IDENTIFIER	{$$.sval = ba.createComplexType($1.sval, $2.sval);}
 			;
 
 
