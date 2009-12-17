@@ -7,11 +7,14 @@ import java.io.*;
 
 
 %token COMMENT
+%token IDENTIFIER
+%token BOOLEAN STRING NUMBER ARRAY
 %token ACCEPTS BEGIN BOOLEAN EACH ELSE END FOR FUNCTION IF NOTHING NUMERIC QUOTE RETURN RETURNS WHILE
 %token PLUS MINUS EQUAL REL_OP_LE REL_OP_LT REL_OP_GE REL_OP_GT EQUALS LOG_OP_EQUAL LOG_OP_AND LOG_OP_OR LOG_OP_NOT
 %token MUL DIV MOD
 %token LPAREN RPAREN COLON SEMICOLON COMMA DOT
 %token TRUE FALSE
+
 %token IDENTIFIER
 %token ARRAY HASH
 %token BOOLEAN
@@ -25,8 +28,8 @@ start	: 	program		{ba.DumpFile($1.sval);}
 
 
 program		:	method 		{$$.sval= $1.sval;}
-			|	program method	{$$.sval = $1.sval + $2.sval;}
-			;
+                |	program method	{$$.sval = $1.sval + $2.sval;}
+                ;
 
 
 method	: 	COMMENT
@@ -34,8 +37,8 @@ method	: 	COMMENT
     		RETURNS return_type
     		ACCEPTS aparams
     		BEGIN
-			body
-			END IDENTIFIER	{ $$.sval = ba.createFunction($3.sval,$5.sval,$7.sval,$9.sval,$11.sval); }
+                body
+                END IDENTIFIER	{ $$.sval = ba.createFunction($3.sval,$5.sval,$7.sval,$9.sval,$11.sval); }
 		;
 
 
@@ -45,22 +48,34 @@ body    :       declarations
         ;
 
 
-declarations    :   type_declaration SEMICOLON                           {$$.sval = $1.sval + ";\n";}
+//init variables so no crash
+declarations    :   type_declaration SEMICOLON                           {System.out.println("Used first in declarations"); $$.sval = $1.sval + ";\n";}
                 |   type_declaration_assignment SEMICOLON                {$$.sval = $1.sval + ";\n";}
-                |   type_declaration  SEMICOLON           declarations   {$$.sval = $1.sval + $2.sval + ";\n";}
-                |   type_declaration_assignment SEMICOLON declarations   {$$.sval = $1.sval + $2.sval + ";\n";}
+                |   declarations type_declaration  SEMICOLON              {$$.sval = $1.sval + $2.sval + ";\n";}
+                |   declarations type_declaration_assignment SEMICOLON    {$$.sval = $1.sval + $2.sval + ";\n";}
                 |                                                        {$$.sval = "";}
                 ;
 
 
-type_declaration	:	type IDENTIFIER	{$$.sval = $1.sval + " " + $2.sval;}
-					;
+type_declaration	:	STRING IDENTIFIER	{$$.sval = $1.sval + " " + $2.sval;}
+			:	BOOLEAN IDENTIFIER	{$$.sval = $1.sval + " " + $2.sval;}
+			:	NUMBER IDENTIFIER	{$$.sval = $1.sval + " " + $2.sval;}
+			:	ARRAY IDENTIFIER	{$$.sval = ba.createComplexType($1.sval, $2.sval);}
+			;
 
 
 /*Add all kinds of type assignments here!*/
-type_declaration_assignment :   type_declaration EQUALS QUOTE   {$$.sval = $1.sval + " = " + $3.sval;}
-                            |   type_declaration EQUALS NUMERIC {$$.sval = $1.sval + " = " + $3.sval;}
+type_declaration_assignment :   STRING IDENTIFIER EQUALS string_exp   {$$.sval = $1.sval + $2.sval + " = " + $4.sval;}
+                            |   NUMBER IDENTIFIER EQUALS arith_exp {$$.sval = $1.sval + $2.sval + " = " + $4.sval;}
+                            |   BOOLEAN IDENTIFIER EQUALS bool_exp  {$$.sval = $1.sval + $2.sval + " = " + $4.sval;}
                             ;
+
+
+//concrete list of functionality
+complex_type_method_invocation
+		:	IDENTIFIER DOT IDENTIFIER LPAREN params RPAREN SEMICOLON {$$.sval = ba.createComplexTypeMethodInvocation($1.sval, $3.sval, $5.sval);}
+		|	IDENTIFIER DOT IDENTIFIER LPAREN RPAREN SEMICOLON {$$.sval = ba.createComplexTypeMethodInvocation($1.sval, $3.sval, null);}
+		;
 
 
 control_body	:	statement               {$$.sval = $1.sval;}
@@ -113,9 +128,10 @@ params	:	IDENTIFIER			{$$.sval = $1.sval;}
 
 
 type		:       BOOLEAN		{$$.sval = "boolean";}
-			|	STRING		{$$.sval = "String";}
-			|	NUMBER		{$$.sval = "double";}
-			;
+                |	STRING		{$$.sval = "String";}
+                |	NUMBER		{$$.sval = "double";}
+                |       ARRAY           {$$.sval = "ArrayList";}
+                ;
 
 return_type     :       type            {$$.sval = $1.sval;}
                 |       NOTHING         {$$.sval = "void";}
@@ -131,6 +147,11 @@ complex_type_method_invocation
 		:	IDENTIFIER DOT IDENTIFIER LPAREN params RPAREN SEMICOLON {$$.sval = ba.createComplexTypeMethodInvocation($1.sval, $3.sval, $5.sval);}
 		|	IDENTIFIER DOT IDENTIFIER LPAREN RPAREN SEMICOLON {$$.sval = ba.createComplexTypeMethodInvocation($1.sval, $3.sval, null);}
 		;
+
+string_exp      :       QUOTE                       {$$.sval = $1.sval;}
+                |       function_declaration        {$$.sval = $1.sval;}
+                |       string_exp PLUS string_exp  {$$.sval = $1.sval + " + " + $3.sval;}
+                ;
 
 arith_exp	: 	arith_exp PLUS term {$$.sval = $1.sval + "+" + $3.sval; }
 			|	arith_exp MINUS term {$$.sval = $1.sval + " - " + $3.sval; }

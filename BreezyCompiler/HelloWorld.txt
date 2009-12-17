@@ -3,9 +3,10 @@
 function main2
 returns nothing 
 accepts nothing
-begin 
-	string helloWorld;
-	helloWorld = "HelloWorld";
+begin
+        number x;number y;
+        string helloWorld;
+	string helloWorld = "HelloWorld";
 	printHelloWorld(helloWorld, test, x);
 end main2
 
