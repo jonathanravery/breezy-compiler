@@ -55,6 +55,7 @@ type_declaration	:	STRING IDENTIFIER	{$$.sval = $1.sval + " " + $2.sval;}
 			|	BOOLEAN IDENTIFIER	{$$.sval = $1.sval + " " + $2.sval;}
 			|	NUMBER IDENTIFIER	{$$.sval = $1.sval + " " + $2.sval;}
 			|	ARRAY IDENTIFIER	{$$.sval = ba.createComplexType($1.sval, $2.sval);}
+			|	HASH IDENTIFIER         {$$.sval = ba.createComplexType($1.sval, $2.sval);}
 			;
 
 
@@ -78,7 +79,6 @@ control_body	:	statement               {$$.sval = $1.sval;}
 
 
 statement	:	function_declaration		{$$.sval = $1.sval;}
-			|	complex_type_declaration		{$$.sval = $1.sval;}
 			|	complex_type_method_invocation	{$$.sval = $1.sval;}
 			|	type_initialization		{$$.sval = $1.sval;}
 			|	return_statement		{$$.sval = $1.sval;}
@@ -125,17 +125,12 @@ type		:       BOOLEAN		{$$.sval = "boolean";}
                 |	STRING		{$$.sval = "String";}
                 |	NUMBER		{$$.sval = "double";}
                 |       ARRAY           {$$.sval = "ArrayList";}
+                |       HASH            {$$.sval = "HashMap";}
                 ;
 
 return_type     :       type            {$$.sval = $1.sval;}
                 |       NOTHING         {$$.sval = "void";}
-		
-complex_type	: ARRAY		{$$.sval = "ArrayList";}
-				| HASH		{$$.sval = "HashMap";}
-				;
-				
-complex_type_declaration	:	complex_type IDENTIFIER SEMICOLON	{$$.sval = ba.createComplexType($1.sval, $2.sval);}
-							;
+
 		
 complex_type_method_invocation
 		:	IDENTIFIER DOT IDENTIFIER LPAREN params RPAREN SEMICOLON {$$.sval = ba.createComplexTypeMethodInvocation($1.sval, $3.sval, $5.sval);}
