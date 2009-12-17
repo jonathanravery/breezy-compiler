@@ -51,11 +51,11 @@ declarations    :   type_declaration SEMICOLON                           {System
                 ;
 
 
-type_declaration	:	STRING IDENTIFIER	{$$.sval = $1.sval + " " + $2.sval;}
-			|	BOOLEAN IDENTIFIER	{$$.sval = $1.sval + " " + $2.sval;}
-			|	NUMBER IDENTIFIER	{$$.sval = $1.sval + " " + $2.sval;}
-			|	ARRAY IDENTIFIER	{$$.sval = ba.createComplexType($1.sval, $2.sval);}
-			|	HASH IDENTIFIER         {$$.sval = ba.createComplexType($1.sval, $2.sval);}
+type_declaration	:	STRING IDENTIFIER	{$$.sval = "String " + $2.sval;}
+			|	BOOLEAN IDENTIFIER	{$$.sval = "boolean " + $2.sval;}
+			|	NUMBER IDENTIFIER	{$$.sval = "Number " + $2.sval;}
+			|	ARRAY IDENTIFIER	{$$.sval = ba.createComplexType("ArrayList", $2.sval);}
+			|	HASH IDENTIFIER         {$$.sval = ba.createComplexType("HashMap", $2.sval);}
 			;
 
 
