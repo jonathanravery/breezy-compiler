@@ -25,11 +25,13 @@ package src;
 
   //Print to console
   private void p(String s){
-	System.out.print(s + " ");
+	if(verbose)
+            System.out.print(s + " ");
   }
   //Print line to console
   private void pl(String s){
-	System.out.println(s);
+        if(verbose)
+            System.out.println(s);
   }
 %}
 
@@ -42,7 +44,7 @@ InputCharacter = [^\r\n]
 WhiteSpace = [ \t\f]
 
 Comment = {TraditionalComment} | {EndOfLineComment}
-TraditionalComment = "/*" [^*] ~"*/" | "/*" "*"+ "/"
+TraditionalComment = "/*" [^*] ~"*/" {LineTerminator}| "/*" "*"+ "/" {LineTerminator}
 EndOfLineComment = "//" {InputCharacter}* {LineTerminator}
 
 %%
@@ -55,7 +57,7 @@ hash                           {p("HASH");    return yyparser.HASH;}
 boolean				{p("BOOLEAN");	return yyparser.BOOLEAN;}
 each				{p("EACH");	return yyparser.EACH;}
 else				{p("ELSE");	return yyparser.ELSE;}
-{LineTerminator}{WhiteSpace}*end				{pl("END");	return yyparser.END;}
+{LineTerminator}{WhiteSpace}*end {pl("END");	return yyparser.END;}
 false				{p("FALSE");	return yyparser.FALSE;}
 for				{p("FOR");	return yyparser.FOR;}
 function			{p("FUNCTION");	return yyparser.FUNCTION;}
