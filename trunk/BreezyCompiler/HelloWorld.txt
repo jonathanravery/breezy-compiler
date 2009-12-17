@@ -47,9 +47,11 @@ returns number
 accepts nothing
 begin
 	WriteToScreen("Hello World");
-	if(true)
+	if(true AND (NOT false) )
 	begin
 		number x;
 		x = 5;
 	end if
+	
+	
 end main
