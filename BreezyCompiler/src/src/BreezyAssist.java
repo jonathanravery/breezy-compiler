@@ -110,8 +110,13 @@ public class BreezyAssist {
         }
     }
     
-    public String createComplexType(String type, String name) {
-    	return "ArrayList " + name + " = new ArrayList();\n";
+    public String createComplexType(int type, String name) {
+    	if (type == Parser.ARRAY)
+    		return "List " + name + " = new ArrayList();\n";
+    	else if (type == Parser.HASH)
+    		return "Map " + name + " = new HashMap();\n";
+    	else
+    		return null;
     }
     
     public String createComplexTypeMethodInvocation(String objectName, String methodName, String params) {
