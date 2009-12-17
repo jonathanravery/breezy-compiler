@@ -132,9 +132,13 @@ condition	:	bool_exp	{$$ = $1;}
 		;
 
 
-bool_exp	:	TRUE		{$$.sval = "true";}
-		|	FALSE		{$$.sval = "false";}
-		;
+bool_exp	:	bool_exp LOG_OP_OR bool_exp {$$.sval = $1.sval + " || " + $3.sval; }
+			|	bool_exp LOG_OP_AND bool_exp {$$.sval = $1.sval + " && " + $3.sval; }
+			|	LOG_OP_NOT bool_exp {$$.sval = " !" + $2.sval; }
+			|	LPAREN bool_exp RPAREN {$$.sval = " ( " + $2.sval + " ) "; }
+			|	TRUE		{$$.sval = "true";}
+			|	FALSE		{$$.sval = "false";}
+			;
 
 
 
