@@ -130,11 +130,11 @@ type		:       BOOLEAN		{$$.sval = "boolean";}
 return_type     :       type            {$$.sval = $1.sval;}
                 |       NOTHING         {$$.sval = "void";}
 		
-complex_type	: ARRAY
-				| HASH
+complex_type	: ARRAY		{$$.sval = "ArrayList";}
+				| HASH		{$$.sval = "HashMap";}
 				;
 				
-complex_type_declaration	:	complex_type IDENTIFIER SEMICOLON	{$$.sval = ba.createComplexType($1.ival, $2.sval);}
+complex_type_declaration	:	complex_type IDENTIFIER SEMICOLON	{$$.sval = ba.createComplexType($1.sval, $2.sval);}
 							;
 		
 complex_type_method_invocation
