@@ -19,8 +19,6 @@
 //#line 2 "Breezy.yacc"
 package src;
 import java.io.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 /*Authored by Jon, Cesar, Vinay, Sharadh*/
 /*Adapted to Breezy by Ian, Leighton, Jack, Jon, Elena, Clement*/
 //#line 22 "Parser.java"
@@ -501,7 +499,7 @@ String yys;    //current token string
 //###############################################################
 // method: yyparse : parse input and execute indicated items
 //###############################################################
-int yyparse() throws Exception
+int yyparse()
 {
 boolean doaction;
   init_stacks();
@@ -970,11 +968,7 @@ break;
  */
 public void run()
 {
-        try {
-            yyparse();
-        } catch (Exception ex) {
-            Logger.getLogger(Parser.class.getName()).log(Level.SEVERE, null, ex);
-        }
+  yyparse();
 }
 //## end of method run() ########################################
 
