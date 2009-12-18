@@ -32,25 +32,23 @@ begin
 	return x;
 end objectTest
 
+
 //Testing arrays
 function arrayTest
 returns nothing
 accepts string s, number x
 begin
+	string testString = "testing string";
+	array testArray2 = ["test", "test2", 3, testString];
 end arrayTest
 
-//Testing arrays
+//Testing hash
 function hashTest
 returns nothing
 accepts string s, number x
 begin
-	hash testHash;
-        number loop = 1;
-        while(loop <= 10)
-
-
-            testHash.add("test");
-            testHash.add("test", "more test");
+	string testkey = "test key";
+	hash testHash = [("test", 5412341), ("test2", 34235325), (34235353, "test value"), (testkey, "test value2")];
 end hashTest
 
 /*Main Function*/
