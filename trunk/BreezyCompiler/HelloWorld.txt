@@ -7,10 +7,6 @@ begin
 	string helloWorld;
 	helloWorld = "HelloWorld";
 	printHelloWorld(helloWorld);
-begin
-        number x;number y;
-        string helloWorld;
-	string helloWorld = "HelloWorld";
 	printHelloWorld(helloWorld, test, x);
 end main2
 
@@ -41,7 +37,6 @@ function arrayTest
 returns nothing
 accepts string s, number x
 begin
-	array testArray2 = ["test", "test2", 3];
 end arrayTest
 
 //Testing arrays
@@ -59,12 +54,25 @@ function main
 returns number
 accepts nothing
 begin
+        number x;
+        string y;
+        boolean b;
 	WriteToScreen("Hello World");
 	if(true AND (NOT false) )
 	begin
-		number x;
-		string y;
-		boolean b;
+                if(false)
+                begin
+                end if
+
+                else if (true)
+                begin
+                end else if
+
+                else
+                begin
+                    print("HelloWorld");
+                end else
+
 		x = 5;
 		x = 7 - 8+(6*9.876 - (-x)%2 );
 		b = true OR false;
