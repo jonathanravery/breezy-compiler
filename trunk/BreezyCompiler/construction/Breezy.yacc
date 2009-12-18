@@ -86,6 +86,9 @@ statement	:	function_declaration		{$$.sval = $1.sval;}
 			|	return_statement		{$$.sval = $1.sval;}
 			|	if_statement			{$$.sval = $1.sval;}
 			|	arith_exp SEMICOLON			{$$.sval = $1.sval + ";\n";}
+			|	IDENTIFIER EQUALS arith_exp SEMICOLON {$$.sval = $1.sval + "=" + $3.sval + ";\n" ;}
+			|	IDENTIFIER EQUALS string_exp SEMICOLON {$$.sval = $1.sval + "=" + $3.sval + ";\n" ;}
+			|	IDENTIFIER EQUALS bool_exp SEMICOLON {$$.sval = $1.sval + "=" + $3.sval + ";\n" ;}
 			;
 
 if_statement	:	IF LPAREN condition RPAREN
