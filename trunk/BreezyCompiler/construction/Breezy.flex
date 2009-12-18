@@ -78,7 +78,7 @@ while				{p("WHILE");	return yyparser.WHILE;}
 ">="					{	return yyparser.REL_OP_GE;}
 ">"					{	return yyparser.REL_OP_GT;}
 "="					{p("EQUALS");	return yyparser.EQUALS;}
-"EQUAL"					{	return yyparser.LOG_OP_EQUAL;}
+"EQUALS"					{	return yyparser.LOG_OP_EQUAL;}
 "AND"					{	return yyparser.LOG_OP_AND;}
 "OR"					{	return yyparser.LOG_OP_OR;}
 "NOT"					{	return yyparser.LOG_OP_NOT;}

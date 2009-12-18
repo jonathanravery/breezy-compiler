@@ -54,16 +54,16 @@ declarations    :   type_declaration SEMICOLON                           {System
 
 type_declaration	:	STRING IDENTIFIER	{$$.sval = "String " + $2.sval;}
 			|	BOOLEAN IDENTIFIER	{$$.sval = "boolean " + $2.sval;}
-			|	NUMBER IDENTIFIER	{$$.sval = "Number " + $2.sval;}
+			|	NUMBER IDENTIFIER	{$$.sval = "double " + $2.sval;}
 			|	ARRAY IDENTIFIER	{$$.sval = ba.createComplexType("ArrayList", $2.sval);}
 			|	HASH IDENTIFIER         {$$.sval = ba.createComplexType("HashMap", $2.sval);}
 			;
 
 
 /*Add all kinds of type assignments here!*/
-type_declaration_assignment :   STRING IDENTIFIER EQUALS string_exp   {$$.sval = $1.sval + $2.sval + " = " + $4.sval;}
-                            |   NUMBER IDENTIFIER EQUALS arith_exp {$$.sval = $1.sval + $2.sval + " = " + $4.sval;}
-                            |   BOOLEAN IDENTIFIER EQUALS bool_exp  {$$.sval = $1.sval + $2.sval + " = " + $4.sval;}
+type_declaration_assignment :   STRING IDENTIFIER EQUALS string_exp   {$$.sval = "String " + $2.sval + " = " + $4.sval;}
+                            |   NUMBER IDENTIFIER EQUALS arith_exp {$$.sval = "double " + $2.sval + " = " + $4.sval;}
+                            |   BOOLEAN IDENTIFIER EQUALS bool_exp  {$$.sval = "boolean " + $2.sval + " = " + $4.sval;}
                             |	ARRAY IDENTIFIER EQUALS LEFT_SQUARE_PAREN params RIGHT_SQUARE_PAREN	{$$.sval = ba.createComplexType("ArrayList", $2.sval, $5.sval);}
                             ;
 
@@ -81,11 +81,13 @@ control_body	:	statement               {$$.sval = $1.sval;}
                 ;
 
 
-statement	:	function_declaration		{$$.sval = $1.sval;}
+statement	:               COMMENT
+                        |       function_declaration		{$$.sval = $1.sval;}
 			|	complex_type_method_invocation	{$$.sval = $1.sval;}
 			|	type_initialization		{$$.sval = $1.sval;}
 			|	return_statement		{$$.sval = $1.sval;}
 			|	if_statement			{$$.sval = $1.sval;}
+                        |       while_loop                      {$$.sval = $1.sval;}
 			|	arith_exp SEMICOLON			{$$.sval = $1.sval + ";\n";}
 			|	IDENTIFIER EQUALS arith_exp SEMICOLON {$$.sval = $1.sval + "=" + $3.sval + ";\n" ;}
 			|	IDENTIFIER EQUALS string_exp SEMICOLON {$$.sval = $1.sval + "=" + $3.sval + ";\n" ;}
@@ -118,7 +120,7 @@ else            :       ELSE
 while_loop	: 	WHILE LPAREN bool_exp RPAREN
 			BEGIN
 				control_body
-			END WHILE
+			END WHILE    { $$.sval = "while( " + $3.sval + " ){\n" + $6.sval + "}\n";}
                 ;
 
 return_statement	:	RETURN IDENTIFIER SEMICOLON	{$$.sval = "return " + $2.sval + ";\n";}
@@ -150,11 +152,11 @@ params	:	IDENTIFIER			{$$.sval = $1.sval;}
 		;
 
 
-type		:       BOOLEAN		{$$.sval = "boolean";}
-                |	STRING		{$$.sval = "String";}
-                |	NUMBER		{$$.sval = "double";}
-                |       ARRAY           {$$.sval = "ArrayList";}
-                |       HASH            {$$.sval = "HashMap";}
+type		:       BOOLEAN		{$$.sval = "boolean ";}
+                |	STRING		{$$.sval = "String ";}
+                |	NUMBER		{$$.sval = "double ";}
+                |       ARRAY           {$$.sval = "ArrayList ";}
+                |       HASH            {$$.sval = "HashMap ";}
                 ;
 
 return_type     :       type            {$$.sval = $1.sval;}
@@ -197,14 +199,22 @@ condition	:	bool_exp	{$$ = $1;}
 
 
 
-bool_exp	:	bool_exp LOG_OP_OR bool_exp {$$.sval = $1.sval + " || " + $3.sval; }
-			|	bool_exp LOG_OP_AND bool_exp {$$.sval = $1.sval + " && " + $3.sval; }
-			|	LOG_OP_NOT bool_exp {$$.sval = " !" + $2.sval; }
-			|	LPAREN bool_exp RPAREN {$$.sval = " ( " + $2.sval + " ) "; }
-			|	TRUE		{$$.sval = "true";}
-			|	FALSE		{$$.sval = "false";}
-			;
+bool_exp	:	arith_exp rel_op arith_exp  {$$.sval = $1.sval + $2.sval + $3.sval;}
+                |       bool_exp LOG_OP_OR bool_exp {$$.sval = $1.sval + " || " + $3.sval; }
+                |	bool_exp LOG_OP_AND bool_exp {$$.sval = $1.sval + " && " + $3.sval; }
+                |	LOG_OP_NOT bool_exp {$$.sval = " !" + $2.sval; }
+                |	LPAREN bool_exp RPAREN {$$.sval = " ( " + $2.sval + " ) "; }
+                |	TRUE		{$$.sval = "true";}
+                |	FALSE		{$$.sval = "false";}
+                ;
 
+rel_op          :       REL_OP_LT		{$$.sval = "<";}
+                |       REL_OP_GT		{$$.sval = ">";}
+                |       REL_OP_LE		{$$.sval = "<=";}
+                |       REL_OP_GE		{$$.sval = ">=";}
+                |       LOG_OP_EQUAL		{$$.sval = "==";}
+                |       LOG_OP_NOT LOG_OP_EQUAL	{$$.sval = "!=";}
+                ;
 
 
 %%
