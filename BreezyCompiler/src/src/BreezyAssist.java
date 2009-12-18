@@ -6,9 +6,13 @@
 package src;
 
 import java.io.*;
-import java.util.ArrayList;
+
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
+
+import libs.structs.*;
 
 /**
  *
@@ -111,10 +115,37 @@ public class BreezyAssist {
     }
     
     public String createComplexType(String type, String name) {
-    		return type + " " + name + " = new " + type + "();\n";
+    	return type + " " + name + " = new " + type + "();\n";
+    }
+    
+    public String createComplexType(String type, String name, String params) {
+    	Collection<TypedParserVal> parseParams = parseParams(params);
+    	String temp = type + " " + name + " = new " + type + "();\n";
+    	for (final TypedParserVal value : parseParams) {
+    		temp += name + ".add(" + "new TypedParserVal<" + value.type + ">(" + value.obj.toString() + ");\n";
+    	}
+    	return temp;
     }
     
     public String createComplexTypeMethodInvocation(String objectName, String methodName, String params) {
     	return objectName + "." + methodName + "(" + params + ");\n";
+    }
+    
+    private Collection<TypedParserVal> parseParams(String params){
+//    	Scanner scanner = new Scanner(params);
+    	ArrayList<TypedParserVal> arrayList = new ArrayList<TypedParserVal>();
+    	StringTokenizer stringTokenizer = new StringTokenizer(params, ",");
+    	while(stringTokenizer.hasMoreElements())  {
+    		String nextToken = stringTokenizer.nextToken();
+    		if (Pattern.matches("/d*", nextToken)) {
+    			arrayList.add(new TypedParserVal(nextToken, "Number"));
+    		} else if (Pattern.matches("\"*", nextToken)) {
+    			arrayList.add(new TypedParserVal(nextToken, "String"));
+    		} else {
+    			arrayList.add(new TypedParserVal(nextToken, "Identifier"));
+    		}
+    	}
+    	return arrayList;
+    	
     }
 }
