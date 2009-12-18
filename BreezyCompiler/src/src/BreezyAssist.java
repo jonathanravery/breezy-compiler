@@ -14,6 +14,7 @@ import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 import libs.structs.*;
+import src.type.TypeTracker;
 
 /**
  *
@@ -23,6 +24,8 @@ public class BreezyAssist {
 
     private static ArrayList<String> errorList = new ArrayList<String>();
     private static boolean mainCreated = false;
+
+    public static TypeTracker typeTrack = new TypeTracker();
 
     public BreezyAssist() {
     }
@@ -54,6 +57,12 @@ public class BreezyAssist {
         if(checkFunctionEnding(id,id2) == false)
             return "";
 
+        //Add function name to id list with it's return type
+        this.addIdentifier(id, retType);
+
+        //TODO: check return value == actual return value
+
+        
         if(id.equals("main")){
             if(!mainCreated){
                 return createMain(retType,params,body);
@@ -67,8 +76,20 @@ public class BreezyAssist {
             retFunction = "public static " + retType + " " + id + "(" + params + ")" + "{\n" + body + "}";
         }
 
-        
         return retFunction;
+    }
+
+    public void addIdentifier(String id, String type){
+        //TODO: check against java keywords
+
+        //Add to our type tracking list of identifiers
+        try{
+            System.err.println("BreezyAssist::addIdentifier()::id " + id);
+            System.err.println("BreezyAssist::addIdentifier()::type " + type);
+            typeTrack.addID(id, type);
+        }catch(Exception e){
+            System.err.println(e.getMessage());
+        }
     }
 
     private String createMain(String retType, String params, String body){
@@ -120,6 +141,10 @@ public class BreezyAssist {
     }
     
     public String createComplexType(String type, String name, String params) {
+        
+        //Add id to type checker
+        this.addIdentifier(name, type);
+
     	String temp = type + " " + name + " = new " + type + "();\n";
     	
     	if (type.equals("ArrayList")) {
