@@ -68,7 +68,7 @@ type_declaration_assignment :   STRING IDENTIFIER EQUALS arith_exp   {$$.sval = 
                             |   NUMBER IDENTIFIER EQUALS arith_exp {$$.sval = "double " + $2.sval + " = " + $4.sval;}
                             |   BOOLEAN IDENTIFIER EQUALS bool_exp  {$$.sval = "boolean " + $2.sval + " = " + $4.sval;}
                             |	ARRAY IDENTIFIER EQUALS LEFT_SQUARE_PAREN params RIGHT_SQUARE_PAREN	{$$.sval = ba.createComplexType("ArrayList", $2.sval, $5.sval);}
-                            |	HASH IDENTIFIER EQUALS LEFT_SQUARE_PAREN params RIGHT_SQUARE_PAREN	{$$.sval = ba.createComplexType("HashMap", $2.sval, $5.sval);}
+                            |	HASH IDENTIFIER EQUALS LEFT_SQUARE_PAREN hash_params RIGHT_SQUARE_PAREN	{$$.sval = ba.createComplexType("HashMap", $2.sval, $5.sval);}
                             ;
 
 
@@ -148,6 +148,15 @@ params_          :	arith_exp			{$$.sval = $1.sval;}
 		|	bool_exp			{$$.sval = $1.sval;}
 		|	params_ COMMA params_ 		{$$.sval = $1.sval + "," + $3.sval;}
 		;
+		
+hash_params		: 	LPAREN hash_item COMMA hash_item RPAREN COMMA hash_params	{$$.sval = "(" + $2.sval + "," + $4.sval + ")" + $7.sval;}
+				|	LPAREN hash_item COMMA hash_item RPAREN		{$$.sval = "(" + $2.sval + "," + $4.sval + ")";}
+				;
+
+hash_item		:	QUOTE	{$$.sval = $1.sval;}
+				|	NUMERIC	{$$.ival = $1.ival;}
+				|	IDENTIFIER	{$$.sval = $1.sval;}
+				;
 
 
 type		:       BOOLEAN		{$$.sval = "boolean ";}

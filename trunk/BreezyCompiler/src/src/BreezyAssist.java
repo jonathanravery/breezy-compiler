@@ -6,6 +6,7 @@
 package src;
 
 import java.io.*;
+import java.lang.reflect.Type;
 
 import java.util.*;
 import java.util.logging.Level;
@@ -119,13 +120,22 @@ public class BreezyAssist {
     }
     
     public String createComplexType(String type, String name, String params) {
-    	Collection<TypedParserVal> parseParams = parseParams(params);
     	String temp = type + " " + name + " = new " + type + "();\n";
-    	for (final TypedParserVal value : parseParams) {
-    		if (value.type.equals("Identifier"))
-    			temp += name + ".add(" + value.obj + ");\n";
-    		else
-    			temp += name + ".add(" + "new TypedParserVal<" + value.type + ">(" + value.obj.toString() + ");\n";
+    	
+    	if (type.equals("ArrayList")) {
+    		Collection<TypedParserVal> parseParams = parseArrayParams(params);
+	    	for (final TypedParserVal value : parseParams) {
+	    		if (value.type.equals("Identifier"))
+	    			temp += name + ".add(" + value.obj + ");\n";
+	    		else
+	    			temp += name + ".add(" + value.convertToCode() + ";\n";
+	    	}
+    	} else { // type is HashMap
+    		Map<TypedParserVal, TypedParserVal> parseHashParams = parseHashParams(params);
+    		for (final TypedParserVal key : parseHashParams.keySet()) {
+    			temp += name + ".put(" + key.convertToCode() + "," + parseHashParams.get(key).convertToCode() + " );\n";
+    		}
+    		System.out.println();
     	}
     	return temp;
     }
@@ -134,8 +144,14 @@ public class BreezyAssist {
     	return objectName + "." + methodName + "(" + params + ");\n";
     }
     
-    private Collection<TypedParserVal> parseParams(String params){
-//    	Scanner scanner = new Scanner(params);
+    /**
+     * Converts array instantiating param string into list of TypedParserVal
+     * e.g. given "(5, "testing", "testing2")
+     * returns list containing TypedParserVal<Number>(5), TypedParserVal<String>("testing") and TypedParserVal<String>("testing2")
+     * @param params
+     * @return
+     */
+    private List<TypedParserVal> parseArrayParams(String params){
     	ArrayList<TypedParserVal> arrayList = new ArrayList<TypedParserVal>();
     	StringTokenizer stringTokenizer = new StringTokenizer(params, ",");
     	while(stringTokenizer.hasMoreElements())  {
@@ -149,6 +165,18 @@ public class BreezyAssist {
     		}
     	}
     	return arrayList;
+    }
+    
+    private Map<TypedParserVal,TypedParserVal> parseHashParams(String params) {
+    	HashMap<TypedParserVal,TypedParserVal> hashMap = new HashMap<TypedParserVal, TypedParserVal>();
+    	StringTokenizer stringTokenizer = new StringTokenizer(params, ")");
     	
+    	while(stringTokenizer.hasMoreElements()) {
+    		String keyValuePair = stringTokenizer.nextToken();
+    		keyValuePair = keyValuePair.replace("(", ""); // Removes leading left parenthesis
+    		List<TypedParserVal> keyValue = parseArrayParams(keyValuePair);
+    		hashMap.put(keyValue.get(0), keyValue.get(1));
+    	}
+    	return hashMap;
     }
 }
