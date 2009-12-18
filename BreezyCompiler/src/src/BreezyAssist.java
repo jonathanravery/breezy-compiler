@@ -137,9 +137,9 @@ public class BreezyAssist {
     	StringTokenizer stringTokenizer = new StringTokenizer(params, ",");
     	while(stringTokenizer.hasMoreElements())  {
     		String nextToken = stringTokenizer.nextToken();
-    		if (Pattern.matches("/d*", nextToken)) {
+    		if (Pattern.matches("\\d.*", nextToken)) {
     			arrayList.add(new TypedParserVal(nextToken, "Number"));
-    		} else if (Pattern.matches("\"*", nextToken)) {
+    		} else if (Pattern.matches("\".*", nextToken)) {
     			arrayList.add(new TypedParserVal(nextToken, "String"));
     		} else {
     			arrayList.add(new TypedParserVal(nextToken, "Identifier"));
