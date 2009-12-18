@@ -8,7 +8,7 @@ public class TypedParserVal extends ParserVal {
 		super.obj = value;
 		this.type = type;
 	}
-	
+        
 	public String type;
 	
 	public String convertToCode() {

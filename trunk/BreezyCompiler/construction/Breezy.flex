@@ -57,7 +57,7 @@ each				{p("EACH");	return yyparser.EACH;}
 else{WhiteSpace}if				{p("ELSEIF");	return yyparser.ELSEIF;}
 else				{p("ELSE");	return yyparser.ELSE;}
 {LineTerminator}{WhiteSpace}*end {pl("END");	return yyparser.END;}
-false				{p("FALSE");	return yyparser.FALSE;}
+false				{p("FALSE");	yyparser.yylval = new ParserVal("false"); yyparser.yylval.obj="boolean"; return yyparser.FALSE;}
 for				{p("FOR");	return yyparser.FOR;}
 function			{p("FUNCTION");	return yyparser.FUNCTION;}
 if				{p("IF");	return yyparser.IF;}
@@ -66,7 +66,7 @@ number				{p("NUMBER");	return yyparser.NUMBER;}
 return				{p("RETURN");	return yyparser.RETURN;}
 {LineTerminator}returns		{p("RETURNS");	return yyparser.RETURNS;}
 string				{p("STRING");	return yyparser.STRING;}
-true				{p("TRUE");	return yyparser.TRUE;}
+true				{p("TRUE");	yyparser.yylval = new ParserVal("true"); yyparser.yylval.obj="boolean"; return yyparser.TRUE;}
 while				{p("WHILE");	return yyparser.WHILE;}
 "+"					{	return yyparser.PLUS;}
 "-"					{	return yyparser.MINUS;}
@@ -91,8 +91,8 @@ while				{p("WHILE");	return yyparser.WHILE;}
 ","					{p("COMMA");	return yyparser.COMMA;}
 \.					{p("DOT");	return yyparser.DOT;}
 [a-zA-Z][a-zA-Z0-9]*			{p(yytext());	yyparser.yylval = new ParserVal(yytext()); return yyparser.IDENTIFIER;}
-\"([^\"]|\\\")*\"			{p(yytext());	yyparser.yylval = new ParserVal(yytext()); return yyparser.QUOTE;}
--?{digit}*(\.{digit}+)?			{p(yytext());	yyparser.yylval = new ParserVal(yytext()); return yyparser.NUMERIC;}
+\"([^\"]|\\\")*\"			{p(yytext());	yyparser.yylval = new ParserVal(yytext()); yyparser.yylval.obj="string"; return yyparser.QUOTE;}
+-?{digit}*(\.{digit}+)?			{p(yytext());	yyparser.yylval = new ParserVal(yytext()); yyparser.yylval.obj="number"; return yyparser.NUMERIC;}
 {LineTerminator}			{pl("");}
 {WhiteSpace}				{}
 .					{p("WHO KNOWS");	return 0;}
