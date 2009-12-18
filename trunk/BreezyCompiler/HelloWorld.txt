@@ -3,6 +3,10 @@
 function main2
 returns nothing 
 accepts nothing
+begin 
+	string helloWorld;
+	helloWorld = "HelloWorld";
+	printHelloWorld(helloWorld);
 begin
         number x;number y;
         string helloWorld;
@@ -14,7 +18,7 @@ end main2
 
 //New Function
 function printHelloWorld
-returns string
+returns number
 accepts string s, number x
 begin
 	WriteToScreen(s);
@@ -25,7 +29,7 @@ end printHelloWorld
 
 //New Function for testing arrays
 function objectTest
-returns string
+returns number
 accepts string s, number x
 begin
 	WriteToScreen(s);
@@ -37,10 +41,18 @@ function arrayTest
 returns nothing
 accepts string s, number x
 begin
-	array testArray;
-	testArray.add("test");
+	array testArray2 = ["test", "test2", 3];
 end arrayTest
 
+//Testing arrays
+function hashTest
+returns nothing
+accepts string s, number x
+begin
+	hash testHash;
+	testHash.add("test");
+	testHash.add("test", "more test");
+end hashTest
 
 /*Main Function*/
 function main
