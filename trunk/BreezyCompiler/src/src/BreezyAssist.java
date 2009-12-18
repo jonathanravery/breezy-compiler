@@ -122,7 +122,10 @@ public class BreezyAssist {
     	Collection<TypedParserVal> parseParams = parseParams(params);
     	String temp = type + " " + name + " = new " + type + "();\n";
     	for (final TypedParserVal value : parseParams) {
-    		temp += name + ".add(" + "new TypedParserVal<" + value.type + ">(" + value.obj.toString() + ");\n";
+    		if (value.type.equals("Identifier"))
+    			temp += name + ".add(" + value.obj + ");\n";
+    		else
+    			temp += name + ".add(" + "new TypedParserVal<" + value.type + ">(" + value.obj.toString() + ");\n";
     	}
     	return temp;
     }
