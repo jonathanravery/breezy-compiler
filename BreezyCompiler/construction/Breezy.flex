@@ -54,6 +54,7 @@ array                           {p("ARRAY");    return yyparser.ARRAY;}
 hash                           {p("HASH");    return yyparser.HASH;}
 boolean				{p("BOOLEAN");	return yyparser.BOOLEAN;}
 each				{p("EACH");	return yyparser.EACH;}
+else{WhiteSpace}if				{p("ELSEIF");	return yyparser.ELSEIF;}
 else				{p("ELSE");	return yyparser.ELSE;}
 {LineTerminator}{WhiteSpace}*end {pl("END");	return yyparser.END;}
 false				{p("FALSE");	return yyparser.FALSE;}

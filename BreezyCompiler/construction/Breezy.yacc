@@ -9,9 +9,10 @@ import java.io.*;
 %token COMMENT
 %token IDENTIFIER
 %token BOOLEAN STRING NUMBER ARRAY HASH
-%token ACCEPTS BEGIN BOOLEAN EACH ELSE END FOR FUNCTION IF NOTHING NUMERIC QUOTE RETURN RETURNS WHILE
+%token ACCEPTS BEGIN BOOLEAN EACH ELSE ELSEIF END FOR FUNCTION IF NOTHING NUMERIC QUOTE RETURN RETURNS WHILE
 %token PLUS MINUS EQUAL REL_OP_LE REL_OP_LT REL_OP_GE REL_OP_GT EQUALS LOG_OP_EQUAL LOG_OP_AND LOG_OP_OR LOG_OP_NOT
 %token MUL DIV MOD
+%token LEFT_SQUARE_PAREN RIGHT_SQUARE_PAREN
 %token LPAREN RPAREN COLON SEMICOLON COMMA DOT
 %token TRUE FALSE
 
@@ -91,11 +92,34 @@ statement	:	function_declaration		{$$.sval = $1.sval;}
 			|	IDENTIFIER EQUALS bool_exp SEMICOLON {$$.sval = $1.sval + "=" + $3.sval + ";\n" ;}
 			;
 
-if_statement	:	IF LPAREN condition RPAREN
+if_statement	:	IF LPAREN bool_exp RPAREN
 					BEGIN
-					body
-					END IF	{ $$.sval = "if(" + $3.sval + "){\n" + $6.sval + "}\n";}
+                                            control_body
+					END IF	else_if else{ $$.sval = "if(" + $3.sval + "){\n" + $6.sval + "}\n" + $9.sval + "\n" + $10.sval;}
 				;
+
+
+else_if         :       ELSEIF LPAREN bool_exp RPAREN
+                        BEGIN
+                            control_body
+                        END ELSEIF else_if { $$.sval = "else if(" + $3.sval + "){\n" + $6.sval + "}\n" + $9.sval + "\n";}
+                        |                   { $$.sval = "";}
+                        ;
+
+
+else            :       ELSE
+                        BEGIN
+                            control_body
+                        END ELSE    { $$.sval = "else{\n" + $3.sval + "}\n";}
+                        |           {$$.sval = "";}
+                        ;
+
+
+while_loop	: 	WHILE LPAREN bool_exp RPAREN
+			BEGIN
+				control_body
+			END WHILE
+                ;
 
 return_statement	:	RETURN IDENTIFIER SEMICOLON	{$$.sval = "return " + $2.sval + ";\n";}
 					|	RETURN NUMERIC SEMICOLON	{$$.sval = "return " + $2.sval + ";\n";}
