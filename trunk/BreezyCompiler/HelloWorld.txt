@@ -45,8 +45,12 @@ returns nothing
 accepts string s, number x
 begin
 	hash testHash;
-	testHash.add("test");
-	testHash.add("test", "more test");
+        number loop = 1;
+        while(loop <= 10)
+
+
+            testHash.add("test");
+            testHash.add("test", "more test");
 end hashTest
 
 /*Main Function*/

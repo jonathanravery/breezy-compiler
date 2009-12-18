@@ -78,14 +78,14 @@ while				{p("WHILE");	return yyparser.WHILE;}
 ">="					{	return yyparser.REL_OP_GE;}
 ">"					{	return yyparser.REL_OP_GT;}
 "="					{p("EQUALS");	return yyparser.EQUALS;}
-"EQUALS"					{	return yyparser.LOG_OP_EQUAL;}
+"EQUALS"				{	return yyparser.LOG_OP_EQUAL;}
 "AND"					{	return yyparser.LOG_OP_AND;}
 "OR"					{	return yyparser.LOG_OP_OR;}
 "NOT"					{	return yyparser.LOG_OP_NOT;}
 "("					{p("LPAREN");	return yyparser.LPAREN;}
 ")"					{p("RPAREN");	return yyparser.RPAREN;}
 ":"					{p("COLON");	return yyparser.COLON;}
-";"			{pl("SEMICOLON");	return yyparser.SEMICOLON;}
+";"                                     {pl("SEMICOLON");	return yyparser.SEMICOLON;}
 ","					{p("COMMA");	return yyparser.COMMA;}
 \.					{p("DOT");	return yyparser.DOT;}
 [a-zA-Z][a-zA-Z0-9]*			{p(yytext());	yyparser.yylval = new ParserVal(yytext()); return yyparser.IDENTIFIER;}
