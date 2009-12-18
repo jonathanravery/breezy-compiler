@@ -84,6 +84,8 @@ while				{p("WHILE");	return yyparser.WHILE;}
 "NOT"					{	return yyparser.LOG_OP_NOT;}
 "("					{p("LPAREN");	return yyparser.LPAREN;}
 ")"					{p("RPAREN");	return yyparser.RPAREN;}
+"["					{p("LEFT_SQUARE_PAREN");	return yyparser.LEFT_SQUARE_PAREN;}
+"]"					{p("RIGHT_SQUARE_PAREN");	return yyparser.RIGHT_SQUARE_PAREN;}
 ":"					{p("COLON");	return yyparser.COLON;}
 ";"                                     {pl("SEMICOLON");	return yyparser.SEMICOLON;}
 ","					{p("COMMA");	return yyparser.COMMA;}
