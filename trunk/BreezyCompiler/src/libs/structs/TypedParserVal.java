@@ -10,4 +10,8 @@ public class TypedParserVal extends ParserVal {
 	}
 	
 	public String type;
+	
+	public String convertToCode() {
+		return "new TypedParserVal<" + type + ">(" + obj.toString() + ")";
+	}
 }
