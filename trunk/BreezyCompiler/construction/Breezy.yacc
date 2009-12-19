@@ -267,8 +267,11 @@ bool_factor     :	LOG_OP_NOT bool_factor {$$.sval = " !" + $2.sval;
                 |	LPAREN bool_exp RPAREN {$$.sval = " ( " + $2.sval + " ) "; 
                                                 $$.obj = $2.obj;
                                                 $$.line = $1.line;}
-                |       arith_exp rel_op arith_exp  {$$.sval = $1.sval + $2.sval + $3.sval;
-                                                         ba.typeTrack.assertNumberType($1,$3,$2);
+                |       arith_exp rel_op arith_exp  {ba.typeTrack.assertNumberOrStringType($1,$3,$2);
+                                                        if($1.obj.toString().equals("string") && $2.sval.equals("=="))
+                                                            $$.sval = "(" +$1.sval + ").equals(" + $3.sval + ")";
+                                                        else
+                                                            $$.sval = $1.sval + $2.sval + $3.sval;
                                                          $$.obj = "boolean";
                                                         $$.line = $1.line;}
                 |	TRUE		{$$.sval = $1.sval; $$.obj = $1.obj;

@@ -75,15 +75,15 @@ while				{p("WHILE");	return yyparser.WHILE;}
 "*"					{	yyparser.yylval = new ParserVal(yytext(),yyline+1,yycolumn); return yyparser.MUL;}
 "/"					{	yyparser.yylval = new ParserVal(yytext(),yyline+1,yycolumn); return yyparser.DIV;}
 "%"					{	yyparser.yylval = new ParserVal(yytext(),yyline+1,yycolumn); return yyparser.MOD;}
-"<="					{	return yyparser.REL_OP_LE;}
-"<"					{	return yyparser.REL_OP_LT;}
-">="					{	return yyparser.REL_OP_GE;}
-">"					{	return yyparser.REL_OP_GT;}
+"<="					{	yyparser.yylval = new ParserVal(yytext(),yyline+1,yycolumn); return yyparser.REL_OP_LE;}
+"<"					{	yyparser.yylval = new ParserVal(yytext(),yyline+1,yycolumn); return yyparser.REL_OP_LT;}
+">="					{	yyparser.yylval = new ParserVal(yytext(),yyline+1,yycolumn); return yyparser.REL_OP_GE;}
+">"					{	yyparser.yylval = new ParserVal(yytext(),yyline+1,yycolumn); return yyparser.REL_OP_GT;}
 "="					{p("EQUALS");	yyparser.yylval = new ParserVal(yytext(),yyline+1,yycolumn); return yyparser.EQUALS;}
-"EQUALS"				{	return yyparser.LOG_OP_EQUAL;}
-"AND"					{	return yyparser.LOG_OP_AND;}
-"OR"					{	return yyparser.LOG_OP_OR;}
-"NOT"					{	return yyparser.LOG_OP_NOT;}
+"EQUALS"				{	yyparser.yylval = new ParserVal(yytext(),yyline+1,yycolumn); return yyparser.LOG_OP_EQUAL;}
+"AND"					{	yyparser.yylval = new ParserVal(yytext(),yyline+1,yycolumn); return yyparser.LOG_OP_AND;}
+"OR"					{	yyparser.yylval = new ParserVal(yytext(),yyline+1,yycolumn); return yyparser.LOG_OP_OR;}
+"NOT"					{	yyparser.yylval = new ParserVal(yytext(),yyline+1,yycolumn); return yyparser.LOG_OP_NOT;}
 "("					{p("LPAREN");	return yyparser.LPAREN;}
 ")"					{p("RPAREN");	return yyparser.RPAREN;}
 "["					{p("LEFT_SQUARE_PAREN");	return yyparser.LEFT_SQUARE_PAREN;}
