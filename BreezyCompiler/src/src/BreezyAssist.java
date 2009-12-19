@@ -7,7 +7,6 @@
 package src;
 
 import java.io.*;
-import java.lang.reflect.Type;
 
 import java.util.*;
 import java.util.logging.Level;
@@ -178,8 +177,44 @@ public class BreezyAssist {
     	return temp;
     }
     
-    public String createComplexTypeMethodInvocation(String objectName, String methodName, String params) {
-    	return objectName + "." + methodName + "(" + params + ")";
+    public String createComplexTypeMethodInvocation(String objectName, String methodName, String scope, String params) {
+    	String type = null;
+		try {
+			type = typeTrack.getType(objectName, scope);
+		} catch (Exception e) {
+		}
+    	String returnValue = "";
+    	if (type.equals("ArrayList")) {
+    		List<TypedParserVal> parseArrayParams = parseArrayParams(params);
+    		if (methodName.equals("add")) {
+    			for (final TypedParserVal param : parseArrayParams) {
+    				returnValue += objectName + "." + methodName + "(" + param.convertToCode() + ");\n";
+    			}
+    		} else if (methodName.equals("remove")) {
+    			for (final TypedParserVal param : parseArrayParams) {
+    				returnValue += objectName + ".remove(" + param.convertToCode() + ");\n";
+    			}
+    		} else if (methodName.equals("removeAt")) {
+    			for (final TypedParserVal param : parseArrayParams) {
+    				returnValue += objectName + ".removeAt(" + param.obj.toString() + ");\n";
+    			}
+    		} else if (methodName.equals("size")) {
+				returnValue += objectName + ".length();\n";
+			}
+    	} else if (type.equals("HashMap")) {
+    		List<TypedParserVal> parseArrayParams = parseArrayParams(params);
+    		if (methodName.equals("add")) {
+//    			Map<TypedParserVal, TypedParserVal> parseHashParams = parseHashParams(params); //TODO: if there is only one key value pair, parsing may fail
+//    			for (final TypedParserVal key : parseHashParams.keySet()) {
+    				returnValue += objectName + ".put(" + parseArrayParams.get(0).convertToCode() + ", " + parseArrayParams.get(1).convertToCode() + ");\n"; 
+//    			}
+    		} else if (methodName.equals("get")) {
+    			returnValue += objectName + ".get(" + parseArrayParams.get(0).convertToCode() + ");\n";
+    		} else if (methodName.equals("remove")) {
+    			
+    		}
+    	}
+    	return returnValue;
     }
     
     /**

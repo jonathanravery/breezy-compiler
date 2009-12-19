@@ -83,9 +83,18 @@ private boolean debug = false;
                 return t.type;
             }
         }
-
         throw new Exception("Line: "+pv.line+  
                                 " Identifier \""+ pv.sval +"\" not found");
+    }
+    
+    public String getType(String id, String scope) throws Exception {
+        for(TypedParserVal t : id_list){
+            if(((String)t.obj).equals(id) && t.scope.equals(scope)){
+                if(debug)System.err.println("TypeTracker::getType()::type " + t.type);
+                return t.type;
+            }
+        }
+        return null;
     }
 
     public void assertSameType(ParserVal pv1, ParserVal pv2, ParserVal pvOP) throws Exception{
