@@ -15,6 +15,7 @@ import src.ParserVal;
  */
 public class TypeTracker {
 
+    private boolean debug = false;
     private static Vector<TypedParserVal> id_list;
 
     /**
@@ -45,8 +46,11 @@ public class TypeTracker {
     }
 
     public void addID(String id, String type, int line, int col)throws Exception{
-        //System.err.println("TypeTracker::addID()::id " + id);
-        //System.err.println("TypeTracker::addID()::type " + type);
+        if(debug){
+            System.err.println("TypeTracker::addID()::id " + id);
+            System.err.println("TypeTracker::addID()::type " + type);
+        }
+
         for(TypedParserVal t : id_list){
             if(t.obj.equals(id))
                 throw new Exception("Line: "+line+  
@@ -59,11 +63,12 @@ public class TypeTracker {
     }
 
     public String getType(ParserVal pv)throws Exception{
-        //System.err.println("TypeTracker::getType()::id " + id);
+        if(debug)System.err.println("TypeTracker::getType()::id " + pv.sval);
+
         for(TypedParserVal t : id_list){
-            //System.err.println(t.obj + "::" + pv.sval);
+            if(debug)System.err.println(t.obj + "::" + pv.sval);
             if(((String)t.obj).equals(pv.sval.trim())){
-                //System.err.println("TypeTracker::getType()::type " + t.type);
+                if(debug)System.err.println("TypeTracker::getType()::type " + t.type);
                 return t.type;
             }
         }
@@ -73,9 +78,11 @@ public class TypeTracker {
     }
 
     public void assertNumberOrStringType(ParserVal pv1, ParserVal pv2, ParserVal pvOP) throws Exception{
-        //System.err.println("TypeTracker::assertNumberOrStringType()::type1 " + pv1.obj);
-        //.err.println("TypeTracker::assertNumberOrStringType()::type2 " + pv2.obj);
-        //System.err.println("TypeTracker::assertNumberOrStringType()::op " + pvOP.sval);
+        if(debug){
+            System.err.println("TypeTracker::assertNumberOrStringType()::type1 " + pv1.obj);
+            System.err.println("TypeTracker::assertNumberOrStringType()::type2 " + pv2.obj);
+            System.err.println("TypeTracker::assertNumberOrStringType()::op " + pvOP.sval);
+        }
         String t1 = (String)pv1.obj;
         String t2 = (String)pv2.obj;
         if(t1.equals("boolean") || t2.equals("boolean"))
@@ -92,10 +99,11 @@ public class TypeTracker {
 
 
     public void assertNumberType(ParserVal pv1, ParserVal pv2, ParserVal pvOP) throws Exception{
-        //System.err.println("TypeTracker::assertNumberType()::type1 " + pv1.obj);
-        //System.err.println("TypeTracker::assertNumberType()::type2 " + pv2.obj);
-        //System.err.println("TypeTracker::assertNumberType()::op " + pvOP.sval);
-
+        if(debug){
+            System.err.println("TypeTracker::assertNumberType()::type1 " + pv1.obj);
+            System.err.println("TypeTracker::assertNumberType()::type2 " + pv2.obj);
+            System.err.println("TypeTracker::assertNumberType()::op " + pvOP.sval);
+        }
         String t1 = (String)pv1.obj;
         String t2 = (String)pv2.obj;
         if(!t1.equals("number") || !t2.equals("number"))
@@ -107,7 +115,8 @@ public class TypeTracker {
 
 
     public void assertStringType(ParserVal pv) throws Exception{
-        //System.err.println("TypeTracker::assertStringType()::type1 " + pv.obj);
+        if(debug)System.err.println("TypeTracker::assertStringType()::type1 " + pv.obj);
+
         if(!pv.obj.equals("string"))
             throw new Exception ("Line: "+pv.line+  
                                 " Type Error.\nSTRING type required.");
@@ -116,7 +125,8 @@ public class TypeTracker {
 
 
     public void assertNumberType(ParserVal pv) throws Exception{
-        //System.err.println("TypeTracker::assertNumberType()::type1 " + pv.obj);
+        if(debug)System.err.println("TypeTracker::assertNumberType()::type1 " + pv.obj);
+
         if(!pv.obj.equals("number"))
             throw new Exception ("Line: "+pv.line+  
                                     " Type Error.\nNUMBER type required.");
@@ -125,7 +135,8 @@ public class TypeTracker {
 
 
     public void assertBoolType(ParserVal pv) throws Exception{
-        //System.err.println("TypeTracker::assertBool()::type1 " + pv.obj);
+        if(debug)System.err.println("TypeTracker::assertBool()::type1 " + pv.obj);
+        
         if(!pv.obj.equals("boolean"))
             throw new Exception ("Line: "+pv.line+  
                                     " Type Error.\n  Required Boolean and found "+ pv.obj);
