@@ -24,11 +24,11 @@ package src;
 
   //Print to console
   private void p(String s){
-            //System.out.print(s + " ");
+            System.out.print(s + " ");
   }
   //Print line to console
   private void pl(String s){
-            //System.out.println(s);
+            System.out.println(s);
   }
   private void l(int line,int col){
             //System.out.print("("+line + "," + col + ")");
@@ -79,9 +79,9 @@ while				{p("WHILE");	return yyparser.WHILE;}
 "<"					{	yyparser.yylval = new ParserVal(yytext(),yyline+1,yycolumn); return yyparser.REL_OP_LT;}
 ">="					{	yyparser.yylval = new ParserVal(yytext(),yyline+1,yycolumn); return yyparser.REL_OP_GE;}
 ">"					{	yyparser.yylval = new ParserVal(yytext(),yyline+1,yycolumn); return yyparser.REL_OP_GT;}
-"="					{p("EQUALS");	yyparser.yylval = new ParserVal(yytext(),yyline+1,yycolumn); return yyparser.EQUALS;}
+"="					{p("=");	yyparser.yylval = new ParserVal(yytext(),yyline+1,yycolumn); return yyparser.EQUALS;}
 "EQUALS"				{	yyparser.yylval = new ParserVal(yytext(),yyline+1,yycolumn); return yyparser.LOG_OP_EQUAL;}
-"AND"					{	yyparser.yylval = new ParserVal(yytext(),yyline+1,yycolumn); return yyparser.LOG_OP_AND;}
+"AND"					{p("AND");	yyparser.yylval = new ParserVal(yytext(),yyline+1,yycolumn); return yyparser.LOG_OP_AND;}
 "OR"					{	yyparser.yylval = new ParserVal(yytext(),yyline+1,yycolumn); return yyparser.LOG_OP_OR;}
 "NOT"					{	yyparser.yylval = new ParserVal(yytext(),yyline+1,yycolumn); return yyparser.LOG_OP_NOT;}
 "("					{p("LPAREN");	return yyparser.LPAREN;}
