@@ -58,7 +58,7 @@ public class BreezyAssist {
             return "";
 
         //Add function name to id list with it's return type
-        this.addIdentifier(id, retType,line,col);
+        this.addIdentifier(id,retType,line,col);
 
         //TODO: check return value == actual return value
 
@@ -73,7 +73,7 @@ public class BreezyAssist {
             }
         }
         else{
-            retFunction = "public static " + retType + " " + id + "(" + params + ")" + "{\n" + body + "}";
+            retFunction = "public " + retType + " " + id + "(" + params + ")" + "{\n" + body + "}";
         }
 
         return retFunction;
@@ -97,12 +97,12 @@ public class BreezyAssist {
         String userMain = "public " + retType + " main(" + params + ")" + "{\n" + body + "}";
 
         if(params.equals("")){
-            systemMain = "public static void main(String[] args){BreezyProg b = new BreezyProg(); b.main();}\n\n";
+            systemMain = "public void main(String[] args){BreezyProg b = new BreezyProg(); b.main();}\n\n";
         }
         else{
             String[] paramList = params.split(" ");
 
-            systemMain = "public static void main(String[] args){main(";
+            systemMain = "public void main(String[] args){main(";
             if(paramList[0].equals("String")){
                 systemMain = systemMain.concat("args[0]");
             }
@@ -166,7 +166,7 @@ public class BreezyAssist {
     }
     
     public String createComplexTypeMethodInvocation(String objectName, String methodName, String params) {
-    	return objectName + "." + methodName + "(" + params + ");\n";
+    	return objectName + "." + methodName + "(" + params + ")";
     }
     
     /**
