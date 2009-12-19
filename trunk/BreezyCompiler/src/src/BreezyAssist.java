@@ -3,6 +3,7 @@
  * and open the template in the editor.
  */
 
+//TODO:  getType() has to include scope
 package src;
 
 import java.io.*;
@@ -50,7 +51,7 @@ public class BreezyAssist {
         }
     }
 
-    public String createFunction(String id, String retType, String params, String body, String id2,int line,int col){
+    public String createFunction(String id, String retType, String params, String body, String id2,int line,String scope){
         String retFunction = "";
 
         //Check and see if block ends with correct ending
@@ -58,7 +59,7 @@ public class BreezyAssist {
             return "";
 
         //Add function name to id list with it's return type
-        this.addIdentifier(id,retType,line,col);
+        this.addIdentifier(id,retType,line,scope);
 
         //TODO: check return value == actual return value
 
@@ -79,14 +80,14 @@ public class BreezyAssist {
         return retFunction;
     }
 
-    public void addIdentifier(String id, String type, int line, int col){
+    public void addIdentifier(String id, String type, int line, String scope){
         //TODO: check against java keywords
 
         //Add to our type tracking list of identifiers
         try{
             //System.err.println("BreezyAssist::addIdentifier()::id " + id);
             //System.err.println("BreezyAssist::addIdentifier()::type " + type);
-            typeTrack.addID(id, type,line,col);
+            typeTrack.addID(id, type,line,scope);
         }catch(Exception e){
             System.err.println(e.getMessage());
         }
@@ -140,10 +141,10 @@ public class BreezyAssist {
     	return type + " " + name + " = new " + type + "();\n";
     }
     
-    public String createComplexType(String type, String name, String params, int line, int col) {
+    public String createComplexType(String type, String name, String params, int line, String scope) {
         
         //Add id to type checker
-        this.addIdentifier(name, type, line, col);
+        this.addIdentifier(name, type, line, scope);
 
     	String temp = type + " " + name + " = new " + type + "();\n";
     	

@@ -6,6 +6,7 @@
 package src.type;
 
 import java.util.Vector;
+import libs.structs.Scope;
 import libs.structs.TypedParserVal;
 import src.ParserVal;
 
@@ -15,7 +16,7 @@ import src.ParserVal;
  */
 public class TypeTracker {
 
-    private boolean debug = false;
+private boolean debug = false;
     private static Vector<TypedParserVal> id_list;
 
     /**
@@ -25,49 +26,50 @@ public class TypeTracker {
         id_list = new Vector<TypedParserVal>();
 
         //TODO: Add our functions to this list
-        TypedParserVal t1 = new TypedParserVal("ReadCharacterFromScreen", "string");        id_list.add(t1);
-        TypedParserVal t2 = new TypedParserVal("ReadLineFromScreen", "string");        id_list.add(t2);
-        TypedParserVal t3 = new TypedParserVal("ReadAllFromScreen", "string");        id_list.add(t3);
-        TypedParserVal t4 = new TypedParserVal("ReadCharacterFromFile", "string");        id_list.add(t4);
-        TypedParserVal t5 = new TypedParserVal("ReadLineFromFile", "string");        id_list.add(t5);
-        TypedParserVal t6 = new TypedParserVal("ReadAllFromFile", "string");        id_list.add(t6);
-        TypedParserVal t7 = new TypedParserVal("WriteToScreen", "nothing");        id_list.add(t7);
-        TypedParserVal t8 = new TypedParserVal("WriteToFile", "nothing");        id_list.add(t8);
-        TypedParserVal t9 = new TypedParserVal("WriteCharacterToScreen", "nothing");        id_list.add(t9);
-        TypedParserVal t10 = new TypedParserVal("WriteLineToScreen", "nothing");        id_list.add(t10);
-        TypedParserVal t11 = new TypedParserVal("WriteAllToScreen", "nothing");        id_list.add(t11);
-        TypedParserVal t12 = new TypedParserVal("WriteCharacterToFile", "nothing");        id_list.add(t12);
-        TypedParserVal t13 = new TypedParserVal("WriteLineToFile", "nothing");        id_list.add(t13);
-        TypedParserVal t14 = new TypedParserVal("WriteAllToFile", "nothing");        id_list.add(t14);
-        TypedParserVal t15 = new TypedParserVal("StringToNumber", "number");        id_list.add(t15);
-        TypedParserVal t16 = new TypedParserVal("NumberToString", "string");        id_list.add(t16);
-        TypedParserVal t17 = new TypedParserVal("WriteCharacterToFile", "nothing");        id_list.add(t17);
+        TypedParserVal t1 = new TypedParserVal("ReadCharacterFromScreen", "string",Scope.GLOBAL.getName());        id_list.add(t1);
+        TypedParserVal t2 = new TypedParserVal("ReadLineFromScreen", "string",Scope.GLOBAL.getName());        id_list.add(t2);
+        TypedParserVal t3 = new TypedParserVal("ReadAllFromScreen", "string",Scope.GLOBAL.getName());        id_list.add(t3);
+        TypedParserVal t4 = new TypedParserVal("ReadCharacterFromFile", "string",Scope.GLOBAL.getName());        id_list.add(t4);
+        TypedParserVal t5 = new TypedParserVal("ReadLineFromFile", "string",Scope.GLOBAL.getName());        id_list.add(t5);
+        TypedParserVal t6 = new TypedParserVal("ReadAllFromFile", "string",Scope.GLOBAL.getName());        id_list.add(t6);
+        TypedParserVal t7 = new TypedParserVal("WriteToScreen", "nothing",Scope.GLOBAL.getName());        id_list.add(t7);
+        TypedParserVal t8 = new TypedParserVal("WriteToFile", "nothing",Scope.GLOBAL.getName());        id_list.add(t8);
+        TypedParserVal t9 = new TypedParserVal("WriteCharacterToScreen", "nothing",Scope.GLOBAL.getName());        id_list.add(t9);
+        TypedParserVal t10 = new TypedParserVal("WriteLineToScreen", "nothing",Scope.GLOBAL.getName());        id_list.add(t10);
+        TypedParserVal t11 = new TypedParserVal("WriteAllToScreen", "nothing",Scope.GLOBAL.getName());        id_list.add(t11);
+        TypedParserVal t12 = new TypedParserVal("WriteCharacterToFile", "nothing",Scope.GLOBAL.getName());        id_list.add(t12);
+        TypedParserVal t13 = new TypedParserVal("WriteLineToFile", "nothing",Scope.GLOBAL.getName());        id_list.add(t13);
+        TypedParserVal t14 = new TypedParserVal("WriteAllToFile", "nothing",Scope.GLOBAL.getName());        id_list.add(t14);
+        TypedParserVal t15 = new TypedParserVal("StringToNumber", "number",Scope.GLOBAL.getName());        id_list.add(t15);
+        TypedParserVal t16 = new TypedParserVal("NumberToString", "string",Scope.GLOBAL.getName());        id_list.add(t16);
+        TypedParserVal t17 = new TypedParserVal("WriteCharacterToFile", "nothing",Scope.GLOBAL.getName());        id_list.add(t17);
 
     }
 
-    public void addID(String id, String type, int line, int col)throws Exception{
+    public void addID(String id, String type, int line, String scope)throws Exception{
         if(debug){
             System.err.println("TypeTracker::addID()::id " + id);
             System.err.println("TypeTracker::addID()::type " + type);
         }
 
         for(TypedParserVal t : id_list){
-            if(t.obj.equals(id))
+            if(t.obj.equals(id) && t.scope.equals(scope))
                 throw new Exception("Line: "+line+  
-                                    " Identifier " + id + " already used");
+                                    " Identifier " + id + " is already being used.");
         }
 
         //Add it to the list
-        TypedParserVal temp = new TypedParserVal(id, type);
+        TypedParserVal temp = new TypedParserVal(id, type, scope);
         id_list.add(temp);
     }
 
-    public String getType(ParserVal pv)throws Exception{
+    public String getType(ParserVal pv, String scope)throws Exception{
         if(debug)System.err.println("TypeTracker::getType()::id " + pv.sval);
 
         for(TypedParserVal t : id_list){
-            if(debug)System.err.println(t.obj + "::" + pv.sval);
-            if(((String)t.obj).equals(pv.sval.trim())){
+            if(debug)System.err.println(t.obj + "." + t.scope + "::" + pv.sval+ "." + scope);
+
+            if(((String)t.obj).equals(pv.sval.trim()) && t.scope.equals(scope)){
                 if(debug)System.err.println("TypeTracker::getType()::type " + t.type);
                 return t.type;
             }
@@ -75,6 +77,22 @@ public class TypeTracker {
 
         throw new Exception("Line: "+pv.line+  
                                 " Identifier \""+ pv.sval +"\" not found");
+    }
+
+    public void assertSameType(ParserVal pv1, ParserVal pv2, ParserVal pvOP) throws Exception{
+        if(debug){
+            System.err.println("TypeTracker::assertSameType()::type1 " + pv1.obj);
+            System.err.println("TypeTracker::assertSameType()::type2 " + pv2.obj);
+            System.err.println("TypeTracker::assertSameType()::op " + pvOP.sval);
+        }
+        String t1 = (String)pv1.obj;
+        String t2 = (String)pv2.obj;
+
+        if(!t1.equals(t2))
+            throw new Exception ("Line: "+pv1.line+
+                                " Type Error.  Performed " + t1.toUpperCase() + " " + pvOP.sval + " " + t2.toUpperCase() +
+                                ".\nConfirm the types are both the same.");
+
     }
 
     public void assertNumberOrStringType(ParserVal pv1, ParserVal pv2, ParserVal pvOP) throws Exception{
@@ -88,12 +106,12 @@ public class TypeTracker {
         if(t1.equals("boolean") || t2.equals("boolean"))
             throw new Exception ("Line: "+pv1.line+  
                     " Type Error.  Performed " + t1.toUpperCase() + " " + pvOP.sval + " " + t2.toUpperCase() +
-                    ".\nCannot use boolean for this type of operation.");
+                    ".\nYou cannot use boolean for this type of operation.");
 
         if(!t1.equals(t2))
             throw new Exception ("Line: "+pv1.line+  
                                 " Type Error.  Performed " + t1.toUpperCase() + " " + pvOP.sval + " " + t2.toUpperCase() +
-                                ".\nConfirm the types are both the same.");
+                                ".\nConfirm the types are both NUMBER or STRING.");
 
     }
 
