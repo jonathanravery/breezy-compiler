@@ -61,20 +61,21 @@ public class TypeTracker {
     public String getType(ParserVal pv)throws Exception{
         //System.err.println("TypeTracker::getType()::id " + id);
         for(TypedParserVal t : id_list){
-            if(t.obj.equals(pv.sval)){
+            //System.err.println(t.obj + "::" + pv.sval);
+            if(((String)t.obj).equals(pv.sval.trim())){
                 //System.err.println("TypeTracker::getType()::type " + t.type);
                 return t.type;
             }
         }
 
         throw new Exception("Line: "+pv.line+  
-                                " Identifier not found");
+                                " Identifier \""+ pv.sval +"\" not found");
     }
 
-    public void assertSameType(ParserVal pv1, ParserVal pv2, ParserVal pvOP) throws Exception{
-        //System.err.println("TypeTracker::assertSameType()::type1 " + pv1.obj);
-        //.err.println("TypeTracker::assertSameType()::type2 " + pv2.obj);
-        //System.err.println("TypeTracker::assertSameType()::op " + pvOP.sval);
+    public void assertNumberOrStringType(ParserVal pv1, ParserVal pv2, ParserVal pvOP) throws Exception{
+        //System.err.println("TypeTracker::assertNumberOrStringType()::type1 " + pv1.obj);
+        //.err.println("TypeTracker::assertNumberOrStringType()::type2 " + pv2.obj);
+        //System.err.println("TypeTracker::assertNumberOrStringType()::op " + pvOP.sval);
         String t1 = (String)pv1.obj;
         String t2 = (String)pv2.obj;
         if(t1.equals("boolean") || t2.equals("boolean"))

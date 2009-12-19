@@ -24,11 +24,11 @@ package src;
 
   //Print to console
   private void p(String s){
-            //System.out.print(s + " ");
+            System.out.print(s + " ");
   }
   //Print line to console
   private void pl(String s){
-            //System.out.println(s);
+            System.out.println(s);
   }
   private void l(int line,int col){
             //System.out.print("("+line + "," + col + ")");

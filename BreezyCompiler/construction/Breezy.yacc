@@ -85,13 +85,13 @@ control_body	:	statement               {$$.sval = $1.sval;}
                 ;
 
 
-statement	:       COMMENT                         {$$.sval = "";}
-                |       function_declaration		{$$.sval = $1.sval;}
-                |	complex_type_method_invocation	{$$.sval = $1.sval;}
-                |	return_statement		{$$.sval = $1.sval;}
-                |	if_statement			{$$.sval = $1.sval;}
-                |       while_loop                      {$$.sval = $1.sval;}
-                |	IDENTIFIER EQUALS exp SEMICOLON {$$.sval = $1.sval + "=" + $3.sval + ";\n" ;}
+statement	:       COMMENT                                     {$$.sval = "";}
+                |       function_declaration SEMICOLON              {$$.sval = $1.sval + ";\n";}
+                |	complex_type_method_invocation SEMICOLON    {$$.sval = $1.sval + ";\n";}
+                |	return_statement SEMICOLON                  {$$.sval = $1.sval + ";\n";}
+                |	if_statement                                {$$.sval = $1.sval;}
+                |       while_loop                                  {$$.sval = $1.sval;}
+                |	IDENTIFIER EQUALS exp SEMICOLON             {$$.sval = $1.sval + "=" + $3.sval + ";\n" ;}
                 ;
 
 if_statement	:	IF LPAREN bool_exp RPAREN
@@ -123,20 +123,20 @@ while_loop	: 	WHILE LPAREN bool_exp RPAREN
 			END WHILE    { $$.sval = "while( " + $3.sval + " ){\n" + $6.sval + "}\n";}
                 ;
 
-return_statement	:	RETURN exp SEMICOLON		{$$.sval = "return " + $2.sval + ";\n";}
-                        |	RETURN function_declaration	{$$.sval = "return " + $2.sval + ";\n";}
-                        |       RETURN complex_type_method_invocation   {$$.sval = "return " +$2.sval + ";\n";}
+return_statement	:	RETURN exp 		{$$.sval = "return " + $2.sval;}
+                        |	RETURN function_declaration 	{$$.sval = "return " + $2.sval;}
+                        |       RETURN complex_type_method_invocation   {$$.sval = "return " +$2.sval;}
                         ;
 
-function_declaration	:	IDENTIFIER LPAREN params RPAREN SEMICOLON {$$.sval = $1.sval + "(" + $3.sval + ");\n";
+function_declaration	:	IDENTIFIER LPAREN params RPAREN {$$.sval = $1.sval + "(" + $3.sval + ")";
                                                                                 $$.obj = ba.typeTrack.getType($1);}
                         ;
 
 
 //concrete list of functionality
 complex_type_method_invocation
-		:	IDENTIFIER DOT IDENTIFIER LPAREN params RPAREN SEMICOLON {$$.sval = ba.createComplexTypeMethodInvocation($1.sval, $3.sval, $5.sval);}
-		|	IDENTIFIER DOT IDENTIFIER LPAREN RPAREN SEMICOLON {$$.sval = ba.createComplexTypeMethodInvocation($1.sval, $3.sval, null);}
+		:	IDENTIFIER DOT IDENTIFIER LPAREN params RPAREN {$$.sval = ba.createComplexTypeMethodInvocation($1.sval, $3.sval, $5.sval);}
+		|	IDENTIFIER DOT IDENTIFIER LPAREN RPAREN {$$.sval = ba.createComplexTypeMethodInvocation($1.sval, $3.sval, null);}
 		;
 
 
@@ -176,12 +176,7 @@ type		:       BOOLEAN		{$$.sval = "boolean ";}
 
 return_type     :       type            {$$.sval = $1.sval;}
                 |       NOTHING         {$$.sval = "void";}
-
-		
-complex_type_method_invocation
-		:	IDENTIFIER DOT IDENTIFIER LPAREN params RPAREN SEMICOLON {$$.sval = ba.createComplexTypeMethodInvocation($1.sval, $3.sval, $5.sval);}
-		|	IDENTIFIER DOT IDENTIFIER LPAREN RPAREN SEMICOLON {$$.sval = ba.createComplexTypeMethodInvocation($1.sval, $3.sval, null);}
-		;
+                ;
 
 exp             :       bool_exp        {$$.sval = $1.sval;
                                                 $$.line = $1.line;}
@@ -190,11 +185,11 @@ exp             :       bool_exp        {$$.sval = $1.sval;
                 ;
 
 arith_exp	: 	arith_exp PLUS term {$$.sval = $1.sval + "+" + $3.sval;
-                                              ba.typeTrack.assertSameType($1,$3, $2);
+                                              ba.typeTrack.assertNumberOrStringType($1,$3, $2);
                                                 $$.obj = $1.obj;
                                                 $$.line = $1.line; }
                 |	arith_exp MINUS term {$$.sval = $1.sval + " - " + $3.sval;
-                                              ba.typeTrack.assertSameType($1,$3, $2);
+                                              ba.typeTrack.assertNumberOrStringType($1,$3, $2);
                                                 $$.obj = $1.obj;
                                                 $$.line = $1.line; }
                 |	term	 {$$.sval = $1.sval;
@@ -202,15 +197,15 @@ arith_exp	: 	arith_exp PLUS term {$$.sval = $1.sval + "+" + $3.sval;
                 ;
 			
 term		:	term MUL unary {$$.sval = $1.sval + " * " + $3.sval;
-                                              ba.typeTrack.assertSameType($1,$3, $2);
+                                              ba.typeTrack.assertNumberOrStringType($1,$3, $2);
                                                 $$.obj = $1.obj;
                                                 $$.line = $1.line; }
                 |	term DIV unary {$$.sval = $1.sval + " / " + $3.sval;
-                                              ba.typeTrack.assertSameType($1,$3, $2);
+                                              ba.typeTrack.assertNumberOrStringType($1,$3, $2);
                                                 $$.obj = $1.obj;
                                                 $$.line = $1.line; }
                 |	term MOD unary {$$.sval = $1.sval + " % " + $3.sval;
-                                              ba.typeTrack.assertSameType($1,$3, $2);
+                                              ba.typeTrack.assertNumberOrStringType($1,$3, $2);
                                                 $$.obj = $1.obj;
                                                 $$.line = $1.line; }
                 |	unary	 {$$.sval = $1.sval; 
