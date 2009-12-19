@@ -233,6 +233,8 @@ public class BreezyAssist {
     			arrayList.add(new TypedParserVal(nextToken, "Number"));
     		} else if (Pattern.matches("\".*", nextToken)) {
     			arrayList.add(new TypedParserVal(nextToken, "String"));
+    		} else if (Pattern.matches("true|false", nextToken)) {
+    			arrayList.add(new TypedParserVal(nextToken, "Boolean"));
     		} else {
     			arrayList.add(new TypedParserVal(nextToken, "Identifier"));
     		}

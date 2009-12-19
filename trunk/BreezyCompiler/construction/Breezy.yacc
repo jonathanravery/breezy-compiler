@@ -169,6 +169,8 @@ hash_params		: 	LPAREN hash_item COMMA hash_item RPAREN COMMA hash_params	{$$.sv
 
 hash_item		:	QUOTE	{$$.sval = $1.sval;}
                         |	NUMERIC	{$$.ival = $1.ival;}
+                        |	TRUE	{$$.sval = "true";}
+                        |	FALSE	{$$.sval = "false";}
                         |	IDENTIFIER	{$$.sval = $1.sval;}
                         ;
 
