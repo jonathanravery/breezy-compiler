@@ -21,7 +21,6 @@ import libs.structs.Scope;
 %token LEFT_SQUARE_PAREN RIGHT_SQUARE_PAREN
 %token LPAREN RPAREN COLON SEMICOLON COMMA DOT
 
-
 %%
 
 start	: 	program		{ba.DumpFile($1.sval);}
@@ -90,7 +89,7 @@ control_body	:	statement               {$$.sval = $1.sval;}
 
 statement	:       COMMENT                                     {$$.sval = "";}
                 |       function_call SEMICOLON              {$$.sval = $1.sval + ";\n";}
-                |	complex_type_method_invocation SEMICOLON    {$$.sval = $1.sval + ";\n";}
+                |	complex_type_method_invocation SEMICOLON    {$$.sval = $1.sval;}
                 |	return_statement SEMICOLON                  {$$.sval = $1.sval + ";\n";}
                 |	if_statement                                {$$.sval = $1.sval;}
                 |       while_loop                                  {$$.sval = $1.sval;}
