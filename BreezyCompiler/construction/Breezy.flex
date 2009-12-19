@@ -92,7 +92,7 @@ while				{p("WHILE");	return yyparser.WHILE;}
 ";"                                     {pl("SEMICOLON");	return yyparser.SEMICOLON;}
 ","					{p("COMMA");	return yyparser.COMMA;}
 \.					{p("DOT");	return yyparser.DOT;}
-[a-zA-Z][a-zA-Z0-9]*			{l(yyline,yycolumn);p(yytext());	yyparser.yylval = new ParserVal(yytext(),yyline,12); return yyparser.IDENTIFIER;}
+[a-zA-Z][a-zA-Z0-9_]*			{l(yyline,yycolumn);p(yytext());	yyparser.yylval = new ParserVal(yytext(),yyline,12); return yyparser.IDENTIFIER;}
 \"([^\"\r\n]|\\\")*\"			{l(yyline,yycolumn);p(yytext());	yyparser.yylval = new ParserVal(yytext(),yyline,12); yyparser.yylval.obj="string"; return yyparser.QUOTE;}
 -?{digit}*(\.{digit}+)?			{l(yyline,yycolumn);p(yytext());	yyparser.yylval = new ParserVal(yytext(),yyline,12); yyparser.yylval.obj="number"; return yyparser.NUMERIC;}
 {LineTerminator}			{pl("");}
