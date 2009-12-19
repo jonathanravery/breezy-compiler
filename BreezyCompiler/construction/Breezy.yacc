@@ -86,7 +86,7 @@ control_body	:	statement               {$$.sval = $1.sval;}
 
 
 statement	:       COMMENT                                     {$$.sval = "";}
-                |       function_declaration SEMICOLON              {$$.sval = $1.sval + ";\n";}
+                |       function_call SEMICOLON              {$$.sval = $1.sval + ";\n";}
                 |	complex_type_method_invocation SEMICOLON    {$$.sval = $1.sval + ";\n";}
                 |	return_statement SEMICOLON                  {$$.sval = $1.sval + ";\n";}
                 |	if_statement                                {$$.sval = $1.sval;}
@@ -124,11 +124,10 @@ while_loop	: 	WHILE LPAREN bool_exp RPAREN
                 ;
 
 return_statement	:	RETURN exp 		{$$.sval = "return " + $2.sval;}
-                        |	RETURN function_declaration 	{$$.sval = "return " + $2.sval;}
                         |       RETURN complex_type_method_invocation   {$$.sval = "return " +$2.sval;}
                         ;
 
-function_declaration	:	IDENTIFIER LPAREN params RPAREN {$$.sval = $1.sval + "(" + $3.sval + ")";
+function_call	:	IDENTIFIER LPAREN params RPAREN {$$.sval = $1.sval + "(" + $3.sval + ")";
                                                                                 $$.obj = ba.typeTrack.getType($1);}
                         ;
 
@@ -189,7 +188,7 @@ arith_exp	: 	arith_exp PLUS term {$$.sval = $1.sval + "+" + $3.sval;
                                                 $$.obj = $1.obj;
                                                 $$.line = $1.line; }
                 |	arith_exp MINUS term {$$.sval = $1.sval + " - " + $3.sval;
-                                              ba.typeTrack.assertNumberOrStringType($1,$3, $2);
+                                              ba.typeTrack.assertNumberType($1,$3, $2);
                                                 $$.obj = $1.obj;
                                                 $$.line = $1.line; }
                 |	term	 {$$.sval = $1.sval;
@@ -197,15 +196,15 @@ arith_exp	: 	arith_exp PLUS term {$$.sval = $1.sval + "+" + $3.sval;
                 ;
 			
 term		:	term MUL unary {$$.sval = $1.sval + " * " + $3.sval;
-                                              ba.typeTrack.assertNumberOrStringType($1,$3, $2);
+                                              ba.typeTrack.assertNumberType($1,$3, $2);
                                                 $$.obj = $1.obj;
                                                 $$.line = $1.line; }
                 |	term DIV unary {$$.sval = $1.sval + " / " + $3.sval;
-                                              ba.typeTrack.assertNumberOrStringType($1,$3, $2);
+                                              ba.typeTrack.assertNumberType($1,$3, $2);
                                                 $$.obj = $1.obj;
                                                 $$.line = $1.line; }
                 |	term MOD unary {$$.sval = $1.sval + " % " + $3.sval;
-                                              ba.typeTrack.assertNumberOrStringType($1,$3, $2);
+                                              ba.typeTrack.assertNumberType($1,$3, $2);
                                                 $$.obj = $1.obj;
                                                 $$.line = $1.line; }
                 |	unary	 {$$.sval = $1.sval; 
@@ -231,7 +230,7 @@ factor 		: 	LPAREN arith_exp RPAREN	{$$.sval = " ( " + $2.sval + " ) ";
                 |	IDENTIFIER		{ $$.sval = $1.sval; 
                                                     $$.obj = ba.typeTrack.getType($1);
                                                     $$.line = $1.line;}
-                |	function_declaration    { $$.sval = $1.sval; 
+                |	function_call    { $$.sval = $1.sval;
                                                     $$.obj = $1.obj;
                                                     $$.line = $1.line;}
                 |       QUOTE           	{ $$.sval = $1.sval; 
@@ -274,7 +273,7 @@ bool_factor     :	LOG_OP_NOT bool_factor {$$.sval = " !" + $2.sval;
                                             ba.typeTrack.assertBoolType($1);
                                             $$.obj = ba.typeTrack.getType($1);
                                                 $$.line = $1.line; }
-                |	function_declaration { $$.sval = $1.sval;
+                |	function_call { $$.sval = $1.sval;
                                                 $1.obj = ba.typeTrack.getType($1);
                                                 ba.typeTrack.assertBoolType($1);
                                                 $$.obj = ba.typeTrack.getType($1);
@@ -312,6 +311,6 @@ public static void main(String args[]){
 	}catch(IOException e){
             e.printStackTrace();
         }catch(Exception e){
-            System.err.println(e.getMessage());;
+            System.err.println(e.getMessage());
 	}  
 }

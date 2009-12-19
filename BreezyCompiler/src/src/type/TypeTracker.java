@@ -87,12 +87,12 @@ public class TypeTracker {
         String t2 = (String)pv2.obj;
         if(t1.equals("boolean") || t2.equals("boolean"))
             throw new Exception ("Line: "+pv1.line+  
-                    " Type Error.  Performed " + t1.toUpperCase() + " " + pvOP.sval + " " + t1.toUpperCase() +
+                    " Type Error.  Performed " + t1.toUpperCase() + " " + pvOP.sval + " " + t2.toUpperCase() +
                     ".\nCannot use boolean for this type of operation.");
 
         if(!t1.equals(t2))
             throw new Exception ("Line: "+pv1.line+  
-                                " Type Error.  Performed " + t1.toUpperCase() + " " + pvOP.sval + " " + t1.toUpperCase() +
+                                " Type Error.  Performed " + t1.toUpperCase() + " " + pvOP.sval + " " + t2.toUpperCase() +
                                 ".\nConfirm the types are both the same.");
 
     }
