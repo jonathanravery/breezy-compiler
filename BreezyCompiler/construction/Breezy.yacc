@@ -146,8 +146,10 @@ aparams         :	NOTHING				{$$.sval = "";}
                 |       aparams_                        {$$.sval = $1.sval;}
                 ;
 
-aparams_	:	type IDENTIFIER			{$$.sval = $1.sval + " " + $2.sval;}
-		|	type IDENTIFIER COMMA aparams_     {$$.sval = $1.sval + " " + $2.sval + ", " + $4.sval;}
+aparams_	:	type IDENTIFIER			{ba.addIdentifier($2.sval,$1.obj.toString(),$2.line,Scope.LOCAL.getName());
+                                                            $$.sval = $1.sval + " " + $2.sval;}
+		|	type IDENTIFIER COMMA aparams_     {ba.addIdentifier($2.sval,$1.obj.toString(),$2.line,Scope.LOCAL.getName());
+                                                            $$.sval = $1.sval + " " + $2.sval + ", " + $4.sval;}
 		;
 
 params          :       NOTHING				{$$.sval = "";}
@@ -169,11 +171,11 @@ hash_item		:	QUOTE	{$$.sval = $1.sval;}
                         ;
 
 
-type		:       BOOLEAN		{$$.sval = "boolean ";}
-                |	STRING		{$$.sval = "String ";}
-                |	NUMBER		{$$.sval = "double ";}
-                |       ARRAY           {$$.sval = "ArrayList ";}
-                |       HASH            {$$.sval = "HashMap ";}
+type		:       BOOLEAN		{$$.sval = "boolean "; $$.obj = "boolean";}
+                |	STRING		{$$.sval = "String "; $$.obj = "string";}
+                |	NUMBER		{$$.sval = "double "; $$.obj = "number";}
+                |       ARRAY           {$$.sval = "ArrayList "; $$.obj = "ArrayList";}
+                |       HASH            {$$.sval = "HashMap "; $$.obj = "HashMap";}
                 ;
 
 return_type     :       type            {$$.sval = $1.sval;}
