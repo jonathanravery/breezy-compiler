@@ -1068,7 +1068,7 @@ break;
 case 78:
 //#line 234 "Breezy.yacc"
 { yyval.sval = val_peek(0).sval; 
-                                                    yyval.obj = ba.typeTrack.getType(val_peek(0));
+                                                    yyval.obj = val_peek(0).obj;
                                                     yyval.line = val_peek(0).line;}
 break;
 case 79:
