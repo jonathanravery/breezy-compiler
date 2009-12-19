@@ -50,7 +50,7 @@ returns nothing
 accepts string s, number x
 begin
 	string testkey = "test key";
-	hash testHash = [("test", 5412341), ("test2", 34235325), (34235353, "test value"), (testkey, "test value2")];
+	hash testHash = [("test", 5412341), ("test2", 34235325), (34235353, "test value"), (testkey, "test value2"), (true, false)];
 	testHash.add("testing add", 3423553);
 end hashTest
 
