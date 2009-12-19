@@ -7,6 +7,7 @@ package src.type;
 
 import java.util.Vector;
 import libs.structs.TypedParserVal;
+import src.ParserVal;
 
 /**
  *
@@ -43,12 +44,13 @@ public class TypeTracker {
 
     }
 
-    public void addID(String id, String type)throws Exception{
-            System.err.println("TypeTracker::addID()::id " + id);
-            System.err.println("TypeTracker::addID()::type " + type);
+    public void addID(String id, String type, int line, int col)throws Exception{
+        //System.err.println("TypeTracker::addID()::id " + id);
+        //System.err.println("TypeTracker::addID()::type " + type);
         for(TypedParserVal t : id_list){
             if(t.obj.equals(id))
-                throw new Exception("Identifier " + id + " already used");
+                throw new Exception("Line: "+line+  
+                                    " Identifier " + id + " already used");
         }
 
         //Add it to the list
@@ -56,69 +58,75 @@ public class TypeTracker {
         id_list.add(temp);
     }
 
-    public String getType(String id)throws Exception{
-            System.err.println("TypeTracker::getType()::id " + id);
+    public String getType(ParserVal pv)throws Exception{
+        //System.err.println("TypeTracker::getType()::id " + id);
         for(TypedParserVal t : id_list){
-            if(t.obj.equals(id)){
-                System.err.println("TypeTracker::getType()::type " + t.type);
+            if(t.obj.equals(pv.sval)){
+                //System.err.println("TypeTracker::getType()::type " + t.type);
                 return t.type;
             }
         }
 
-        throw new Exception("Identifier not found");
+        throw new Exception("Line: "+pv.line+  
+                                " Identifier not found");
     }
 
-    public Object assertSameType(Object type1, Object type2, String op) throws Exception{
-        System.err.println("TypeTracker::assertSameType()::type1 " + type1);
-        System.err.println("TypeTracker::assertSameType()::type2 " + type2);
-            System.err.println("TypeTracker::assertSameType()::op " + op);
-        String t1 = (String)type1;
-        String t2 = (String)type2;
-        if(type1.equals("boolean") || type2.equals("boolean"))
-            throw new Exception ("Type Error.  Performed " + t1.toUpperCase() + " " + op + " " + t1.toUpperCase() +".\nCannot use boolean for this type of operation.");
+    public void assertSameType(ParserVal pv1, ParserVal pv2, ParserVal pvOP) throws Exception{
+        //System.err.println("TypeTracker::assertSameType()::type1 " + pv1.obj);
+        //.err.println("TypeTracker::assertSameType()::type2 " + pv2.obj);
+        //System.err.println("TypeTracker::assertSameType()::op " + pvOP.sval);
+        String t1 = (String)pv1.obj;
+        String t2 = (String)pv2.obj;
+        if(t1.equals("boolean") || t2.equals("boolean"))
+            throw new Exception ("Line: "+pv1.line+  
+                    " Type Error.  Performed " + t1.toUpperCase() + " " + pvOP.sval + " " + t1.toUpperCase() +
+                    ".\nCannot use boolean for this type of operation.");
 
-        if(!type1.equals(type2))
-            throw new Exception ("Type Error.  Performed " + t1.toUpperCase() + " " + op + " " + t1.toUpperCase() +".\nConfirm the types are both the same.");
+        if(!t1.equals(t2))
+            throw new Exception ("Line: "+pv1.line+  
+                                " Type Error.  Performed " + t1.toUpperCase() + " " + pvOP.sval + " " + t1.toUpperCase() +
+                                ".\nConfirm the types are both the same.");
 
-        return type1;
-    }
-
-
-    public Object assertNumberType(Object type1, Object type2, String op) throws Exception{
-        System.err.println("TypeTracker::assertNumberType()::type1 " + type1);
-        System.err.println("TypeTracker::assertNumberType()::type2 " + type2);
-        System.err.println("TypeTracker::assertNumberType()::op " + op);
-
-        String t1 = (String)type1;
-        String t2 = (String)type2;
-        if(!type1.equals("number") || !type2.equals("number"))
-            throw new Exception ("Type Error.  Performed " + t1.toUpperCase() + " " + op + " " + t2.toUpperCase() +".\nConfirm the types are both numbers.");
-
-        return type1;
     }
 
 
-    public Object assertStringType(Object type1) throws Exception{
-        System.err.println("TypeTracker::assertStringType()::type1 " + type1);
-        if(!type1.equals("string"))
-            throw new Exception ("Type Error.\nSTRING type required.");
+    public void assertNumberType(ParserVal pv1, ParserVal pv2, ParserVal pvOP) throws Exception{
+        //System.err.println("TypeTracker::assertNumberType()::type1 " + pv1.obj);
+        //System.err.println("TypeTracker::assertNumberType()::type2 " + pv2.obj);
+        //System.err.println("TypeTracker::assertNumberType()::op " + pvOP.sval);
 
-        return type1;
+        String t1 = (String)pv1.obj;
+        String t2 = (String)pv2.obj;
+        if(!t1.equals("number") || !t2.equals("number"))
+            throw new Exception ("Line: "+pv1.line+  
+                                " Type Error.  Performed " + t1.toUpperCase() + " " + pvOP.sval + " " + t2.toUpperCase() +
+                                ".\nConfirm the types are both numbers.");
+
     }
 
 
-    public Object assertNumberType(Object type1) throws Exception{
-        System.err.println("TypeTracker::assertNumberType()::type1 " + type1);
-        if(!type1.equals("number"))
-            throw new Exception ("Type Error.\nNUMBER type required.");
+    public void assertStringType(ParserVal pv) throws Exception{
+        //System.err.println("TypeTracker::assertStringType()::type1 " + pv.obj);
+        if(!pv.obj.equals("string"))
+            throw new Exception ("Line: "+pv.line+  
+                                " Type Error.\nSTRING type required.");
 
-        return type1;
     }
 
 
-    public void assertBoolType(Object type1) throws Exception{
-        System.err.println("TypeTracker::assertBool()::type1 " + type1);
-        if(!type1.equals("boolean"))
-            throw new Exception ("Type Error.\n  Required Boolean and found "+ type1);
+    public void assertNumberType(ParserVal pv) throws Exception{
+        //System.err.println("TypeTracker::assertNumberType()::type1 " + pv.obj);
+        if(!pv.obj.equals("number"))
+            throw new Exception ("Line: "+pv.line+  
+                                    " Type Error.\nNUMBER type required.");
+
+    }
+
+
+    public void assertBoolType(ParserVal pv) throws Exception{
+        //System.err.println("TypeTracker::assertBool()::type1 " + pv.obj);
+        if(!pv.obj.equals("boolean"))
+            throw new Exception ("Line: "+pv.line+  
+                                    " Type Error.\n  Required Boolean and found "+ pv.obj);
     }
 }

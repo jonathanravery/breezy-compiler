@@ -12,7 +12,6 @@ package src;
 //Adapted from pltsnow project by Jon, Cesar, Vinay, Sharadh
 
   public Parser yyparser;
-  public int ln = 0;
 
   /* Default constructor */
   public Yylex(){}
@@ -31,6 +30,9 @@ package src;
   private void pl(String s){
             System.out.println(s);
   }
+  private void l(int line,int col){
+            System.out.print("("+line + "," + col + ")");
+  }
 %}
 
 digit=		[0-9]
@@ -47,7 +49,7 @@ EndOfLineComment = "//" {InputCharacter}* {LineTerminator}
 
 %%
 
-{Comment}			{p("COMMENT");	return yyparser.COMMENT;}
+{Comment}			{l(yyline,yycolumn);p("COMMENT");	return yyparser.COMMENT;}
 {LineTerminator}accepts		{p("ACCEPTS");	return yyparser.ACCEPTS;}
 {LineTerminator}{WhiteSpace}*begin		{pl("BEGIN");	return yyparser.BEGIN;}
 array                           {p("ARRAY");    return yyparser.ARRAY;}
@@ -57,7 +59,7 @@ each				{p("EACH");	return yyparser.EACH;}
 else{WhiteSpace}if				{p("ELSEIF");	return yyparser.ELSEIF;}
 else				{p("ELSE");	return yyparser.ELSE;}
 {LineTerminator}{WhiteSpace}*end {pl("END");	return yyparser.END;}
-false				{p("FALSE");	yyparser.yylval = new ParserVal("false"); yyparser.yylval.obj="boolean"; return yyparser.FALSE;}
+false				{p("FALSE");	yyparser.yylval = new ParserVal("false",yyline,yycolumn); yyparser.yylval.obj="boolean"; return yyparser.FALSE;}
 for				{p("FOR");	return yyparser.FOR;}
 function			{p("FUNCTION");	return yyparser.FUNCTION;}
 if				{p("IF");	return yyparser.IF;}
@@ -66,13 +68,13 @@ number				{p("NUMBER");	return yyparser.NUMBER;}
 return				{p("RETURN");	return yyparser.RETURN;}
 {LineTerminator}returns		{p("RETURNS");	return yyparser.RETURNS;}
 string				{p("STRING");	return yyparser.STRING;}
-true				{p("TRUE");	yyparser.yylval = new ParserVal("true"); yyparser.yylval.obj="boolean"; return yyparser.TRUE;}
+true				{p("TRUE");	yyparser.yylval = new ParserVal("true",yyline,yycolumn); yyparser.yylval.obj="boolean"; return yyparser.TRUE;}
 while				{p("WHILE");	return yyparser.WHILE;}
-"+"					{	return yyparser.PLUS;}
-"-"					{	return yyparser.MINUS;}
-"*"					{	return yyparser.MUL;}
-"/"					{	return yyparser.DIV;}
-"%"					{	return yyparser.MOD;}
+"+"					{	yyparser.yylval = new ParserVal(yytext(),yyline,yycolumn); return yyparser.PLUS;}
+"-"					{	yyparser.yylval = new ParserVal(yytext(),yyline,yycolumn); return yyparser.MINUS;}
+"*"					{	yyparser.yylval = new ParserVal(yytext(),yyline,yycolumn); return yyparser.MUL;}
+"/"					{	yyparser.yylval = new ParserVal(yytext(),yyline,yycolumn); return yyparser.DIV;}
+"%"					{	yyparser.yylval = new ParserVal(yytext(),yyline,yycolumn); return yyparser.MOD;}
 "<="					{	return yyparser.REL_OP_LE;}
 "<"					{	return yyparser.REL_OP_LT;}
 ">="					{	return yyparser.REL_OP_GE;}
@@ -90,9 +92,9 @@ while				{p("WHILE");	return yyparser.WHILE;}
 ";"                                     {pl("SEMICOLON");	return yyparser.SEMICOLON;}
 ","					{p("COMMA");	return yyparser.COMMA;}
 \.					{p("DOT");	return yyparser.DOT;}
-[a-zA-Z][a-zA-Z0-9]*			{p(yytext());	yyparser.yylval = new ParserVal(yytext()); return yyparser.IDENTIFIER;}
-\"([^\"]|\\\")*\"			{p(yytext());	yyparser.yylval = new ParserVal(yytext()); yyparser.yylval.obj="string"; return yyparser.QUOTE;}
--?{digit}*(\.{digit}+)?			{p(yytext());	yyparser.yylval = new ParserVal(yytext()); yyparser.yylval.obj="number"; return yyparser.NUMERIC;}
+[a-zA-Z][a-zA-Z0-9]*			{l(yyline,yycolumn);p(yytext());	yyparser.yylval = new ParserVal(yytext(),yyline,12); return yyparser.IDENTIFIER;}
+\"([^\"]|\\\")*\"			{l(yyline,yycolumn);p(yytext());	yyparser.yylval = new ParserVal(yytext(),yyline,12); yyparser.yylval.obj="string"; return yyparser.QUOTE;}
+-?{digit}*(\.{digit}+)?			{l(yyline,yycolumn);p(yytext());	yyparser.yylval = new ParserVal(yytext(),yyline,12); yyparser.yylval.obj="number"; return yyparser.NUMERIC;}
 {LineTerminator}			{pl("");}
 {WhiteSpace}				{}
 .					{p("WHO KNOWS");	return 0;}
