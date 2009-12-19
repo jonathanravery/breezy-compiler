@@ -281,12 +281,14 @@ bool_factor     :	LOG_OP_NOT bool_factor {$$.sval = " !" + $2.sval;
                                                             $$.sval = $1.sval + $2.sval + $3.sval;
                                                          $$.obj = "boolean";
                                                         $$.line = $1.line;}
-                |	TRUE		{$$.sval = $1.sval; $$.obj = $1.obj;
+                |	TRUE		{$$.sval = $1.sval;
+                                                $$.obj = $1.obj;
                                                 $$.line = $1.line;}
-                |	FALSE		{$$.sval = $1.sval; $$.obj = $1.obj;
+                |	FALSE		{$$.sval = $1.sval;
+                                                $$.obj = $1.obj;
                                                 $$.line = $1.line;}
                 |       IDENTIFIER      {$$.sval = $1.sval; 
-                                            $1.obj = ba.typeTrack.getType($1, Scope.GLOBAL.getName());
+                                            $1.obj = ba.typeTrack.getType($1, Scope.LOCAL.getName());
                                             ba.typeTrack.assertBoolType($1);
                                             $$.obj = $1.obj;
                                                 $$.line = $1.line; }

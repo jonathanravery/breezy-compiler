@@ -76,7 +76,7 @@ private boolean debug = false;
         if(debug)System.err.println("TypeTracker::getType()::id " + pv.sval);
 
         for(TypedParserVal t : id_list){
-            if(debug)System.err.println(t.obj + "." + t.scope + "::" + pv.sval+ "." + scope);
+            //if(debug)System.err.println(t.obj + "." + t.scope + "::" + pv.sval+ "." + scope);
 
             if(((String)t.obj).equals(pv.sval.trim()) && t.scope.equals(scope)){
                 if(debug)System.err.println("TypeTracker::getType()::type " + t.type);
