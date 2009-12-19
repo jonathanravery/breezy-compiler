@@ -8,8 +8,15 @@ public class TypedParserVal extends ParserVal {
 		super.obj = value;
 		this.type = type;
 	}
+
+        public TypedParserVal(Object value, String type, String scope){
+		super.obj = value;
+		this.type = type;
+                this.scope = scope;
+	}
         
 	public String type;
+        public String scope;
 	
 	public String convertToCode() {
 		return "new TypedParserVal<" + type + ">(" + obj.toString() + ")";
