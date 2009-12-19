@@ -97,12 +97,12 @@ public class BreezyAssist {
         String userMain = "public " + retType + " main(" + params + ")" + "{\n" + body + "}";
 
         if(params.equals("")){
-            systemMain = "public void main(String[] args){BreezyProg b = new BreezyProg(); b.main();}\n\n";
+            systemMain = "public static void main(String[] args){BreezyProg b = new BreezyProg(); b.main();}\n\n";
         }
         else{
             String[] paramList = params.split(" ");
 
-            systemMain = "public void main(String[] args){main(";
+            systemMain = "public static void main(String[] args){main(";
             if(paramList[0].equals("String")){
                 systemMain = systemMain.concat("args[0]");
             }
