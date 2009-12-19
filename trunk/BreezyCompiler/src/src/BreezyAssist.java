@@ -204,14 +204,15 @@ public class BreezyAssist {
     	} else if (type.equals("HashMap")) {
     		List<TypedParserVal> parseArrayParams = parseArrayParams(params);
     		if (methodName.equals("add")) {
-//    			Map<TypedParserVal, TypedParserVal> parseHashParams = parseHashParams(params); //TODO: if there is only one key value pair, parsing may fail
-//    			for (final TypedParserVal key : parseHashParams.keySet()) {
-    				returnValue += objectName + ".put(" + parseArrayParams.get(0).convertToCode() + ", " + parseArrayParams.get(1).convertToCode() + ");\n"; 
-//    			}
+				returnValue += objectName + ".put(" + parseArrayParams.get(0).convertToCode() + ", " + parseArrayParams.get(1).convertToCode() + ");\n"; 
     		} else if (methodName.equals("get")) {
     			returnValue += objectName + ".get(" + parseArrayParams.get(0).convertToCode() + ");\n";
     		} else if (methodName.equals("remove")) {
-    			
+    			for (final TypedParserVal toBeRemoved : parseArrayParams) {
+    				returnValue += objectName + ".remove(" + toBeRemoved.convertToCode() + ");\n"; 
+    			}
+    		} else if (methodName.equals("size")) {
+    			returnValue += objectName + ".length();\n";
     		}
     	}
     	return returnValue;
