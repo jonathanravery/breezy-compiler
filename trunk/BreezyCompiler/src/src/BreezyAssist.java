@@ -165,7 +165,7 @@ public class BreezyAssist {
 	    		if (value.type.equals("Identifier"))
 	    			temp += name + ".add(" + value.obj + ");\n";
 	    		else
-	    			temp += name + ".add(" + value.convertToCode() + ";\n";
+	    			temp += name + ".add(" + value.convertToCode() + ");\n";
 	    	}
     	} else { // type is HashMap
     		Map<TypedParserVal, TypedParserVal> parseHashParams = parseHashParams(params);
