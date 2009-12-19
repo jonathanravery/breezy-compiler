@@ -94,10 +94,10 @@ public class BreezyAssist {
 
     private String createMain(String retType, String params, String body){
         String systemMain = "";
-        String userMain = "public static " + retType + " main(" + params + ")" + "{\n" + body + "}";
+        String userMain = "public " + retType + " main(" + params + ")" + "{\n" + body + "}";
 
         if(params.equals("")){
-            systemMain = "public static void main(String[] args){main();}\n\n";
+            systemMain = "public static void main(String[] args){BreezyProg b = new BreezyProg(); b.main();}\n\n";
         }
         else{
             String[] paramList = params.split(" ");

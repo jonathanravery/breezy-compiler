@@ -173,7 +173,7 @@ public class BreezyDefault {
 	 * 
 	 * @param text The text to write to stdout
 	 */
-	public static void WriteToScreen(String text) {
+	public void WriteToScreen(String text) {
 		System.out.print(text);
 	}
 
@@ -200,28 +200,28 @@ public class BreezyDefault {
 	 * Write a single character to standard out.
 	 * @param text
 	 */
-	public static void WriteCharacterToScreen(String text)
+	public void WriteCharacterToScreen(String text)
 	{
-		BreezyDefault.WriteToScreen(text.substring(0, 1));
+		this.WriteToScreen(text.substring(0, 1));
 	}
 	
 	/**
 	 * Write a line of text to standard out
 	 * @param text
 	 */
-	public static void WriteLineToScreen(String text)
+	public void WriteLineToScreen(String text)
 	{
 		String[] lines = text.split("\n");
-		BreezyDefault.WriteToScreen(lines[0] + "\n");
+		this.WriteToScreen(lines[0] + "\n");
 	}
 	
 	/**
 	 * Write some text to standard out
 	 * @param text
 	 */
-	public static void WriteAllToScreen(String text)
+	public void WriteAllToScreen(String text)
 	{
-		BreezyDefault.WriteToScreen(text);
+		this.WriteToScreen(text);
 	}
 	
 	/**
