@@ -37,7 +37,7 @@ method	: 	COMMENT
     		ACCEPTS aparams
     		BEGIN
                 body
-                END IDENTIFIER	{ $$.sval = ba.createFunction($3.sval,$5.sval,$7.sval,$9.sval,$11.sval); }
+                END IDENTIFIER	{ $$.sval = ba.createFunction($3.sval,$5.sval,$7.sval,$9.sval,$11.sval,$3.line,$3.column); }
 		;
 
 
@@ -55,24 +55,27 @@ declarations    :   declarations type_declaration  SEMICOLON              {$$.sv
                 ;
 
 
-type_declaration	:	STRING IDENTIFIER	{$$.sval = "String " + $2.sval + "=\"\""; ba.addIdentifier($2.sval,"string");}
-			|	BOOLEAN IDENTIFIER	{$$.sval = "boolean " + $2.sval + "=false"; ba.addIdentifier($2.sval,"boolean");}
-			|	NUMBER IDENTIFIER	{$$.sval = "double " + $2.sval + "=0"; ba.addIdentifier($2.sval,"number");}
-			|	ARRAY IDENTIFIER	{$$.sval = ba.createComplexType("ArrayList", $2.sval); ba.addIdentifier($2.sval,"ArrayList");}
-			|	HASH IDENTIFIER         {$$.sval = ba.createComplexType("HashMap", $2.sval); ba.addIdentifier($2.sval,"HashMap");}
+type_declaration	:	STRING IDENTIFIER	{$$.sval = "String " + $2.sval + "=\"\""; ba.addIdentifier($2.sval,"string",$2.line,$2.column);}
+			|	BOOLEAN IDENTIFIER	{$$.sval = "boolean " + $2.sval + "=false"; ba.addIdentifier($2.sval,"boolean",$2.line,$2.column);}
+			|	NUMBER IDENTIFIER	{$$.sval = "double " + $2.sval + "=0"; ba.addIdentifier($2.sval,"number",$2.line,$2.column);}
+			|	ARRAY IDENTIFIER	{$$.sval = ba.createComplexType("ArrayList", $2.sval); ba.addIdentifier($2.sval,"ArrayList",$2.line,$2.column);}
+			|	HASH IDENTIFIER         {$$.sval = ba.createComplexType("HashMap", $2.sval); ba.addIdentifier($2.sval,"HashMap",$2.line,$2.column);}
 			;
 
 
 /*Add all kinds of type assignments here!*/
 type_declaration_assignment :   STRING IDENTIFIER EQUALS arith_exp   {$$.sval = "String " + $2.sval + " = " + $4.sval;
-                                                                        ba.typeTrack.assertStringType($4.obj);
-                                                                         ba.addIdentifier($2.sval,"string");}
+                                                                        ba.typeTrack.assertStringType($4);
+                                                                         ba.addIdentifier($2.sval,"string",$2.line,$2.column);}
                             |   NUMBER IDENTIFIER EQUALS arith_exp {$$.sval = "double " + $2.sval + " = " + $4.sval;
-                                                                        ba.typeTrack.assertNumberType($4.obj);
-                                                                         ba.addIdentifier($2.sval,"number");}
-                            |   BOOLEAN IDENTIFIER EQUALS bool_exp  {$$.sval = "boolean " + $2.sval + " = " + $4.sval; ba.addIdentifier($2.sval,"boolean");}
-                            |	ARRAY IDENTIFIER EQUALS LEFT_SQUARE_PAREN params RIGHT_SQUARE_PAREN	{$$.sval = ba.createComplexType("ArrayList", $2.sval, $5.sval);}
-                            |	HASH IDENTIFIER EQUALS LEFT_SQUARE_PAREN hash_params RIGHT_SQUARE_PAREN	{$$.sval = ba.createComplexType("HashMap", $2.sval, $5.sval);}
+                                                                        ba.typeTrack.assertNumberType($4);
+                                                                         ba.addIdentifier($2.sval,"number",$2.line,$2.column);}
+                            |   BOOLEAN IDENTIFIER EQUALS bool_exp  {$$.sval = "boolean " + $2.sval + " = " + $4.sval;
+                                                                          ba.addIdentifier($2.sval,"boolean",$2.line,$2.column);}
+                            |	ARRAY IDENTIFIER EQUALS LEFT_SQUARE_PAREN params RIGHT_SQUARE_PAREN	
+                                        {$$.sval = ba.createComplexType("ArrayList", $2.sval, $5.sval,$2.line,$2.column);}
+                            |	HASH IDENTIFIER EQUALS LEFT_SQUARE_PAREN hash_params RIGHT_SQUARE_PAREN
+                                	{$$.sval = ba.createComplexType("HashMap", $2.sval, $5.sval,$2.line,$2.column);}
                             ;
 
 
@@ -126,7 +129,7 @@ return_statement	:	RETURN exp SEMICOLON		{$$.sval = "return " + $2.sval + ";\n";
                         ;
 
 function_declaration	:	IDENTIFIER LPAREN params RPAREN SEMICOLON {$$.sval = $1.sval + "(" + $3.sval + ");\n";
-                                                                                $$.obj = ba.typeTrack.getType($1.sval);}
+                                                                                $$.obj = ba.typeTrack.getType($1);}
                         ;
 
 
@@ -180,53 +183,107 @@ complex_type_method_invocation
 		|	IDENTIFIER DOT IDENTIFIER LPAREN RPAREN SEMICOLON {$$.sval = ba.createComplexTypeMethodInvocation($1.sval, $3.sval, null);}
 		;
 
-exp             :       bool_exp        {$$.sval = $1.sval;}
-                |       arith_exp        {$$.sval = $1.sval;}
+exp             :       bool_exp        {$$.sval = $1.sval;
+                                                $$.line = $1.line;}
+                |       arith_exp        {$$.sval = $1.sval;
+                                                $$.line = $1.line;}
                 ;
 
-arith_exp	: 	arith_exp PLUS term {$$.sval = $1.sval + "+" + $3.sval;  $$.obj = ba.typeTrack.assertSameType($1.obj,$3.obj, "+"); }
-                |	arith_exp MINUS term {$$.sval = $1.sval + " - " + $3.sval;  $$.obj = ba.typeTrack.assertNumberType($1.obj,$3.obj,"-"); }
-                |	term	 {$$.sval = $1.sval;}
+arith_exp	: 	arith_exp PLUS term {$$.sval = $1.sval + "+" + $3.sval;
+                                              ba.typeTrack.assertSameType($1,$3, $2);
+                                                $$.obj = $1.obj;
+                                                $$.line = $1.line; }
+                |	arith_exp MINUS term {$$.sval = $1.sval + " - " + $3.sval;
+                                              ba.typeTrack.assertSameType($1,$3, $2);
+                                                $$.obj = $1.obj;
+                                                $$.line = $1.line; }
+                |	term	 {$$.sval = $1.sval;
+                                    $$.line = $1.line;}
                 ;
 			
-term		:	term MUL unary {$$.sval = $1.sval + " * " + $3.sval;  $$.obj = ba.typeTrack.assertNumberType($1.obj,$3.obj, "*"); }
-                |	term DIV unary {$$.sval = $1.sval + " / " + $3.sval;  $$.obj = ba.typeTrack.assertNumberType($1.obj,$3.obj, "/"); }
-                |	term MOD unary {$$.sval = $1.sval + " % " + $3.sval;  $$.obj = ba.typeTrack.assertNumberType($1.obj,$3.obj, "%");}
-                |	unary	 {$$.sval = $1.sval; $$.obj = $1.obj;}
+term		:	term MUL unary {$$.sval = $1.sval + " * " + $3.sval;
+                                              ba.typeTrack.assertSameType($1,$3, $2);
+                                                $$.obj = $1.obj;
+                                                $$.line = $1.line; }
+                |	term DIV unary {$$.sval = $1.sval + " / " + $3.sval;
+                                              ba.typeTrack.assertSameType($1,$3, $2);
+                                                $$.obj = $1.obj;
+                                                $$.line = $1.line; }
+                |	term MOD unary {$$.sval = $1.sval + " % " + $3.sval;
+                                              ba.typeTrack.assertSameType($1,$3, $2);
+                                                $$.obj = $1.obj;
+                                                $$.line = $1.line; }
+                |	unary	 {$$.sval = $1.sval; 
+                                    $$.obj = $1.obj;
+                                    $$.line = $1.line;}
                 ;
 
-unary		:	MINUS unary { $$.sval = " -"+ $2.sval; $$.obj = $2.obj; ba.typeTrack.assertNumberType($1.obj);}
-                |	factor	 {$$.sval = $1.sval; $$.obj = $1.obj;}
+unary		:	MINUS unary { $$.sval = " -"+ $2.sval; 
+                                        ba.typeTrack.assertNumberType($2);
+                                        $$.obj = $2.obj;
+                                        $$.line = $2.line;}
+                |	factor	 {$$.sval = $1.sval;
+                                    $$.obj = $1.obj;
+                                    $$.line = $1.line;}
                 ;
 
-factor 		: 	LPAREN arith_exp RPAREN	{$$.sval = " ( " + $2.sval + " ) "; $$.obj = $2.obj; }
-                |	NUMERIC                 { $$.sval = $1.sval; $$.obj = $1.obj; }
-                |	IDENTIFIER		{ $$.sval = $1.sval; $$.obj = ba.typeTrack.getType($1.sval); }
-                |	function_declaration    { $$.sval = $1.sval; $$.obj = ba.typeTrack.getType($1.sval); }
-                |       QUOTE           	{ $$.sval = $1.sval; $$.obj = $1.obj; }
+factor 		: 	LPAREN arith_exp RPAREN	{$$.sval = " ( " + $2.sval + " ) ";
+                                                    $$.obj = $2.obj;
+                                                    $$.line = $1.line; }
+                |	NUMERIC                 { $$.sval = $1.sval; 
+                                                    $$.obj = $1.obj;
+                                                    $$.line = $1.line; }
+                |	IDENTIFIER		{ $$.sval = $1.sval; 
+                                                    $$.obj = ba.typeTrack.getType($1);
+                                                    $$.line = $1.line;}
+                |	function_declaration    { $$.sval = $1.sval; 
+                                                    $$.obj = ba.typeTrack.getType($1);
+                                                    $$.line = $1.line;}
+                |       QUOTE           	{ $$.sval = $1.sval; 
+                                                    $$.obj = $1.obj;
+                                                    $$.line = $1.line;}
                 ;
 
-bool_exp	:       bool_exp LOG_OP_OR bool_term {$$.sval = $1.sval + " || " + $3.sval; $$.obj = $1.obj;}
-                |       bool_term                         {$$.sval = $1.sval; $$.obj = $1.obj;}
+bool_exp	:       bool_exp LOG_OP_OR bool_term {$$.sval = $1.sval + " || " + $3.sval;
+                                                         $$.obj = $1.obj;
+                                                            $$.line = $1.line;}
+                |       bool_term                         {$$.sval = $1.sval; 
+                                                            $$.obj = $1.obj;
+                                                            $$.line = $1.line;}
                 ;
 
-bool_term       :	bool_term LOG_OP_AND bool_factor {$$.sval = $1.sval + " && " + $3.sval;  $$.obj = $1.obj; }
-                |       bool_factor                         {$$.sval = $1.sval; $$.obj = $1.obj;}
+bool_term       :	bool_term LOG_OP_AND bool_factor {$$.sval = $1.sval + " && " + $3.sval;  
+                                                            $$.obj = $1.obj;
+                                                            $$.line = $1.line; }
+                |       bool_factor                         {$$.sval = $1.sval; 
+                                                                    $$.obj = $1.obj;
+                                                                    $$.line = $1.line;}
                 ;
 
-bool_factor     :	LOG_OP_NOT bool_factor {$$.sval = " !" + $2.sval; $$.obj = $2.obj;}
-                |	LPAREN bool_exp RPAREN {$$.sval = " ( " + $2.sval + " ) "; $$.obj = $2.obj; }
-                |       arith_exp rel_op arith_exp  {$$.sval = $1.sval + $2.sval + $3.sval; ba.typeTrack.assertNumberType($1.obj,$3.obj,$2.sval); $$.obj = "boolean";}
-                |	TRUE		{$$.sval = $1.sval; $$.obj = $1.obj;}
-                |	FALSE		{$$.sval = $1.sval; $$.obj = $1.obj;}
+bool_factor     :	LOG_OP_NOT bool_factor {$$.sval = " !" + $2.sval; 
+                                                $$.obj = $2.obj;
+                                                $$.line = $1.line;}
+                |	LPAREN bool_exp RPAREN {$$.sval = " ( " + $2.sval + " ) "; 
+                                                $$.obj = $2.obj;
+                                                $$.line = $1.line;}
+                |       arith_exp rel_op arith_exp  {$$.sval = $1.sval + $2.sval + $3.sval;
+                                                         ba.typeTrack.assertNumberType($1,$3,$2);
+                                                         $$.obj = "boolean";
+                                                        $$.line = $1.line;}
+                |	TRUE		{$$.sval = $1.sval; $$.obj = $1.obj;
+                                                $$.line = $1.line;}
+                |	FALSE		{$$.sval = $1.sval; $$.obj = $1.obj;
+                                                $$.line = $1.line;}
                 |       IDENTIFIER      {$$.sval = $1.sval; 
-                                            $1.obj = ba.typeTrack.getType($1.sval);
-                                            ba.typeTrack.assertBoolType($1.obj);
-                                            $$.obj = ba.typeTrack.getType($1.sval); }
+                                            $1.obj = ba.typeTrack.getType($1);
+                                            ba.typeTrack.assertBoolType($1);
+                                            $$.obj = ba.typeTrack.getType($1);
+                                                $$.line = $1.line; }
                 |	function_declaration { $$.sval = $1.sval;
-                                                $1.obj = ba.typeTrack.getType($1.sval);
-                                                ba.typeTrack.assertBoolType($1.obj);
-                                                $$.obj = ba.typeTrack.getType($1.sval);}
+                                                $1.obj = ba.typeTrack.getType($1);
+                                                ba.typeTrack.assertBoolType($1);
+                                                $$.obj = ba.typeTrack.getType($1);
+                                                $$.line = $1.line;}
                 ;
 
 rel_op          :       REL_OP_LT		{$$.sval = "<";}

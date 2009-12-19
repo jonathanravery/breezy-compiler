@@ -25,7 +25,7 @@ public class BreezyAssist {
     private static ArrayList<String> errorList = new ArrayList<String>();
     private static boolean mainCreated = false;
 
-    public static TypeTracker typeTrack = new TypeTracker();
+    public TypeTracker typeTrack = new TypeTracker();
 
     public BreezyAssist() {
     }
@@ -50,7 +50,7 @@ public class BreezyAssist {
         }
     }
 
-    public String createFunction(String id, String retType, String params, String body, String id2){
+    public String createFunction(String id, String retType, String params, String body, String id2,int line,int col){
         String retFunction = "";
 
         //Check and see if block ends with correct ending
@@ -58,7 +58,7 @@ public class BreezyAssist {
             return "";
 
         //Add function name to id list with it's return type
-        this.addIdentifier(id, retType);
+        this.addIdentifier(id, retType,line,col);
 
         //TODO: check return value == actual return value
 
@@ -79,14 +79,14 @@ public class BreezyAssist {
         return retFunction;
     }
 
-    public void addIdentifier(String id, String type){
+    public void addIdentifier(String id, String type, int line, int col){
         //TODO: check against java keywords
 
         //Add to our type tracking list of identifiers
         try{
-            System.err.println("BreezyAssist::addIdentifier()::id " + id);
-            System.err.println("BreezyAssist::addIdentifier()::type " + type);
-            typeTrack.addID(id, type);
+            //System.err.println("BreezyAssist::addIdentifier()::id " + id);
+            //System.err.println("BreezyAssist::addIdentifier()::type " + type);
+            typeTrack.addID(id, type,line,col);
         }catch(Exception e){
             System.err.println(e.getMessage());
         }
@@ -140,10 +140,10 @@ public class BreezyAssist {
     	return type + " " + name + " = new " + type + "();\n";
     }
     
-    public String createComplexType(String type, String name, String params) {
+    public String createComplexType(String type, String name, String params, int line, int col) {
         
         //Add id to type checker
-        this.addIdentifier(name, type);
+        this.addIdentifier(name, type, line, col);
 
     	String temp = type + " " + name + " = new " + type + "();\n";
     	

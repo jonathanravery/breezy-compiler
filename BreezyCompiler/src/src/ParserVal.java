@@ -30,9 +30,14 @@ public String sval;
  */
 public Object obj;
 
+public int line;
+
+public int column;
+
 //#############################################
 //## C O N S T R U C T O R S
 //#############################################
+
 /**
  * Initialize me without a value
  */
@@ -42,33 +47,41 @@ public ParserVal()
 /**
  * Initialize me as an int
  */
-public ParserVal(int val)
+public ParserVal(int val, int lin, int col)
 {
   ival=val;
+  line = lin;
+  column = col;
 }
 
 /**
  * Initialize me as a double
  */
-public ParserVal(double val)
+public ParserVal(double val, int lin, int col)
 {
   dval=val;
+  line = lin;
+  column = col;
 }
 
 /**
  * Initialize me as a string
  */
-public ParserVal(String val)
+public ParserVal(String val, int lin, int col)
 {
   sval=val;
+  line = lin;
+  column = col;
 }
 
 /**
  * Initialize me as an Object
  */
-public ParserVal(Object val)
+public ParserVal(Object val, int lin, int col)
 {
   obj=val;
+  line = lin;
+  column = col;
 }
 }//end class
 
