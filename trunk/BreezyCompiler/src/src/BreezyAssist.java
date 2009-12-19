@@ -59,7 +59,10 @@ public class BreezyAssist {
         String retFunction = "";
 
         /*This is only called  when yacc reduces a string
-         to a function*/
+         of functions to a method.  Right now we need to clear
+         out all of the local variables that were declared in this
+         function so that they can be declared in other functions.*/
+        typeTrack.removeLocals();
 
 
         //Check and see if block ends with correct ending

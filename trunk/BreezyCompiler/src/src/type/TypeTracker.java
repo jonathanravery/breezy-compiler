@@ -63,6 +63,15 @@ private boolean debug = false;
         id_list.add(temp);
     }
 
+    public void removeLocals(){
+        for(int i = 0; i < id_list.size(); i++){
+            if(id_list.get(i).scope.equals(Scope.LOCAL.getName())){
+                id_list.removeElementAt(i);
+                i--;
+            }
+        }
+    }
+
     public String getType(ParserVal pv, String scope)throws Exception{
         if(debug)System.err.println("TypeTracker::getType()::id " + pv.sval);
 
