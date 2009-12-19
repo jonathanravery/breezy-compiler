@@ -38,6 +38,10 @@ accepts string s, number x
 begin
 	string testString = "testing string";
 	array testArray2 = ["test", "test2", 3, testString];
+	testArray2.remove("test");
+	testArray2.add("test4");
+	testArray2.add(5);
+	testArray2.removeAt(1);
 end arrayTest
 
 //Testing hash
@@ -47,6 +51,7 @@ accepts string s, number x
 begin
 	string testkey = "test key";
 	hash testHash = [("test", 5412341), ("test2", 34235325), (34235353, "test value"), (testkey, "test value2")];
+	testHash.add("testing add", 3423553);
 end hashTest
 
 /*Main Function*/

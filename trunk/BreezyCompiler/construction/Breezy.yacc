@@ -137,8 +137,8 @@ function_call	:	IDENTIFIER LPAREN params RPAREN {$$.sval = $1.sval + "(" + $3.sv
 
 //concrete list of functionality
 complex_type_method_invocation
-		:	IDENTIFIER DOT IDENTIFIER LPAREN params RPAREN {$$.sval = ba.createComplexTypeMethodInvocation($1.sval, $3.sval, $5.sval);}
-		|	IDENTIFIER DOT IDENTIFIER LPAREN RPAREN {$$.sval = ba.createComplexTypeMethodInvocation($1.sval, $3.sval, null);}
+		:	IDENTIFIER DOT IDENTIFIER LPAREN params RPAREN {$$.sval = ba.createComplexTypeMethodInvocation($1.sval, $3.sval, Scope.LOCAL.getName(), $5.sval);}
+		|	IDENTIFIER DOT IDENTIFIER LPAREN RPAREN {$$.sval = ba.createComplexTypeMethodInvocation($1.sval, $3.sval, Scope.LOCAL.getName(), null);}
 		;
 
 
