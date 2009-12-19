@@ -270,6 +270,8 @@ bool_factor     :	LOG_OP_NOT bool_factor {$$.sval = " !" + $2.sval;
                 |       arith_exp rel_op arith_exp  {ba.typeTrack.assertNumberOrStringType($1,$3,$2);
                                                         if($1.obj.toString().equals("string") && $2.sval.equals("=="))
                                                             $$.sval = "(" +$1.sval + ").equals(" + $3.sval + ")";
+                                                        else if($1.obj.toString().equals("string"))
+                                                            throw new Exception("You cannot use " + $2.sval + " with two STRING types.");
                                                         else
                                                             $$.sval = $1.sval + $2.sval + $3.sval;
                                                          $$.obj = "boolean";
