@@ -12,5 +12,8 @@ del %BREEZY_HOME%\dist\BreezyProg.java
 
 del %BREEZY_HOME%\dist\BreezyProg.class
 
+del BreezyProg.java
+
+
 
 
