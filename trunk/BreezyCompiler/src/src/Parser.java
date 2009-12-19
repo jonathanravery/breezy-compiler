@@ -539,7 +539,7 @@ final static String yyrule[] = {
 "rel_op : LOG_OP_NOT LOG_OP_EQUAL",
 };
 
-//#line 303 "Breezy.yacc"
+//#line 305 "Breezy.yacc"
 
 void yyerror(String s){
 	System.out.println(s);
@@ -593,7 +593,7 @@ String yys;    //current token string
 //###############################################################
 // method: yyparse : parse input and execute indicated items
 //###############################################################
-int yyparse()throws Exception
+int yyparse() throws Exception
 {
 boolean doaction;
   init_stacks();
@@ -1118,23 +1118,25 @@ case 85:
 {ba.typeTrack.assertNumberOrStringType(val_peek(2),val_peek(0),val_peek(1));
                                                         if(val_peek(2).obj.toString().equals("string") && val_peek(1).sval.equals("=="))
                                                             yyval.sval = "(" +val_peek(2).sval + ").equals(" + val_peek(0).sval + ")";
+                                                        else if(val_peek(2).obj.toString().equals("string"))
+                                                            throw new Exception("You cannot use " + val_peek(1).sval + " with two STRING types.");
                                                         else
                                                             yyval.sval = val_peek(2).sval + val_peek(1).sval + val_peek(0).sval;
                                                          yyval.obj = "boolean";
                                                         yyval.line = val_peek(2).line;}
 break;
 case 86:
-//#line 277 "Breezy.yacc"
-{yyval.sval = val_peek(0).sval; yyval.obj = val_peek(0).obj;
-                                                yyval.line = val_peek(0).line;}
-break;
-case 87:
 //#line 279 "Breezy.yacc"
 {yyval.sval = val_peek(0).sval; yyval.obj = val_peek(0).obj;
                                                 yyval.line = val_peek(0).line;}
 break;
-case 88:
+case 87:
 //#line 281 "Breezy.yacc"
+{yyval.sval = val_peek(0).sval; yyval.obj = val_peek(0).obj;
+                                                yyval.line = val_peek(0).line;}
+break;
+case 88:
+//#line 283 "Breezy.yacc"
 {yyval.sval = val_peek(0).sval; 
                                             val_peek(0).obj = ba.typeTrack.getType(val_peek(0), Scope.GLOBAL.getName());
                                             ba.typeTrack.assertBoolType(val_peek(0));
@@ -1142,7 +1144,7 @@ case 88:
                                                 yyval.line = val_peek(0).line; }
 break;
 case 89:
-//#line 286 "Breezy.yacc"
+//#line 288 "Breezy.yacc"
 { yyval.sval = val_peek(0).sval;
                                                 val_peek(0).obj = ba.typeTrack.getType(val_peek(0), Scope.GLOBAL.getName());
                                                 ba.typeTrack.assertBoolType(val_peek(0));
@@ -1150,30 +1152,30 @@ case 89:
                                                 yyval.line = val_peek(0).line;}
 break;
 case 90:
-//#line 293 "Breezy.yacc"
+//#line 295 "Breezy.yacc"
 {yyval.sval = "<";}
 break;
 case 91:
-//#line 294 "Breezy.yacc"
+//#line 296 "Breezy.yacc"
 {yyval.sval = ">";}
 break;
 case 92:
-//#line 295 "Breezy.yacc"
+//#line 297 "Breezy.yacc"
 {yyval.sval = "<=";}
 break;
 case 93:
-//#line 296 "Breezy.yacc"
+//#line 298 "Breezy.yacc"
 {yyval.sval = ">=";}
 break;
 case 94:
-//#line 297 "Breezy.yacc"
+//#line 299 "Breezy.yacc"
 {yyval.sval = "==";}
 break;
 case 95:
-//#line 298 "Breezy.yacc"
+//#line 300 "Breezy.yacc"
 {yyval.sval = "!=";}
 break;
-//#line 1097 "Parser.java"
+//#line 1099 "Parser.java"
 //########## END OF USER-SUPPLIED ACTIONS ##########
     }//switch
     //#### Now let's reduce... ####

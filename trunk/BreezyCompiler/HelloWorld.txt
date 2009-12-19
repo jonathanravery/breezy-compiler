@@ -1,16 +1,4 @@
 
-/*Main Function*/
-function main2
-returns nothing 
-accepts nothing
-begin 
-	string helloWorld;
-	helloWorld = "HelloWorld";
-	printHelloWorld(helloWorld);
-	printHelloWorld(helloWorld, test, x);
-end main2
-
-
 
 //New Function
 function printHelloWorld
@@ -21,6 +9,16 @@ begin
 	return x;
 end printHelloWorld
 
+
+/*Main Function*/
+function main2
+returns nothing 
+accepts nothing
+begin 
+	string helloWorld;
+	helloWorld = "HelloWorld";
+	printHelloWorld(helloWorld);
+end main2
 
 
 //New Function for testing arrays
@@ -69,11 +67,6 @@ begin
                 else if (true)
                 begin
                 end else if
-
-                else
-                begin
-                    print("HelloWorld");
-                end else
 
 		x = 5;
 		x = 7 - 8+(6*9.876 - (-x)%2 );
