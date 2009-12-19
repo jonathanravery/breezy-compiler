@@ -1,6 +1,7 @@
 %{
 package src;
 import java.io.*;
+import libs.structs.Scope;
 //Authored by Jon, Cesar, Vinay, Sharadh
 //Adapted to Breezy by Ian, Leighton, Jack, Jon, Elena, Clement
 %}
@@ -37,7 +38,7 @@ method	: 	COMMENT
     		ACCEPTS aparams
     		BEGIN
                 body
-                END IDENTIFIER	{ $$.sval = ba.createFunction($3.sval,$5.sval,$7.sval,$9.sval,$11.sval,$3.line,$3.column); }
+                END IDENTIFIER	{ $$.sval = ba.createFunction($3.sval,$5.sval,$7.sval,$9.sval,$11.sval,$3.line,Scope.GLOBAL.getName()); }
 		;
 
 
@@ -55,27 +56,27 @@ declarations    :   declarations type_declaration  SEMICOLON              {$$.sv
                 ;
 
 
-type_declaration	:	STRING IDENTIFIER	{$$.sval = "String " + $2.sval + "=\"\""; ba.addIdentifier($2.sval,"string",$2.line,$2.column);}
-			|	BOOLEAN IDENTIFIER	{$$.sval = "boolean " + $2.sval + "=false"; ba.addIdentifier($2.sval,"boolean",$2.line,$2.column);}
-			|	NUMBER IDENTIFIER	{$$.sval = "double " + $2.sval + "=0"; ba.addIdentifier($2.sval,"number",$2.line,$2.column);}
-			|	ARRAY IDENTIFIER	{$$.sval = ba.createComplexType("ArrayList", $2.sval); ba.addIdentifier($2.sval,"ArrayList",$2.line,$2.column);}
-			|	HASH IDENTIFIER         {$$.sval = ba.createComplexType("HashMap", $2.sval); ba.addIdentifier($2.sval,"HashMap",$2.line,$2.column);}
+type_declaration	:	STRING IDENTIFIER	{$$.sval = "String " + $2.sval + "=\"\""; ba.addIdentifier($2.sval,"string",$2.line,Scope.LOCAL.getName());}
+			|	BOOLEAN IDENTIFIER	{$$.sval = "boolean " + $2.sval + "=false"; ba.addIdentifier($2.sval,"boolean",$2.line,Scope.LOCAL.getName());}
+			|	NUMBER IDENTIFIER	{$$.sval = "double " + $2.sval + "=0"; ba.addIdentifier($2.sval,"number",$2.line,Scope.LOCAL.getName());}
+			|	ARRAY IDENTIFIER	{$$.sval = ba.createComplexType("ArrayList", $2.sval); ba.addIdentifier($2.sval,"ArrayList",$2.line,Scope.LOCAL.getName());}
+			|	HASH IDENTIFIER         {$$.sval = ba.createComplexType("HashMap", $2.sval); ba.addIdentifier($2.sval,"HashMap",$2.line,Scope.LOCAL.getName());}
 			;
 
 
 /*Add all kinds of type assignments here!*/
 type_declaration_assignment :   STRING IDENTIFIER EQUALS arith_exp   {$$.sval = "String " + $2.sval + " = " + $4.sval;
                                                                         ba.typeTrack.assertStringType($4);
-                                                                         ba.addIdentifier($2.sval,"string",$2.line,$2.column);}
+                                                                         ba.addIdentifier($2.sval,"string",$2.line,Scope.LOCAL.getName());}
                             |   NUMBER IDENTIFIER EQUALS arith_exp {$$.sval = "double " + $2.sval + " = " + $4.sval;
                                                                         ba.typeTrack.assertNumberType($4);
-                                                                         ba.addIdentifier($2.sval,"number",$2.line,$2.column);}
+                                                                         ba.addIdentifier($2.sval,"number",$2.line,Scope.LOCAL.getName());}
                             |   BOOLEAN IDENTIFIER EQUALS bool_exp  {$$.sval = "boolean " + $2.sval + " = " + $4.sval;
-                                                                          ba.addIdentifier($2.sval,"boolean",$2.line,$2.column);}
+                                                                          ba.addIdentifier($2.sval,"boolean",$2.line,Scope.LOCAL.getName());}
                             |	ARRAY IDENTIFIER EQUALS LEFT_SQUARE_PAREN params RIGHT_SQUARE_PAREN	
-                                        {$$.sval = ba.createComplexType("ArrayList", $2.sval, $5.sval,$2.line,$2.column);}
+                                        {$$.sval = ba.createComplexType("ArrayList", $2.sval, $5.sval,$2.line,Scope.LOCAL.getName());}
                             |	HASH IDENTIFIER EQUALS LEFT_SQUARE_PAREN hash_params RIGHT_SQUARE_PAREN
-                                	{$$.sval = ba.createComplexType("HashMap", $2.sval, $5.sval,$2.line,$2.column);}
+                                	{$$.sval = ba.createComplexType("HashMap", $2.sval, $5.sval,$2.line,Scope.LOCAL.getName());}
                             ;
 
 
@@ -91,7 +92,9 @@ statement	:       COMMENT                                     {$$.sval = "";}
                 |	return_statement SEMICOLON                  {$$.sval = $1.sval + ";\n";}
                 |	if_statement                                {$$.sval = $1.sval;}
                 |       while_loop                                  {$$.sval = $1.sval;}
-                |	IDENTIFIER EQUALS exp SEMICOLON             {$$.sval = $1.sval + "=" + $3.sval + ";\n" ;}
+                |	IDENTIFIER EQUALS exp SEMICOLON             {$1.obj = ba.typeTrack.getType($1,Scope.LOCAL.getName());
+                                                                        ba.typeTrack.assertSameType($1,$3,$2);
+                                                                        $$.sval = $1.sval + "=" + $3.sval + ";\n" ;}
                 ;
 
 if_statement	:	IF LPAREN bool_exp RPAREN
@@ -128,7 +131,7 @@ return_statement	:	RETURN exp 		{$$.sval = "return " + $2.sval;}
                         ;
 
 function_call	:	IDENTIFIER LPAREN params RPAREN {$$.sval = $1.sval + "(" + $3.sval + ")";
-                                                                                $$.obj = ba.typeTrack.getType($1);}
+                                                            $$.obj = ba.typeTrack.getType($1, Scope.GLOBAL.getName());}
                         ;
 
 
@@ -161,9 +164,9 @@ hash_params		: 	LPAREN hash_item COMMA hash_item RPAREN COMMA hash_params	{$$.sv
 				;
 
 hash_item		:	QUOTE	{$$.sval = $1.sval;}
-				|	NUMERIC	{$$.ival = $1.ival;}
-				|	IDENTIFIER	{$$.sval = $1.sval;}
-				;
+                        |	NUMERIC	{$$.ival = $1.ival;}
+                        |	IDENTIFIER	{$$.sval = $1.sval;}
+                        ;
 
 
 type		:       BOOLEAN		{$$.sval = "boolean ";}
@@ -178,9 +181,11 @@ return_type     :       type            {$$.sval = $1.sval;}
                 ;
 
 exp             :       bool_exp        {$$.sval = $1.sval;
-                                                $$.line = $1.line;}
+                                                $$.line = $1.line;
+                                                $$.obj = $1.obj;}
                 |       arith_exp        {$$.sval = $1.sval;
-                                                $$.line = $1.line;}
+                                                $$.line = $1.line;
+                                                $$.obj = $1.obj;}
                 ;
 
 arith_exp	: 	arith_exp PLUS term {$$.sval = $1.sval + "+" + $3.sval;
@@ -228,7 +233,7 @@ factor 		: 	LPAREN arith_exp RPAREN	{$$.sval = " ( " + $2.sval + " ) ";
                                                     $$.obj = $1.obj;
                                                     $$.line = $1.line; }
                 |	IDENTIFIER		{ $$.sval = $1.sval; 
-                                                    $$.obj = ba.typeTrack.getType($1);
+                                                    $$.obj = ba.typeTrack.getType($1, Scope.LOCAL.getName());
                                                     $$.line = $1.line;}
                 |	function_call    { $$.sval = $1.sval;
                                                     $$.obj = $1.obj;
@@ -269,14 +274,14 @@ bool_factor     :	LOG_OP_NOT bool_factor {$$.sval = " !" + $2.sval;
                 |	FALSE		{$$.sval = $1.sval; $$.obj = $1.obj;
                                                 $$.line = $1.line;}
                 |       IDENTIFIER      {$$.sval = $1.sval; 
-                                            $1.obj = ba.typeTrack.getType($1);
+                                            $1.obj = ba.typeTrack.getType($1, Scope.GLOBAL.getName());
                                             ba.typeTrack.assertBoolType($1);
-                                            $$.obj = ba.typeTrack.getType($1);
+                                            $$.obj = $1.obj;
                                                 $$.line = $1.line; }
                 |	function_call { $$.sval = $1.sval;
-                                                $1.obj = ba.typeTrack.getType($1);
+                                                $1.obj = ba.typeTrack.getType($1, Scope.GLOBAL.getName());
                                                 ba.typeTrack.assertBoolType($1);
-                                                $$.obj = ba.typeTrack.getType($1);
+                                                $$.obj = $1.obj;
                                                 $$.line = $1.line;}
                 ;
 

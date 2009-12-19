@@ -79,7 +79,7 @@ while				{p("WHILE");	return yyparser.WHILE;}
 "<"					{	return yyparser.REL_OP_LT;}
 ">="					{	return yyparser.REL_OP_GE;}
 ">"					{	return yyparser.REL_OP_GT;}
-"="					{p("EQUALS");	return yyparser.EQUALS;}
+"="					{p("EQUALS");	yyparser.yylval = new ParserVal(yytext(),yyline+1,yycolumn); return yyparser.EQUALS;}
 "EQUALS"				{	return yyparser.LOG_OP_EQUAL;}
 "AND"					{	return yyparser.LOG_OP_AND;}
 "OR"					{	return yyparser.LOG_OP_OR;}
