@@ -51,13 +51,17 @@ public class BreezyAssist {
         } catch (IOException ex) {
             Logger.getLogger(BreezyAssist.class.getName()).log(Level.SEVERE, null, ex);
         }
+
+        System.out.println("Congratulations!  You've compiled!");
     }
 
     public String createFunction(String id, String retType, String params, String body, String id2,int line,String scope){
         String retFunction = "";
 
-        //This is only called  when yacc reduces a string
-        //of tokens
+        /*This is only called  when yacc reduces a string
+         to a function*/
+
+
         //Check and see if block ends with correct ending
         if(checkFunctionEnding(id,id2) == false)
             return "";
