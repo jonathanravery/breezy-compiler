@@ -37,9 +37,11 @@ public class BreezyAssist {
 
     public void DumpFile(String s, String fileName){
         try {
-            FileWriter fw = new FileWriter(fileName + ".java");
+            File f = new File(fileName + ".java");
+            f.createNewFile();
+            f.setWritable(true);
+            FileWriter fw = new FileWriter(f);
 
-            //TODO: REMOVE
             fw.write("import src.BreezyDefault;\n\n");
             fw.write("import java.io.*;\n\n");
             fw.write("public class " + fileName + " extends BreezyDefault{\n");
@@ -54,6 +56,8 @@ public class BreezyAssist {
     public String createFunction(String id, String retType, String params, String body, String id2,int line,String scope){
         String retFunction = "";
 
+        //This is only called  when yacc reduces a string
+        //of tokens
         //Check and see if block ends with correct ending
         if(checkFunctionEnding(id,id2) == false)
             return "";
