@@ -28,7 +28,9 @@ start	: 	program		{ba.DumpFile($1.sval);}
 
 
 program		:	method 		{$$.sval= $1.sval;}
+                |       COMMENT         {$$.sval="";}
                 |	program method	{$$.sval = $1.sval + $2.sval;}
+                |	program COMMENT	{$$.sval = $1.sval;}
                 ;
 
 
