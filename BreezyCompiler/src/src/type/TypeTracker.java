@@ -135,9 +135,10 @@ public class TypeTracker {
         String t2 = (String)pv2.obj;
 
         if(!t1.equals(t2) && !t1.equals("not_def") && !t2.equals("not_def") )
-            throw new Exception ("Line: "+pv1.line+
-                                " Type Error.  Performed " + t1.toUpperCase() + " " + pvOP.sval + " " + t2.toUpperCase() +
-                                ".\nConfirm the types are both the same.");
+            throw new BreezyException (pv1.line,
+                                        ExceptionType.TYPE.getName(),
+                                        t1.toUpperCase() + " " + pvOP.sval + " " + t2.toUpperCase() + " is not a valid operation." +
+                                            ".\nConfirm the types are both the same.");
 
         /*If we don't throw a type error, make sure that variables are not "not_def
         and if they are, record this info so that we can check type later when
@@ -180,14 +181,16 @@ public class TypeTracker {
         String t2 = (String)pv2.obj;
         if( (!t1.equals("string") && !t1.equals("number") && !t1.equals("not_def"))
                 || (!t2.equals("string") && !t2.equals("number") && !t2.equals("not_def")))
-            throw new Exception ("Line: "+pv1.line+  
-                    " Type Error.  Performed " + t1.toUpperCase() + " " + pvOP.sval + " " + t2.toUpperCase() +
-                    ".\nYou must use STRING or NUMBER for this type of operation.");
+            throw new BreezyException (pv1.line,
+                                        ExceptionType.TYPE.getName(),
+                                        t1.toUpperCase() + " " + pvOP.sval + " " + t2.toUpperCase() + " is not a valid operation." +
+                                            "\n\tConfirm the types are both NUMBER or STRING.");
 
         if(!t1.equals(t2) && !t1.equals("not_def") && !t2.equals("not_def") )
-            throw new Exception ("Line: "+pv1.line+  
-                                " Type Error.  Performed " + t1.toUpperCase() + " " + pvOP.sval + " " + t2.toUpperCase() +
-                                ".\nConfirm the types are both NUMBER or STRING.");
+            throw new BreezyException (pv1.line,
+                                        ExceptionType.TYPE.getName(),
+                                        t1.toUpperCase() + " " + pvOP.sval + " " + t2.toUpperCase() + " is not a valid operation." +
+                                            "\n\tConfirm the types are both the NUMBER or STRING.");
 
         /*If we don't throw a type error, make sure that variables are not "not_def
         and if they are, record this info so that we can check type later when
@@ -225,8 +228,9 @@ public class TypeTracker {
 
         String t1 = (String)pv.obj;
         if((!t1.equals("ArrayList") && !t1.equals("HashMap") && !t1.equals("not_def")))
-            throw new Exception ("Line: "+pv.line+
-                    " Type Error.  You must use ARRAY or HASH for this type of operation.");
+            throw new BreezyException (pv.line,
+                                        ExceptionType.TYPE.getName(),
+                                        "Expected ARRAY or HASH but found " + pv.obj.toString().toUpperCase() + ".");
 
         /*If we don't throw a type error, make sure that variables are not "not_def
         and if they are, record this info so that we can check type later when
@@ -248,9 +252,10 @@ public class TypeTracker {
         String t1 = (String)pv1.obj;
         String t2 = (String)pv2.obj;
         if( (!t1.equals("number") && !t1.equals("not_def")) || (!t2.equals("number") && !t2.equals("not_def")))
-            throw new Exception ("Line: "+pv1.line+  
-                                " Type Error.  Performed " + t1.toUpperCase() + " " + pvOP.sval + " " + t2.toUpperCase() +
-                                ".\nConfirm the types are both numbers.");
+            throw new BreezyException (pv1.line,
+                                        ExceptionType.TYPE.getName(),
+                                        t1.toUpperCase() + " " + pvOP.sval + " " + t2.toUpperCase() + " is not a valid operation." +
+                                            ".\nConfirm that both variables are of the type NUMBER.");
 
         /*If we don't throw a type error, make sure that variables are not "not_def
         and if they are, record this info so that we can check type later when

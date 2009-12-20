@@ -33,6 +33,10 @@ package src;
   private void l(int line,int col){
             //System.out.print("("+line + "," + col + ")");
   }
+
+  public int getLine(){
+    return yyline;
+    }
 %}
 
 digit=		[0-9]
