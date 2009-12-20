@@ -54,7 +54,7 @@ public class BreezyAssist {
         System.out.println("*\n*\n*\n\n\nCongratulations!  You've compiled!\n\n\n*\n*\n*");
     }
 
-    public String createFunction(String id, String retType, String params, String body, String id2,int line,String scope){
+    public String createFunction(String id, String retType, String params, String body, String id2,int line,String scope)throws Exception{
         String retFunction = "";
 
         /*This is only called  when yacc reduces a string
@@ -90,17 +90,13 @@ public class BreezyAssist {
         return retFunction;
     }
 
-    public void addIdentifier(String id, String type, int line, String scope){
+    public void addIdentifier(String id, String type, int line, String scope)throws Exception{
         //TODO: check against java keywords
 
         //Add to our type tracking list of identifiers
-        try{
-            //System.err.println("BreezyAssist::addIdentifier()::id " + id);
-            //System.err.println("BreezyAssist::addIdentifier()::type " + type);
-            typeTrack.addID(id, type,line,scope);
-        }catch(Exception e){
-            System.err.println(e.getMessage());
-        }
+        //System.err.println("BreezyAssist::addIdentifier()::id " + id);
+        //System.err.println("BreezyAssist::addIdentifier()::type " + type);
+        typeTrack.addID(id, type,line,scope);
     }
 
     private String createMain(String retType, String params, String body){
@@ -152,7 +148,7 @@ public class BreezyAssist {
     	return type + " " + name + " = new " + type + "();\n";
     }
     
-    public String createComplexType(String type, String name, String params, int line, String scope) {
+    public String createComplexType(String type, String name, String params, int line, String scope) throws Exception{
         
         //Add id to type checker
         this.addIdentifier(name, type, line, scope);

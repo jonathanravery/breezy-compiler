@@ -542,7 +542,7 @@ final static String yyrule[] = {
 "rel_op : LOG_OP_NOT LOG_OP_EQUAL",
 };
 
-//#line 278 "Breezy.yacc"
+//#line 279 "Breezy.yacc"
 
 void yyerror(String s){
 	System.out.println(s);
@@ -894,178 +894,179 @@ break;
 case 41:
 //#line 137 "Breezy.yacc"
 {yyval.sval = val_peek(3).sval + "(" + val_peek(1).sval + ")";
-                                                            yyval.obj = ba.typeTrack.getType(val_peek(3), Scope.GLOBAL.getName());}
+                                                            yyval.obj = ba.typeTrack.getType(val_peek(3), Scope.GLOBAL.getName());
+                                                            yyval.line = val_peek(3).line;}
 break;
 case 42:
-//#line 144 "Breezy.yacc"
+//#line 145 "Breezy.yacc"
 {yyval.sval = ba.createComplexTypeMethodInvocation(val_peek(5).sval, val_peek(3).sval, Scope.LOCAL.getName(), val_peek(1).sval);}
 break;
 case 43:
-//#line 145 "Breezy.yacc"
+//#line 146 "Breezy.yacc"
 {yyval.sval = ba.createComplexTypeMethodInvocation(val_peek(4).sval, val_peek(2).sval, Scope.LOCAL.getName(), null);}
 break;
 case 44:
-//#line 149 "Breezy.yacc"
+//#line 150 "Breezy.yacc"
 {yyval.sval = "";}
 break;
 case 45:
-//#line 150 "Breezy.yacc"
+//#line 151 "Breezy.yacc"
 {yyval.sval = val_peek(0).sval;}
 break;
 case 46:
-//#line 153 "Breezy.yacc"
+//#line 154 "Breezy.yacc"
 {ba.addIdentifier(val_peek(0).sval,val_peek(1).obj.toString(),val_peek(0).line,Scope.LOCAL.getName());
                                                             yyval.sval = val_peek(1).sval + " " + val_peek(0).sval;}
 break;
 case 47:
-//#line 155 "Breezy.yacc"
+//#line 156 "Breezy.yacc"
 {ba.addIdentifier(val_peek(2).sval,val_peek(3).obj.toString(),val_peek(2).line,Scope.LOCAL.getName());
                                                             yyval.sval = val_peek(3).sval + " " + val_peek(2).sval + ", " + val_peek(0).sval;}
 break;
 case 48:
-//#line 159 "Breezy.yacc"
-{yyval.sval = "";}
-break;
-case 49:
 //#line 160 "Breezy.yacc"
 {yyval.sval = "";}
 break;
-case 50:
+case 49:
 //#line 161 "Breezy.yacc"
+{yyval.sval = "";}
+break;
+case 50:
+//#line 162 "Breezy.yacc"
 {yyval.sval = val_peek(0).sval;}
 break;
 case 51:
-//#line 164 "Breezy.yacc"
+//#line 165 "Breezy.yacc"
 {yyval.sval = val_peek(0).sval;}
 break;
 case 52:
-//#line 165 "Breezy.yacc"
+//#line 166 "Breezy.yacc"
 {yyval.sval = val_peek(2).sval + "," + val_peek(0).sval;}
 break;
 case 53:
-//#line 168 "Breezy.yacc"
+//#line 169 "Breezy.yacc"
 {yyval.sval = "(" + val_peek(3).sval + "," + val_peek(1).sval + ")" + val_peek(6).sval;}
 break;
 case 54:
-//#line 169 "Breezy.yacc"
+//#line 170 "Breezy.yacc"
 {yyval.sval = "(" + val_peek(3).sval + "," + val_peek(1).sval + ")";}
 break;
 case 55:
-//#line 173 "Breezy.yacc"
+//#line 174 "Breezy.yacc"
 {yyval.sval = "boolean "; yyval.obj = "boolean";}
 break;
 case 56:
-//#line 174 "Breezy.yacc"
+//#line 175 "Breezy.yacc"
 {yyval.sval = "String "; yyval.obj = "string";}
 break;
 case 57:
-//#line 175 "Breezy.yacc"
+//#line 176 "Breezy.yacc"
 {yyval.sval = "double "; yyval.obj = "number";}
 break;
 case 58:
-//#line 176 "Breezy.yacc"
+//#line 177 "Breezy.yacc"
 {yyval.sval = "ArrayList "; yyval.obj = "ArrayList";}
 break;
 case 59:
-//#line 177 "Breezy.yacc"
+//#line 178 "Breezy.yacc"
 {yyval.sval = "HashMap "; yyval.obj = "HashMap";}
 break;
 case 60:
-//#line 180 "Breezy.yacc"
+//#line 181 "Breezy.yacc"
 {yyval.sval = val_peek(0).sval;}
 break;
 case 61:
-//#line 181 "Breezy.yacc"
+//#line 182 "Breezy.yacc"
 {yyval.sval = "void";}
 break;
 case 62:
-//#line 184 "Breezy.yacc"
+//#line 185 "Breezy.yacc"
 {ba.typeTrack.assertBoolType(val_peek(2),val_peek(0),val_peek(1));
                                                         yyval.sval = val_peek(2).sval + " || " + val_peek(0).sval;
                                                         yyval.obj = val_peek(2).obj;
                                                         yyval.line = val_peek(2).line;}
 break;
 case 63:
-//#line 188 "Breezy.yacc"
+//#line 189 "Breezy.yacc"
 {yyval.sval = val_peek(2).sval + "+" + val_peek(0).sval;
                                               ba.typeTrack.assertNumberOrStringType(val_peek(2),val_peek(0), val_peek(1));
                                                 yyval.obj = val_peek(2).obj;
                                                 yyval.line = val_peek(2).line; }
 break;
 case 64:
-//#line 192 "Breezy.yacc"
+//#line 193 "Breezy.yacc"
 {yyval.sval = val_peek(2).sval + " - " + val_peek(0).sval;
                                               ba.typeTrack.assertNumberType(val_peek(2),val_peek(0), val_peek(1));
                                                 yyval.obj = val_peek(2).obj;
                                                 yyval.line = val_peek(2).line; }
 break;
 case 65:
-//#line 196 "Breezy.yacc"
+//#line 197 "Breezy.yacc"
 {yyval.sval = val_peek(0).sval;
                                     yyval.line = val_peek(0).line;}
 break;
 case 66:
-//#line 200 "Breezy.yacc"
+//#line 201 "Breezy.yacc"
 {ba.typeTrack.assertBoolType(val_peek(2),val_peek(0),val_peek(1));
                                                 yyval.sval = val_peek(2).sval + " && " + val_peek(0).sval;
                                                 yyval.obj = val_peek(2).obj;
                                                 yyval.line = val_peek(2).line; }
 break;
 case 67:
-//#line 204 "Breezy.yacc"
+//#line 205 "Breezy.yacc"
 {yyval.sval = val_peek(2).sval + " * " + val_peek(0).sval;
                                               ba.typeTrack.assertNumberType(val_peek(2),val_peek(0), val_peek(1));
                                                 yyval.obj = val_peek(2).obj;
                                                 yyval.line = val_peek(2).line; }
 break;
 case 68:
-//#line 208 "Breezy.yacc"
+//#line 209 "Breezy.yacc"
 {yyval.sval = val_peek(2).sval + " / " + val_peek(0).sval;
                                               ba.typeTrack.assertNumberType(val_peek(2),val_peek(0), val_peek(1));
                                                 yyval.obj = val_peek(2).obj;
                                                 yyval.line = val_peek(2).line; }
 break;
 case 69:
-//#line 212 "Breezy.yacc"
+//#line 213 "Breezy.yacc"
 {yyval.sval = val_peek(2).sval + " % " + val_peek(0).sval;
                                               ba.typeTrack.assertNumberType(val_peek(2),val_peek(0), val_peek(1));
                                                 yyval.obj = val_peek(2).obj;
                                                 yyval.line = val_peek(2).line; }
 break;
 case 70:
-//#line 216 "Breezy.yacc"
+//#line 217 "Breezy.yacc"
 {yyval.sval = val_peek(0).sval; 
                                     yyval.obj = val_peek(0).obj;
                                     yyval.line = val_peek(0).line;}
 break;
 case 71:
-//#line 221 "Breezy.yacc"
+//#line 222 "Breezy.yacc"
 {ba.typeTrack.assertBoolType(val_peek(0));
                                                 yyval.sval = " !" + val_peek(0).sval;
                                                 yyval.obj = val_peek(0).obj;
                                                 yyval.line = val_peek(1).line;}
 break;
 case 72:
-//#line 225 "Breezy.yacc"
+//#line 226 "Breezy.yacc"
 {  ba.typeTrack.assertNumberType(val_peek(0));
                                         yyval.sval = " -"+ val_peek(0).sval;
                                         yyval.obj = val_peek(0).obj;
                                         yyval.line = val_peek(0).line;}
 break;
 case 73:
-//#line 229 "Breezy.yacc"
+//#line 230 "Breezy.yacc"
 {yyval.sval = val_peek(0).sval;
                                     yyval.obj = val_peek(0).obj;
                                     yyval.line = val_peek(0).line;}
 break;
 case 74:
-//#line 234 "Breezy.yacc"
+//#line 235 "Breezy.yacc"
 {yyval.sval = " ( " + val_peek(1).sval + " ) ";
                                                     yyval.obj = val_peek(1).obj;
                                                     yyval.line = val_peek(2).line; }
 break;
 case 75:
-//#line 237 "Breezy.yacc"
+//#line 238 "Breezy.yacc"
 {ba.typeTrack.assertNumberOrStringType(val_peek(2),val_peek(0),val_peek(1));
                                                         if(val_peek(2).obj.toString().equals("string") && val_peek(1).sval.equals("=="))
                                                             yyval.sval = "(" +val_peek(2).sval + ").equals(" + val_peek(0).sval + ")";
@@ -1079,66 +1080,66 @@ case 75:
                                                         yyval.line = val_peek(2).line;}
 break;
 case 76:
-//#line 248 "Breezy.yacc"
+//#line 249 "Breezy.yacc"
 { yyval.sval = val_peek(0).sval; 
                                                     yyval.obj = val_peek(0).obj;
                                                     yyval.line = val_peek(0).line; }
 break;
 case 77:
-//#line 251 "Breezy.yacc"
+//#line 252 "Breezy.yacc"
 { yyval.sval = val_peek(0).sval; 
                                                     yyval.obj = ba.typeTrack.getType(val_peek(0), Scope.LOCAL.getName());
                                                     yyval.line = val_peek(0).line;}
 break;
 case 78:
-//#line 254 "Breezy.yacc"
+//#line 255 "Breezy.yacc"
 { yyval.sval = val_peek(0).sval;
                                                     yyval.obj = val_peek(0).obj;
                                                     yyval.line = val_peek(0).line;}
 break;
 case 79:
-//#line 257 "Breezy.yacc"
+//#line 258 "Breezy.yacc"
 { yyval.sval = val_peek(0).sval; 
                                                     yyval.obj = val_peek(0).obj;
                                                     yyval.line = val_peek(0).line;}
 break;
 case 80:
-//#line 260 "Breezy.yacc"
+//#line 261 "Breezy.yacc"
 {yyval.sval = val_peek(0).sval;
                                                 yyval.obj = val_peek(0).obj;
                                                 yyval.line = val_peek(0).line;}
 break;
 case 81:
-//#line 263 "Breezy.yacc"
+//#line 264 "Breezy.yacc"
 {yyval.sval = val_peek(0).sval;
                                                 yyval.obj = val_peek(0).obj;
                                                 yyval.line = val_peek(0).line;}
 break;
 case 82:
-//#line 268 "Breezy.yacc"
+//#line 269 "Breezy.yacc"
 {yyval.sval = "<";}
 break;
 case 83:
-//#line 269 "Breezy.yacc"
+//#line 270 "Breezy.yacc"
 {yyval.sval = ">";}
 break;
 case 84:
-//#line 270 "Breezy.yacc"
+//#line 271 "Breezy.yacc"
 {yyval.sval = "<=";}
 break;
 case 85:
-//#line 271 "Breezy.yacc"
+//#line 272 "Breezy.yacc"
 {yyval.sval = ">=";}
 break;
 case 86:
-//#line 272 "Breezy.yacc"
+//#line 273 "Breezy.yacc"
 {yyval.sval = "==";}
 break;
 case 87:
-//#line 273 "Breezy.yacc"
+//#line 274 "Breezy.yacc"
 {yyval.sval = "!=";}
 break;
-//#line 1064 "Parser.java"
+//#line 1065 "Parser.java"
 //########## END OF USER-SUPPLIED ACTIONS ##########
     }//switch
     //#### Now let's reduce... ####

@@ -16,14 +16,18 @@ import src.ParserVal;
  */
 public class TypeTracker {
 
-private boolean debug = false;
+    private boolean debug = false;
     private static Vector<TypedParserVal> id_list;
+    private static Vector<LateTypeValidation> validate_list;
+    private static Vector<LateTypeValidationPair> pair_list;
 
     /**
      * Default constructor
      */
     public TypeTracker() {
         id_list = new Vector<TypedParserVal>();
+        validate_list = new Vector<LateTypeValidation>();
+        pair_list = new Vector<LateTypeValidationPair>();
 
         //TODO: Add our functions to this list
         TypedParserVal t1 = new TypedParserVal("ReadCharacterFromScreen", "string",Scope.GLOBAL.getName());        id_list.add(t1);
@@ -58,8 +62,11 @@ private boolean debug = false;
                     /*If we had a function that was defined AFTER it was called we would
                      find it here.  Now we need to assign it's type so that if it is
                      used later, it will have a type and there can be more type
-                     checking.*/
+                     checking.  We also need to validate it's previous uses.  If it was
+                     used out of context, throw a type error.*/
                     t.type = type;
+                    doLateTypeValidation(id, type);
+                    return;
                 }
                 else
                     throw new Exception("Line: "+line+
@@ -130,6 +137,30 @@ private boolean debug = false;
                                 " Type Error.  Performed " + t1.toUpperCase() + " " + pvOP.sval + " " + t2.toUpperCase() +
                                 ".\nConfirm the types are both the same.");
 
+        /*If we don't throw a type error, make sure that variables are not "not_def
+        and if they are, record this info so that we can check type later when
+         the programmer defines the function.*/
+        if(pv1.obj.equals("not_def") && !pv2.obj.equals("not_def")){
+            LateTypeValidation ltv = new LateTypeValidation((pv1.sval.split("[(]"))[0],pv2.obj.toString(),pv1.line);
+            validate_list.add(ltv);
+        }
+        else if(pv2.obj.equals("not_def") && !pv1.obj.equals("not_def")){
+            LateTypeValidation ltv = new LateTypeValidation((pv2.sval.split("[(]"))[0],pv1.obj.toString(),pv2.line);
+            validate_list.add(ltv);
+        }
+        else{
+            /*Here we have two function identifiers that have not been declared.  Add them
+             to a LateValidationPair and put them in a vector.  Validate later that they are
+             both the same type.*/
+            LateTypeValidation ltv = new LateTypeValidation((pv1.sval.split("[(]"))[0],"",pv1.line);
+            LateTypeValidation ltv2 = new LateTypeValidation((pv2.sval.split("[(]"))[0],"",pv2.line);
+            LateTypeValidationPair pair = new LateTypeValidationPair(ltv,ltv2);
+            pair.setCanBeNumber(true);
+            pair.setCanBeString(true);
+            pair.setCanBeBoolean(true);
+            pair_list.add(pair);
+        }
+
     }
 
     public void assertNumberOrStringType(ParserVal pv1, ParserVal pv2, ParserVal pvOP) throws Exception{
@@ -150,6 +181,29 @@ private boolean debug = false;
                                 " Type Error.  Performed " + t1.toUpperCase() + " " + pvOP.sval + " " + t2.toUpperCase() +
                                 ".\nConfirm the types are both NUMBER or STRING.");
 
+        /*If we don't throw a type error, make sure that variables are not "not_def
+        and if they are, record this info so that we can check type later when
+         the programmer defines the function.*/
+        if(pv1.obj.equals("not_def") && !pv2.obj.equals("not_def")){
+            LateTypeValidation ltv = new LateTypeValidation((pv1.sval.split("[(]"))[0],pv2.obj.toString(),pv1.line);
+            validate_list.add(ltv);
+        }
+        else if(pv2.obj.equals("not_def") && !pv1.obj.equals("not_def")){
+            LateTypeValidation ltv = new LateTypeValidation((pv2.sval.split("[(]"))[0],pv1.obj.toString(),pv2.line);
+            validate_list.add(ltv);
+        }
+        else{
+            /*Here we have two function identifiers that have not been declared.  Add them
+             to a LateValidationPair and put them in a vector.  Validate later that they are
+             both the same type.*/
+            LateTypeValidation ltv = new LateTypeValidation((pv1.sval.split("[(]"))[0],"",pv1.line);
+            LateTypeValidation ltv2 = new LateTypeValidation((pv2.sval.split("[(]"))[0],"",pv2.line);
+            LateTypeValidationPair pair = new LateTypeValidationPair(ltv,ltv2);
+            pair.setCanBeNumber(true);
+            pair.setCanBeString(true);
+            pair_list.add(pair);
+        }
+
     }
 
 
@@ -166,6 +220,18 @@ private boolean debug = false;
                                 " Type Error.  Performed " + t1.toUpperCase() + " " + pvOP.sval + " " + t2.toUpperCase() +
                                 ".\nConfirm the types are both numbers.");
 
+        /*If we don't throw a type error, make sure that variables are not "not_def
+        and if they are, record this info so that we can check type later when
+         the programmer defines the function.*/
+        if(pv1.obj.equals("not_def")){
+            LateTypeValidation ltv = new LateTypeValidation((pv1.sval.split("[(]"))[0],"number",pv1.line);
+            validate_list.add(ltv);
+        }
+        if(pv2.obj.equals("not_def")){
+            LateTypeValidation ltv = new LateTypeValidation((pv2.sval.split("[(]"))[0],"number",pv2.line);
+            validate_list.add(ltv);
+        }
+
     }
 
 
@@ -176,6 +242,14 @@ private boolean debug = false;
             throw new Exception ("Line: "+pv.line+  
                                 " Type Error.\nSTRING type required.");
 
+        /*If we don't throw a type error, make sure that variables are not "not_def
+        and if they are, record this info so that we can check type later when
+         the programmer defines the function.*/
+        if(pv.obj.equals("not_def")){
+            LateTypeValidation ltv = new LateTypeValidation((pv.sval.split("[(]"))[0],"string",pv.line);
+            validate_list.add(ltv);
+        }
+
     }
 
 
@@ -185,6 +259,14 @@ private boolean debug = false;
         if(!pv.obj.equals("number") && !pv.obj.equals("not_def"))
             throw new Exception ("Line: "+pv.line+  
                                     " Type Error.\nNUMBER type required.");
+
+        /*If we don't throw a type error, make sure that variables are not "not_def
+        and if they are, record this info so that we can check type later when
+         the programmer defines the function.*/
+        if(pv.obj.equals("not_def")){
+            LateTypeValidation ltv = new LateTypeValidation((pv.sval.split("[(]"))[0],"number",pv.line);
+            validate_list.add(ltv);
+        }
 
     }
 
@@ -202,6 +284,18 @@ private boolean debug = false;
                                 " Type Error.  Performed " + t1.toUpperCase() + " " + pvOP.sval + " " + t2.toUpperCase() +
                                 ".\nConfirm the types are both boolean expressions.");
 
+        /*If we don't throw a type error, make sure that variables are not "not_def
+        and if they are, record this info so that we can check type later when
+         the programmer defines the function.*/
+        if(pv1.obj.equals("not_def")){
+            LateTypeValidation ltv = new LateTypeValidation((pv1.sval.split("[(]"))[0],"boolean",pv1.line);
+            validate_list.add(ltv);
+        }
+        if(pv2.obj.equals("not_def")){
+            LateTypeValidation ltv = new LateTypeValidation((pv2.sval.split("[(]"))[0],"boolean",pv2.line);
+            validate_list.add(ltv);
+        }
+
     }
 
 
@@ -211,5 +305,175 @@ private boolean debug = false;
         if(!pv.obj.equals("boolean") && !pv.obj.equals("not_def"))
             throw new Exception ("Line: "+pv.line+  
                                     " Type Error.\n  Required Boolean and found "+ pv.obj);
+
+        /*If we don't throw a type error, make sure that variables are not "not_def
+        and if they are, record this info so that we can check type later when
+         the programmer defines the function.*/
+        if(pv.obj.equals("not_def")){
+            LateTypeValidation ltv = new LateTypeValidation((pv.sval.split("[(]"))[0],"boolean",pv.line);
+            validate_list.add(ltv);
+        }
+
+    }
+
+    private void doLateTypeValidation(String id, String type) throws Exception{
+        String errorMsg = "";
+        boolean throwError = false;
+        
+        /*Loop through the LateValidation pairs to see if the id is in any of them.
+        if it is then remove it and add the other in the pair to the single set with
+        it's expected type*/
+        for(int i = 0; i < pair_list.size(); i++){
+            LateTypeValidationPair pair = pair_list.get(i);
+            LateTypeValidation obj1 = pair.ltv1;
+            LateTypeValidation obj2 = pair.ltv2;
+
+            if(obj1.name.equals(id)){
+                if(pair.canBeType(type)){
+                    obj2.expectedType = type;
+                    validate_list.add(obj2);
+                    pair_list.removeElementAt(i);
+                    i--;
+                }
+                else{ //Error with type
+                    errorMsg.concat("Type Error.  Line " + obj1.line + ".  "  + obj1.name + " is the wrong type.\n");
+                    pair_list.removeElementAt(i);
+                    i--;
+                    throwError = true;
+                }
+            }
+            else if(obj2.name.equals(id)){
+                if(pair.canBeType(type)){
+                    obj1.expectedType = type;
+                    validate_list.add(obj1);
+                    pair_list.removeElementAt(i);
+                    i--;
+                }
+                else{ //Error with type
+                    errorMsg.concat("Type Error.  Line " + obj2.line + ".  "  + obj2.name + " is the wrong type.\n");
+                    pair_list.removeElementAt(i);
+                    i--;
+                    throwError = true;
+                }
+            }
+
+        }//end for
+
+        /*Now loop through the singles and see if there are any type errors*/
+        for(int i = 0; i < validate_list.size(); i++){
+            LateTypeValidation obj = validate_list.get(i);
+            if(obj.name.equals(id)){
+                if(obj.expectedType.equals(type)){
+                    //No error here, just remove the item from the list
+                    validate_list.removeElementAt(i);
+                    i--;
+                }
+                else{
+                    //Error.  Print message.
+                    errorMsg =errorMsg.concat("Type Error.  Line " +
+                            obj.line + ".  "  + obj.name + " returns " + type.toUpperCase() +
+                            " but should return " + obj.expectedType.toUpperCase() +".\n");
+                    validate_list.removeElementAt(i);
+                    i--;
+                    throwError = true;
+                }
+            }
+
+        }//end for
+
+        if(throwError)
+            throw new Exception(errorMsg);
+    }
+
+
+}
+
+
+class LateTypeValidation{
+    protected String name;
+    protected String expectedType;
+    protected int line;
+
+    public LateTypeValidation(){
+    }
+
+    public LateTypeValidation(String name, String expectedType, int line) {
+        this.name = name;
+        this.expectedType = expectedType;
+        this.line = line;
+    }
+}
+
+class LateTypeValidationPair{
+    protected LateTypeValidation ltv1;
+    protected LateTypeValidation ltv2;
+    
+    /*These are flags.
+     TRUE means that the unknowns can be that type
+     FALSE means they can't.*/
+    boolean canBeNumber = false;
+    boolean canBeString = false;
+    boolean canBeBoolean = false;
+    boolean canBeArray = false;
+    boolean canBeHash = false;
+
+    public LateTypeValidationPair(LateTypeValidation obj1, LateTypeValidation obj2){
+        this.ltv1 = obj1;
+        this.ltv2 = obj2;
+    }
+
+    public boolean canBeType(String type){
+        if("string".equals(type))
+            return this.isCanBeString();
+        else if("number".equals(type))
+            return this.isCanBeNumber();
+        else if("boolean".equals(type))
+            return this.isCanBeBoolean();
+        else if("ArrayList".equals(type))
+            return this.isCanBeArray();
+        else if("HashMap".equals(type))
+            return this.isCanBeHash();
+        else
+            return false;
+    }
+
+    public boolean isCanBeArray() {
+        return canBeArray;
+    }
+
+    public void setCanBeArray(boolean canBeArray) {
+        this.canBeArray = canBeArray;
+    }
+
+    public boolean isCanBeBoolean() {
+        return canBeBoolean;
+    }
+
+    public void setCanBeBoolean(boolean canBeBoolean) {
+        this.canBeBoolean = canBeBoolean;
+    }
+
+    public boolean isCanBeHash() {
+        return canBeHash;
+    }
+
+    public void setCanBeHash(boolean canBeHash) {
+        this.canBeHash = canBeHash;
+    }
+
+    public boolean isCanBeNumber() {
+        return canBeNumber;
+    }
+
+    public void setCanBeNumber(boolean canBeNumber) {
+        this.canBeNumber = canBeNumber;
+    }
+
+    public boolean isCanBeString() {
+        return canBeString;
+    }
+
+    public void setCanBeString(boolean canBeString) {
+        this.canBeString = canBeString;
     }
 }
