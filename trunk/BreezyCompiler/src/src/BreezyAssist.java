@@ -28,6 +28,8 @@ public class BreezyAssist {
     private static boolean mainCreated = false;
 
     public TypeTracker typeTrack = new TypeTracker();
+    public static boolean errors=false;
+    public static Vector<Integer> caught_syntax_erros = new Vector<Integer>();
 
     public BreezyAssist() {
     }
@@ -39,7 +41,12 @@ public class BreezyAssist {
     public void DumpFile(String s, String fileName)throws BreezyException{
         if(!mainCreated)
             throw new BreezyException(0,ExceptionType.NO_MAIN.getName(),"Must have exactly one function named \"main\".");
-
+        if(errors){
+        	for (int i : caught_syntax_erros)
+        	{
+            throw new BreezyException(i,ExceptionType.SYNTAX.getName(),"Syntax errors.");
+        	}
+        } 	
         try {
             File f = new File(fileName + ".java");
             f.createNewFile();
@@ -55,7 +62,7 @@ public class BreezyAssist {
         } catch (IOException ex) {
             Logger.getLogger(BreezyAssist.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        
         System.out.println("*****\nCongratulations!  You've compiled!\n*****");
     }
 

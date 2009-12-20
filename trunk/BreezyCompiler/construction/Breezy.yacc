@@ -53,6 +53,7 @@ body    :       declarations
 declarations    :   declarations type_declaration  SEMICOLON              {$$.sval = $1.sval + $2.sval + ";\n";}
                 |   declarations type_declaration_assignment SEMICOLON    {$$.sval = $1.sval + $2.sval + ";\n";}
                 |   declarations COMMENT                                  {$$.sval = $1.sval + "";}
+                |   error {yyerror("Error at line: " + getLine(), getLine() );  }
                 |                                                           {$$.sval = "";}
                 ;
 
@@ -97,6 +98,7 @@ statement	:       COMMENT                                     {$$.sval = "";}
                 |	IDENTIFIER EQUALS exp SEMICOLON             {$1.obj = ba.typeTrack.getType($1,Scope.LOCAL.getName());
                                                                         ba.typeTrack.assertSameType($1,$3,$2);
                                                                         $$.sval = $1.sval + "=" + $3.sval + ";\n" ;}
+                |  error {yyerror("Error at line: " + getLine(), getLine() ); }
                 ;
 
 if_statement	:	IF LPAREN exp RPAREN
@@ -104,6 +106,7 @@ if_statement	:	IF LPAREN exp RPAREN
                             control_body
                         END IF	else_if else    { ba.typeTrack.assertBoolType($3);
                                                     $$.sval = "if(" + $3.sval + "){\n" + $6.sval + "}\n" + $9.sval + "\n" + $10.sval;}
+                
                 ;
 
 
@@ -284,6 +287,13 @@ rel_op          :       REL_OP_LT		{$$.sval = "<";}
 
 
 %%
+
+void yyerror(String s, int i){
+	System.out.println(s);
+	ba.errors=true;
+	ba.caught_syntax_erros.add(i);
+	
+}
 
 void yyerror(String s){
 	System.out.println(s);
