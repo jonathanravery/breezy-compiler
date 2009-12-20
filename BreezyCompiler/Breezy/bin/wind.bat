@@ -1,4 +1,4 @@
-echo @OFF
+@echo off
 
 java -jar %BREEZY_HOME%\dist\BreezyCompiler.jar %1 
 
