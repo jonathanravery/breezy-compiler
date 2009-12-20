@@ -34,18 +34,16 @@ public class BreezyAssist {
     public BreezyAssist() {
     }
 
-    public void DumpFile(String s) throws BreezyException{
+    public void DumpFile(String s) throws Exception{
         DumpFile(s,"BreezyProg");
     }
 
-    public void DumpFile(String s, String fileName)throws BreezyException{
+    public void DumpFile(String s, String fileName)throws Exception{
         if(!mainCreated)
             throw new BreezyException(0,ExceptionType.NO_MAIN.getName(),"Must have exactly one function named \"main\".");
         if(errors){
-        	for (int i : caught_syntax_erros)
-        	{
-            throw new BreezyException(i,ExceptionType.SYNTAX.getName(),"Syntax errors.");
-        	}
+        	
+            throw new Exception("Total syntax erros: " +caught_syntax_erros.size());
         } 	
         try {
             File f = new File(fileName + ".java");

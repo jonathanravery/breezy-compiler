@@ -39,7 +39,7 @@ method	: 	COMMENT
     		ACCEPTS aparams
     		BEGIN
                 body
-                END IDENTIFIER	{ $$.sval = ba.createFunction($3.sval,$5,$7.sval,$9.sval,$11,$3.line,Scope.GLOBAL.getName()); }
+            END IDENTIFIER	{ $$.sval = ba.createFunction($3.sval,$5,$7.sval,$9.sval,$11,$3.line,Scope.GLOBAL.getName()); }
 		;
 
 
@@ -53,8 +53,8 @@ body    :       declarations
 declarations    :   declarations type_declaration  SEMICOLON              {$$.sval = $1.sval + $2.sval + ";\n";}
                 |   declarations type_declaration_assignment SEMICOLON    {$$.sval = $1.sval + $2.sval + ";\n";}
                 |   declarations COMMENT                                  {$$.sval = $1.sval + "";}
-                |   error {yyerror("Error at line: " + getLine(), getLine() );  }
-                |                                                           {$$.sval = "";}
+                |   error 	{yyerror("Error at line: " + getLine(), getLine() );  }
+                |                              {$$.sval = "";}
                 ;
 
 
@@ -63,6 +63,7 @@ type_declaration	:	STRING IDENTIFIER	{$$.sval = "String " + $2.sval + "=\"\""; b
 			|	NUMBER IDENTIFIER	{$$.sval = "double " + $2.sval + "=0"; ba.typeTrack.addID($2.sval,"number",$2.line,Scope.LOCAL.getName());}
 			|	ARRAY IDENTIFIER	{$$.sval = ba.createComplexType("ArrayList", $2.sval); ba.typeTrack.addID($2.sval,"ArrayList",$2.line,Scope.LOCAL.getName());}
 			|	HASH IDENTIFIER         {$$.sval = ba.createComplexType("HashMap", $2.sval); ba.typeTrack.addID($2.sval,"HashMap",$2.line,Scope.LOCAL.getName());}
+			|
 			;
 
 
@@ -98,7 +99,6 @@ statement	:       COMMENT                                     {$$.sval = "";}
                 |	IDENTIFIER EQUALS exp SEMICOLON             {$1.obj = ba.typeTrack.getType($1,Scope.LOCAL.getName());
                                                                         ba.typeTrack.assertSameType($1,$3,$2);
                                                                         $$.sval = $1.sval + "=" + $3.sval + ";\n" ;}
-                |  error {yyerror("Error at line: " + getLine(), getLine() ); }
                 ;
 
 if_statement	:	IF LPAREN exp RPAREN
@@ -140,6 +140,7 @@ for_loop        :       FOR EACH LPAREN loop_id IN exp RPAREN
                         END FOR EACH            {ba.typeTrack.assertArrayOrHashType($6);
                                                     ba.typeTrack.removeLocalID($4);
                                                     $$.sval = "for(TypedParserVal " +$4.sval+ " : " + $6.sval + "){" + $9.sval + "\n}\n";}
+                   |    error  	{yyerror("Error at line: " + getLine(), getLine() );  }
                 ;
 
 loop_id         :       IDENTIFIER          {ba.typeTrack.addID($1.sval,"TypedParserVal",$1.line,Scope.LOCAL.getName());}
@@ -170,6 +171,7 @@ aparams_	:	type IDENTIFIER			{ba.typeTrack.addID($2.sval,$1.obj.toString(),$2.li
                                                             $$.sval = $1.sval + " " + $2.sval;}
 		|	type IDENTIFIER COMMA aparams_     {ba.typeTrack.addID($2.sval,$1.obj.toString(),$2.line,Scope.LOCAL.getName());
                                                             $$.sval = $1.sval + " " + $2.sval + ", " + $4.sval;}
+        |    error 	{yyerror("Error at line: " + getLine(), getLine() );  }
 		;
 
 params          :       NOTHING				{$$.sval = "";}
@@ -179,29 +181,33 @@ params          :       NOTHING				{$$.sval = "";}
 
 params_          :	exp			{$$.sval = $1.sval;}
 		|	params_ COMMA params_ 		{$$.sval = $1.sval + "," + $3.sval;}
+		|    error  	{yyerror("Error at line: " + getLine(), getLine() );  }
 		;
 		
 hash_params		: 	hash_params COMMA LPAREN exp COMMA exp RPAREN	{$$.sval = "(" + $4.sval + "," + $6.sval + ")" + $1.sval;}
-                        |	LPAREN exp COMMA exp RPAREN		{$$.sval = "(" + $2.sval + "," + $4.sval + ")";}
-                        ;
-
-
-type		:       BOOLEAN		{$$.sval = "boolean "; $$.obj = "boolean";}
-                |	STRING		{$$.sval = "String "; $$.obj = "string";}
-                |	NUMBER		{$$.sval = "double "; $$.obj = "number";}
-                |       ARRAY           {$$.sval = "ArrayList "; $$.obj = "ArrayList";}
-                |       HASH            {$$.sval = "HashMap "; $$.obj = "HashMap";}
+                |	LPAREN exp COMMA exp RPAREN		{$$.sval = "(" + $2.sval + "," + $4.sval + ")";}
+                   |    error  	{yyerror("Error at line: " + getLine(), getLine() );  }      
                 ;
+
+
+type		:   BOOLEAN		{$$.sval = "boolean "; $$.obj = "boolean";}
+            |	STRING		{$$.sval = "String "; $$.obj = "string";}
+            |	NUMBER		{$$.sval = "double "; $$.obj = "number";}
+            |   ARRAY           {$$.sval = "ArrayList "; $$.obj = "ArrayList";}
+            |   HASH            {$$.sval = "HashMap "; $$.obj = "HashMap";}
+            |    error  	{yyerror("Error at line: " + getLine(), getLine() );  }
+            ;
 
 return_type     :       type            {$$.sval = $1.sval; $$.obj = $1.obj;}
                 |       NOTHING         {$$.sval = "void"; $$.obj = "void";}
+                |    error  	{yyerror("Error at line: " + getLine(), getLine() );  }
                 ;
 
 exp	: 	exp LOG_OP_OR term {ba.typeTrack.assertBoolType($1,$3,$2);
                                                         $$.sval = $1.sval + " || " + $3.sval;
                                                         $$.obj = $1.obj;
                                                         $$.line = $1.line;}
-                |       exp PLUS term {$$.sval = $1.sval + "+" + $3.sval;
+                |     exp PLUS term {$$.sval = $1.sval + "+" + $3.sval;
                                               ba.typeTrack.assertNumberOrStringType($1,$3, $2);
                                                 $$.obj = $1.obj;
                                                 $$.line = $1.line; }
@@ -211,6 +217,7 @@ exp	: 	exp LOG_OP_OR term {ba.typeTrack.assertBoolType($1,$3,$2);
                                                 $$.line = $1.line; }
                 |	term	 {$$.sval = $1.sval;
                                     $$.line = $1.line;}
+                | error  	{yyerror("Error at line: " + getLine(), getLine() );  }
                 ;
 			
 term		:	term LOG_OP_AND unary {ba.typeTrack.assertBoolType($1,$3,$2);
@@ -232,6 +239,7 @@ term		:	term LOG_OP_AND unary {ba.typeTrack.assertBoolType($1,$3,$2);
                 |	unary	 {$$.sval = $1.sval; 
                                     $$.obj = $1.obj;
                                     $$.line = $1.line;}
+                   |    error  	{yyerror("Error at line: " + getLine(), getLine() );  }
                 ;
 
 unary		:	LOG_OP_NOT unary {ba.typeTrack.assertBoolType($2);
@@ -245,6 +253,7 @@ unary		:	LOG_OP_NOT unary {ba.typeTrack.assertBoolType($2);
                 |	factor	 {$$.sval = $1.sval;
                                     $$.obj = $1.obj;
                                     $$.line = $1.line;}
+                |    error  	{yyerror("Error at line: " + getLine(), getLine() );  }
                 ;
 
 factor 		: 	LPAREN exp RPAREN	{$$.sval = " ( " + $2.sval + " ) ";
@@ -279,6 +288,8 @@ factor 		: 	LPAREN exp RPAREN	{$$.sval = " ( " + $2.sval + " ) ";
                 |	FALSE		{$$.sval = $1.sval;
                                                 $$.obj = $1.obj;
                                                 $$.line = $1.line;}
+              |    error  	{yyerror("Error at line: " + getLine(), getLine() );  }
+                                                              
                 ;
 
 rel_op          :       REL_OP_LT		{$$.sval = "<";}
