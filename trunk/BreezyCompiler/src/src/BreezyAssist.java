@@ -51,8 +51,9 @@ public class BreezyAssist {
             f.setWritable(true);
             FileWriter fw = new FileWriter(f);
 
-            fw.write("import src.BreezyDefault;\n\n");
-            fw.write("import java.io.*;\n\n");
+            fw.write("import src.BreezyDefault;\n");
+            fw.write("import libs.structs.TypedParserVal;\n");
+            fw.write("import java.util.*;\n\n");
             fw.write("public class " + fileName + " extends BreezyDefault{\n");
             fw.write(s);
             fw.write("\n}");

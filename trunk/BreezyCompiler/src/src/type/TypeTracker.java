@@ -81,7 +81,7 @@ public class TypeTracker {
 
     public void removeLocalID(ParserVal pv){
         for(int i = 0; i < id_list.size(); i++){
-            if(id_list.get(i).sval.equals(pv.sval) &&
+            if(id_list.get(i).obj.equals(pv.sval) &&
                     id_list.get(i).scope.equals(Scope.LOCAL.getName())){
                 id_list.removeElementAt(i);
                 return;
@@ -189,14 +189,14 @@ public class TypeTracker {
         }
         String t1 = (String)pv1.obj;
         String t2 = (String)pv2.obj;
-        if( (!t1.equals("string") && !t1.equals("number") && !t1.equals("not_def"))
-                || (!t2.equals("string") && !t2.equals("number") && !t2.equals("not_def")))
+        if( (!t1.equals("string") && !t1.equals("number") && !t1.equals("not_def") && !t1.equals("TypedParserVal"))
+                || (!t2.equals("string") && !t2.equals("number") && !t2.equals("not_def") && !t2.equals("TypedParserVal")))
             throw new BreezyException (pv1.line,
                                         ExceptionType.TYPE.getName(),
                                         t1.toUpperCase() + " " + pvOP.sval + " " + t2.toUpperCase() + " is not a valid operation." +
                                             "\n\tConfirm the types are both NUMBER or STRING.");
 
-        if(!t1.equals(t2) && !t1.equals("not_def") && !t2.equals("not_def") )
+        if(!t1.equals(t2) && !t1.equals("not_def") && !t2.equals("not_def") && !t2.equals("TypedParserVal") && !t1.equals("TypedParserVal") )
             throw new BreezyException (pv1.line,
                                         ExceptionType.TYPE.getName(),
                                         t1.toUpperCase() + " " + pvOP.sval + " " + t2.toUpperCase() + " is not a valid operation." +

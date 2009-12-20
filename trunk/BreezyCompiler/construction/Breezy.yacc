@@ -13,7 +13,8 @@ import libs.structs.Scope;
 %token NUMBER ARRAY HASH
 %token TRUE FALSE
 %token ACCEPTS BEGIN BOOLEAN EACH ELSE ELSEIF END FOR FUNCTION IF IN NOTHING NUMERIC QUOTE RETURN RETURNS WHILE
-%token REL_OP_LE REL_OP_LT REL_OP_GE REL_OP_GT EQUALS LOG_OP_EQUAL LOG_OP_AND LOG_OP_OR LOG_OP_NOT
+%token EQUALS LOG_OP_EQUAL LOG_OP_AND LOG_OP_OR LOG_OP_NOT
+%token REL_OP_LE REL_OP_LT REL_OP_GE REL_OP_GT 
 %token EQUAL
 %left PLUS MINUS
 %left MOD
@@ -158,8 +159,10 @@ function_call	:	IDENTIFIER LPAREN params RPAREN {$$.sval = $1.sval + "(" + $3.sv
 
 //concrete list of functionality
 complex_type_method_invocation
-		:	IDENTIFIER DOT IDENTIFIER LPAREN params RPAREN {$$.sval = ba.createComplexTypeMethodInvocation($1.sval, $3.sval, Scope.LOCAL.getName(), $5.sval);}
-		|	IDENTIFIER DOT IDENTIFIER LPAREN RPAREN {$$.sval = ba.createComplexTypeMethodInvocation($1.sval, $3.sval, Scope.LOCAL.getName(), null);}
+		:	IDENTIFIER DOT IDENTIFIER LPAREN params RPAREN {$$.sval = ba.createComplexTypeMethodInvocation($1.sval, $3.sval, Scope.LOCAL.getName(), $5.sval);
+                                                                        $$.obj = "void";}
+		|	IDENTIFIER DOT IDENTIFIER LPAREN RPAREN {$$.sval = ba.createComplexTypeMethodInvocation($1.sval, $3.sval, Scope.LOCAL.getName(), null);
+                                                                        $$.obj = "void";}
 		;
 
 
