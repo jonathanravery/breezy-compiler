@@ -19,7 +19,7 @@ public class BreezyException extends Exception{
 
                 errorMsg = "";
                 errorMsg = errorMsg.concat("Line " + line + ". ");
-                errorMsg = errorMsg.concat(error.toUpperCase() + " - ");
+                errorMsg = errorMsg.concat(error.toUpperCase() + " :: ");
                 errorMsg = errorMsg.concat(msg);
 
 	}

@@ -290,8 +290,8 @@ void yyerror(String s){
 }
 
 protected Parser(Reader r) {
-	//Yylex lexer = new Yylex(r, this);
 	super(r);
+	//Yylex lexer = new Yylex(r, this);
 	super.yyparser = this;
 	ba = new BreezyAssist();
 }
