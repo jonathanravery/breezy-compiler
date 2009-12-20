@@ -6,6 +6,8 @@
 //TODO:  getType() has to include scope
 package src;
 
+import BreezyExceptions.BreezyException;
+import BreezyExceptions.ExceptionType;
 import java.io.*;
 
 import java.util.*;
@@ -30,11 +32,14 @@ public class BreezyAssist {
     public BreezyAssist() {
     }
 
-    public void DumpFile(String s){
+    public void DumpFile(String s) throws BreezyException{
         DumpFile(s,"BreezyProg");
     }
 
-    public void DumpFile(String s, String fileName){
+    public void DumpFile(String s, String fileName)throws BreezyException{
+        if(!mainCreated)
+            throw new BreezyException(0,ExceptionType.NO_MAIN.getName(),"Must have exactly one function named \"main\".");
+
         try {
             File f = new File(fileName + ".java");
             f.createNewFile();
@@ -51,10 +56,10 @@ public class BreezyAssist {
             Logger.getLogger(BreezyAssist.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        System.out.println("*\n*\n*\n\n\nCongratulations!  You've compiled!\n\n\n*\n*\n*");
+        System.out.println("*****\nCongratulations!  You've compiled!\n*****");
     }
 
-    public String createFunction(String id, ParserVal retType, String params, String body, String id2,int line,String scope)throws Exception{
+    public String createFunction(String id, ParserVal retType, String params, String body, ParserVal id2,int line,String scope)throws Exception{
         String retFunction = "";
 
         /*This is only called  when yacc reduces a string
@@ -65,11 +70,10 @@ public class BreezyAssist {
 
 
         //Check and see if block ends with correct ending
-        if(checkFunctionEnding(id,id2) == false)
-            return "";
+        checkFunctionEnding(id,id2);
 
         //Add function name to id list with it's return type
-        this.addIdentifier(id,retType.obj.toString(),line,scope);
+        this.typeTrack.addID(id,retType.obj.toString(),line,scope);
 
         //TODO: check return value == actual return value
 
@@ -79,24 +83,14 @@ public class BreezyAssist {
                 return createMain(retType.sval,params,body);
             }
             else{
-                //Error.  User has two main functions
-                return "";
+                throw new BreezyException(line,ExceptionType.DUPLICATE_MAIN.getName(),"You must have exactly one function named \"main\".");
             }
         }
         else{
-            retFunction = "public " + retType + " " + id + "(" + params + ")" + "{\n" + body + "}";
+            retFunction = "public " + retType.sval + " " + id + "(" + params + ")" + "{\n" + body + "}";
         }
 
         return retFunction;
-    }
-
-    public void addIdentifier(String id, String type, int line, String scope)throws Exception{
-        //TODO: check against java keywords
-
-        //Add to our type tracking list of identifiers
-        //System.err.println("BreezyAssist::addIdentifier()::id " + id);
-        //System.err.println("BreezyAssist::addIdentifier()::type " + type);
-        typeTrack.addID(id, type,line,scope);
     }
 
     private String createMain(String retType, String params, String body){
@@ -132,16 +126,15 @@ public class BreezyAssist {
             systemMain = systemMain.concat(");}\n");
         }
 
+        mainCreated = true;
         return systemMain + userMain;
     }
 
-    public boolean checkFunctionEnding(String expected, String actual){
-        if(expected.equals(actual))
-            return true;
-        else{
-            errorList.add("Function ended mismatch: Expeced " + expected + " but actual " + actual);
-            return false;
-        }
+    public void checkFunctionEnding(String expected, ParserVal actual) throws Exception{
+        if(!expected.equals(actual.sval))
+            throw new BreezyException(actual.line,
+                                        ExceptionType.FUNCTION_ENDING.getName(),
+                                        "Expeced " + expected + " but was " + actual.sval + ".");
     }
     
     public String createComplexType(String type, String name) {
@@ -151,7 +144,7 @@ public class BreezyAssist {
     public String createComplexType(String type, String name, String params, int line, String scope) throws Exception{
         
         //Add id to type checker
-        this.addIdentifier(name, type, line, scope);
+        this.typeTrack.addID(name, type, line, scope);
 
     	String temp = type + " " + name + " = new " + type + "();\n";
     	

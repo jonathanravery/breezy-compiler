@@ -5,6 +5,8 @@
 
 package src.type;
 
+import BreezyExceptions.BreezyException;
+import BreezyExceptions.ExceptionType;
 import java.util.Vector;
 import libs.structs.Scope;
 import libs.structs.TypedParserVal;
@@ -69,8 +71,7 @@ public class TypeTracker {
                     return;
                 }
                 else
-                    throw new Exception("Line: "+line+
-                                    " Identifier " + id + " is already being used.");
+                    throw new BreezyException(line, ExceptionType.DUPLICATE_ID.getName(),"Identifier \"" + id + "\" is already being used.");
         }
 
         //Add it to the list
@@ -109,8 +110,9 @@ public class TypeTracker {
         }
 
         //Default behavior
-        throw new Exception("Line: "+pv.line+  
-                                " Identifier \""+ pv.sval +"\" not found");
+        throw new BreezyException(pv.line,
+                                    ExceptionType.VARIABLE_MISSING.getName(),
+                                    "Identifier \""+ pv.sval +"\" was not found.");
     }
     
     public String getType(String id, String scope) throws Exception {
@@ -140,7 +142,12 @@ public class TypeTracker {
         /*If we don't throw a type error, make sure that variables are not "not_def
         and if they are, record this info so that we can check type later when
          the programmer defines the function.*/
-        if(pv1.obj.equals("not_def") && !pv2.obj.equals("not_def")){
+        if(!pv1.obj.equals("not_def") && !pv2.obj.equals("not_def")){
+            /*Here we have to variables that are the same type and
+             have already been defined.  Return.*/
+            return;
+        }
+        else if(pv1.obj.equals("not_def") && !pv2.obj.equals("not_def")){
             LateTypeValidation ltv = new LateTypeValidation((pv1.sval.split("[(]"))[0],pv2.obj.toString(),pv1.line);
             validate_list.add(ltv);
         }
@@ -185,7 +192,12 @@ public class TypeTracker {
         /*If we don't throw a type error, make sure that variables are not "not_def
         and if they are, record this info so that we can check type later when
          the programmer defines the function.*/
-        if(pv1.obj.equals("not_def") && !pv2.obj.equals("not_def")){
+        if(!pv1.obj.equals("not_def") && !pv2.obj.equals("not_def")){
+            /*Here we have to variables that are the same type and
+             have already been defined.  Return.*/
+            return;
+        }
+        else if(pv1.obj.equals("not_def") && !pv2.obj.equals("not_def")){
             LateTypeValidation ltv = new LateTypeValidation((pv1.sval.split("[(]"))[0],pv2.obj.toString(),pv1.line);
             validate_list.add(ltv);
         }
