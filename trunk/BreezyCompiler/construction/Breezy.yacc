@@ -134,11 +134,15 @@ while_loop	: 	WHILE LPAREN exp RPAREN
                                         $$.sval = "while( " + $3.sval + " ){\n" + $6.sval + "}\n";}
                 ;
 
-for_loop        :       FOR EACH LPAREN IDENTIFIER IN exp RPAREN
+for_loop        :       FOR EACH LPAREN loop_id IN exp RPAREN
                         BEGIN
                             control_body
                         END FOR EACH            {ba.typeTrack.assertArrayOrHashType($6);
+                                                    ba.typeTrack.removeLocalID($4);
                                                     $$.sval = "for(TypedParserVal " +$4.sval+ " : " + $6.sval + "){" + $9.sval + "\n}\n";}
+                ;
+
+loop_id         :       IDENTIFIER          {ba.typeTrack.addID($1.sval,"TypedParserVal",$1.line,Scope.LOCAL.getName());}
                 ;
 
 return_statement	:	RETURN exp 		{$$.sval = "return " + $2.sval;}
