@@ -276,8 +276,10 @@ public class TypeTracker {
         if(debug)System.err.println("TypeTracker::assertStringType()::type1 " + pv.obj);
 
         if(!pv.obj.equals("string") && !pv.obj.equals("not_def"))
-            throw new Exception ("Line: "+pv.line+  
-                                " Type Error.\nSTRING type required.");
+            throw new BreezyException (pv.line,
+                                        ExceptionType.TYPE.getName(),
+                                        "\""+pv.sval.toUpperCase() + "\" must be type STRING.  Found " +
+                                        pv.obj.toString().toUpperCase() +".");
 
         /*If we don't throw a type error, make sure that variables are not "not_def
         and if they are, record this info so that we can check type later when
@@ -294,8 +296,10 @@ public class TypeTracker {
         if(debug)System.err.println("TypeTracker::assertNumberType()::type1 " + pv.obj);
 
         if(!pv.obj.equals("number") && !pv.obj.equals("not_def"))
-            throw new Exception ("Line: "+pv.line+  
-                                    " Type Error.\nNUMBER type required.");
+            throw new BreezyException (pv.line,
+                                        ExceptionType.TYPE.getName(),
+                                        "\""+pv.sval.toUpperCase() + "\" must be type NUMBER.  Found " +
+                                        pv.obj.toString().toUpperCase() +".");
 
         /*If we don't throw a type error, make sure that variables are not "not_def
         and if they are, record this info so that we can check type later when
@@ -317,9 +321,10 @@ public class TypeTracker {
         String t1 = (String)pv1.obj;
         String t2 = (String)pv2.obj;
         if((!t1.equals("boolean") && !t1.equals("not_def")) || (!t2.equals("boolean") && !t2.equals("not_def")))
-            throw new Exception ("Line: "+pv1.line+
-                                " Type Error.  Performed " + t1.toUpperCase() + " " + pvOP.sval + " " + t2.toUpperCase() +
-                                ".\nConfirm the types are both boolean expressions.");
+            throw new BreezyException (pv1.line,
+                                        ExceptionType.TYPE.getName(),
+                                        t1.toUpperCase() + " " + pvOP.sval + " " + t2.toUpperCase() + " is not a valid operation." +
+                                            ".\nConfirm that both variables are of the type BOOLEAN.");
 
         /*If we don't throw a type error, make sure that variables are not "not_def
         and if they are, record this info so that we can check type later when
@@ -340,8 +345,10 @@ public class TypeTracker {
         if(debug)System.err.println("TypeTracker::assertBool()::type1 " + pv.obj);
         
         if(!pv.obj.equals("boolean") && !pv.obj.equals("not_def"))
-            throw new Exception ("Line: "+pv.line+  
-                                    " Type Error.\n  Required Boolean and found "+ pv.obj);
+            throw new BreezyException (pv.line,
+                                        ExceptionType.TYPE.getName(),
+                                        "\""+pv.sval.toUpperCase() + "\" must be type BOOLEAN.  Found " +
+                                        pv.obj.toString().toUpperCase() +".");
 
         /*If we don't throw a type error, make sure that variables are not "not_def
         and if they are, record this info so that we can check type later when
@@ -373,7 +380,7 @@ public class TypeTracker {
                     i--;
                 }
                 else{ //Error with type
-                    errorMsg.concat("Type Error.  Line " + obj1.line + ".  "  + obj1.name + " is the wrong type.\n");
+                    errorMsg.concat("Line " + obj2.line + ".  TYPE ERROR :: "  + obj2.name + " is the wrong type.\n");
                     pair_list.removeElementAt(i);
                     i--;
                     throwError = true;
@@ -387,7 +394,7 @@ public class TypeTracker {
                     i--;
                 }
                 else{ //Error with type
-                    errorMsg.concat("Type Error.  Line " + obj2.line + ".  "  + obj2.name + " is the wrong type.\n");
+                    errorMsg.concat("Line " + obj2.line + ".  TYPE ERROR :: "  + obj2.name + " is the wrong type.\n");
                     pair_list.removeElementAt(i);
                     i--;
                     throwError = true;
@@ -407,9 +414,9 @@ public class TypeTracker {
                 }
                 else{
                     //Error.  Print message.
-                    errorMsg =errorMsg.concat("Type Error.  Line " +
-                            obj.line + ".  "  + obj.name + " returns " + type.toUpperCase() +
-                            " but should return " + obj.expectedType.toUpperCase() +".\n");
+                    errorMsg =errorMsg.concat( "Line " + obj.line + ".  TYPE ERROR :: "  +
+                            obj.name + " returns type " + type.toUpperCase() +
+                            " but should return type " + obj.expectedType.toUpperCase() +".\n");
                     validate_list.removeElementAt(i);
                     i--;
                     throwError = true;
@@ -421,8 +428,6 @@ public class TypeTracker {
         if(throwError)
             throw new Exception(errorMsg);
     }
-
-
 }
 
 
