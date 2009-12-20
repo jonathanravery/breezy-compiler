@@ -66,13 +66,13 @@ type_declaration	:	STRING IDENTIFIER	{$$.sval = "String " + $2.sval + "=\"\""; b
 
 
 /*Add all kinds of type assignments here!*/
-type_declaration_assignment :   STRING IDENTIFIER EQUALS arith_exp   {$$.sval = "String " + $2.sval + " = " + $4.sval;
+type_declaration_assignment :   STRING IDENTIFIER EQUALS exp   {$$.sval = "String " + $2.sval + " = " + $4.sval;
                                                                         ba.typeTrack.assertStringType($4);
                                                                          ba.addIdentifier($2.sval,"string",$2.line,Scope.LOCAL.getName());}
-                            |   NUMBER IDENTIFIER EQUALS arith_exp {$$.sval = "double " + $2.sval + " = " + $4.sval;
+                            |   NUMBER IDENTIFIER EQUALS exp {$$.sval = "double " + $2.sval + " = " + $4.sval;
                                                                         ba.typeTrack.assertNumberType($4);
                                                                          ba.addIdentifier($2.sval,"number",$2.line,Scope.LOCAL.getName());}
-                            |   BOOLEAN IDENTIFIER EQUALS bool_exp  {$$.sval = "boolean " + $2.sval + " = " + $4.sval;
+                            |   BOOLEAN IDENTIFIER EQUALS exp  {$$.sval = "boolean " + $2.sval + " = " + $4.sval;
                                                                           ba.addIdentifier($2.sval,"boolean",$2.line,Scope.LOCAL.getName());}
                             |	ARRAY IDENTIFIER EQUALS LEFT_SQUARE_PAREN params RIGHT_SQUARE_PAREN	
                                         {$$.sval = ba.createComplexType("ArrayList", $2.sval, $5.sval,$2.line,Scope.LOCAL.getName());}
@@ -98,17 +98,19 @@ statement	:       COMMENT                                     {$$.sval = "";}
                                                                         $$.sval = $1.sval + "=" + $3.sval + ";\n" ;}
                 ;
 
-if_statement	:	IF LPAREN bool_exp RPAREN
+if_statement	:	IF LPAREN exp RPAREN
                         BEGIN
                             control_body
-                        END IF	else_if else    { $$.sval = "if(" + $3.sval + "){\n" + $6.sval + "}\n" + $9.sval + "\n" + $10.sval;}
+                        END IF	else_if else    { ba.typeTrack.assertBoolType($3);
+                                                    $$.sval = "if(" + $3.sval + "){\n" + $6.sval + "}\n" + $9.sval + "\n" + $10.sval;}
                 ;
 
 
-else_if         :       ELSEIF LPAREN bool_exp RPAREN
+else_if         :       ELSEIF LPAREN exp RPAREN
                         BEGIN
                             control_body
-                        END ELSEIF else_if { $$.sval = "else if(" + $3.sval + "){\n" + $6.sval + "}\n" + $9.sval + "\n";}
+                        END ELSEIF else_if { ba.typeTrack.assertBoolType($3);
+                                                $$.sval = "else if(" + $3.sval + "){\n" + $6.sval + "}\n" + $9.sval + "\n";}
                         |                   { $$.sval = "";}
                         ;
 
@@ -121,10 +123,11 @@ else            :       ELSE
                         ;
 
 
-while_loop	: 	WHILE LPAREN bool_exp RPAREN
+while_loop	: 	WHILE LPAREN exp RPAREN
 			BEGIN
 				control_body
-			END WHILE    { $$.sval = "while( " + $3.sval + " ){\n" + $6.sval + "}\n";}
+			END WHILE    { ba.typeTrack.assertBoolType($3);
+                                        $$.sval = "while( " + $3.sval + " ){\n" + $6.sval + "}\n";}
                 ;
 
 return_statement	:	RETURN exp 		{$$.sval = "return " + $2.sval;}
@@ -154,23 +157,16 @@ aparams_	:	type IDENTIFIER			{ba.addIdentifier($2.sval,$1.obj.toString(),$2.line
 		;
 
 params          :       NOTHING				{$$.sval = "";}
+                |                                       {$$.sval = "";}
                 |       params_                         {$$.sval = $1.sval;}
                 ;
 
-params_          :	arith_exp			{$$.sval = $1.sval;}
-		|	bool_exp			{$$.sval = $1.sval;}
+params_          :	exp			{$$.sval = $1.sval;}
 		|	params_ COMMA params_ 		{$$.sval = $1.sval + "," + $3.sval;}
 		;
 		
-hash_params		: 	LPAREN hash_item COMMA hash_item RPAREN COMMA hash_params	{$$.sval = "(" + $2.sval + "," + $4.sval + ")" + $7.sval;}
-				|	LPAREN hash_item COMMA hash_item RPAREN		{$$.sval = "(" + $2.sval + "," + $4.sval + ")";}
-				;
-
-hash_item		:	QUOTE	{$$.sval = $1.sval;}
-                        |	NUMERIC	{$$.ival = $1.ival;}
-                        |	TRUE	{$$.sval = "true";}
-                        |	FALSE	{$$.sval = "false";}
-                        |	IDENTIFIER	{$$.sval = $1.sval;}
+hash_params		: 	hash_params COMMA LPAREN exp COMMA exp RPAREN	{$$.sval = "(" + $4.sval + "," + $6.sval + ")" + $1.sval;}
+                        |	LPAREN exp COMMA exp RPAREN		{$$.sval = "(" + $2.sval + "," + $4.sval + ")";}
                         ;
 
 
@@ -185,19 +181,15 @@ return_type     :       type            {$$.sval = $1.sval;}
                 |       NOTHING         {$$.sval = "void";}
                 ;
 
-exp             :       bool_exp        {$$.sval = $1.sval;
-                                                $$.line = $1.line;
-                                                $$.obj = $1.obj;}
-                |       arith_exp        {$$.sval = $1.sval;
-                                                $$.line = $1.line;
-                                                $$.obj = $1.obj;}
-                ;
-
-arith_exp	: 	arith_exp PLUS term {$$.sval = $1.sval + "+" + $3.sval;
+exp	: 	exp LOG_OP_OR term {ba.typeTrack.assertBoolType($1,$3,$2);
+                                                        $$.sval = $1.sval + " || " + $3.sval;
+                                                        $$.obj = $1.obj;
+                                                        $$.line = $1.line;}
+                |       exp PLUS term {$$.sval = $1.sval + "+" + $3.sval;
                                               ba.typeTrack.assertNumberOrStringType($1,$3, $2);
                                                 $$.obj = $1.obj;
                                                 $$.line = $1.line; }
-                |	arith_exp MINUS term {$$.sval = $1.sval + " - " + $3.sval;
+                |	exp MINUS term {$$.sval = $1.sval + " - " + $3.sval;
                                               ba.typeTrack.assertNumberType($1,$3, $2);
                                                 $$.obj = $1.obj;
                                                 $$.line = $1.line; }
@@ -205,7 +197,11 @@ arith_exp	: 	arith_exp PLUS term {$$.sval = $1.sval + "+" + $3.sval;
                                     $$.line = $1.line;}
                 ;
 			
-term		:	term MUL unary {$$.sval = $1.sval + " * " + $3.sval;
+term		:	term LOG_OP_AND unary {ba.typeTrack.assertBoolType($1,$3,$2);
+                                                $$.sval = $1.sval + " && " + $3.sval;
+                                                $$.obj = $1.obj;
+                                                $$.line = $1.line; }
+                |       term MUL unary {$$.sval = $1.sval + " * " + $3.sval;
                                               ba.typeTrack.assertNumberType($1,$3, $2);
                                                 $$.obj = $1.obj;
                                                 $$.line = $1.line; }
@@ -222,8 +218,12 @@ term		:	term MUL unary {$$.sval = $1.sval + " * " + $3.sval;
                                     $$.line = $1.line;}
                 ;
 
-unary		:	MINUS unary { $$.sval = " -"+ $2.sval; 
-                                        ba.typeTrack.assertNumberType($2);
+unary		:	LOG_OP_NOT unary {ba.typeTrack.assertBoolType($2);
+                                                $$.sval = " !" + $2.sval;
+                                                $$.obj = $2.obj;
+                                                $$.line = $1.line;}
+                |       MINUS unary {  ba.typeTrack.assertNumberType($2);
+                                        $$.sval = " -"+ $2.sval;
                                         $$.obj = $2.obj;
                                         $$.line = $2.line;}
                 |	factor	 {$$.sval = $1.sval;
@@ -231,9 +231,20 @@ unary		:	MINUS unary { $$.sval = " -"+ $2.sval;
                                     $$.line = $1.line;}
                 ;
 
-factor 		: 	LPAREN arith_exp RPAREN	{$$.sval = " ( " + $2.sval + " ) ";
+factor 		: 	LPAREN exp RPAREN	{$$.sval = " ( " + $2.sval + " ) ";
                                                     $$.obj = $2.obj;
                                                     $$.line = $1.line; }
+                |       exp rel_op exp  {ba.typeTrack.assertNumberOrStringType($1,$3,$2);
+                                                        if($1.obj.toString().equals("string") && $2.sval.equals("=="))
+                                                            $$.sval = "(" +$1.sval + ").equals(" + $3.sval + ")";
+                                                        else if($1.obj.toString().equals("string") && $2.sval.equals("!="))
+                                                            $$.sval = "!((" +$1.sval + ").equals(" + $3.sval + "))";
+                                                        else if($1.obj.toString().equals("string"))
+                                                            throw new Exception("You cannot use " + $2.sval + " with two STRING types.");
+                                                        else
+                                                            $$.sval = $1.sval + $2.sval + $3.sval;
+                                                         $$.obj = "boolean";
+                                                        $$.line = $1.line;}
                 |	NUMERIC                 { $$.sval = $1.sval; 
                                                     $$.obj = $1.obj;
                                                     $$.line = $1.line; }
@@ -246,55 +257,10 @@ factor 		: 	LPAREN arith_exp RPAREN	{$$.sval = " ( " + $2.sval + " ) ";
                 |       QUOTE           	{ $$.sval = $1.sval; 
                                                     $$.obj = $1.obj;
                                                     $$.line = $1.line;}
-                ;
-
-bool_exp	:       bool_exp LOG_OP_OR bool_term {$$.sval = $1.sval + " || " + $3.sval;
-                                                         $$.obj = $1.obj;
-                                                            $$.line = $1.line;}
-                |       bool_term                         {$$.sval = $1.sval; 
-                                                            $$.obj = $1.obj;
-                                                            $$.line = $1.line;}
-                ;
-
-bool_term       :	bool_term LOG_OP_AND bool_factor {$$.sval = $1.sval + " && " + $3.sval;  
-                                                            $$.obj = $1.obj;
-                                                            $$.line = $1.line; }
-                |       bool_factor                         {$$.sval = $1.sval; 
-                                                                    $$.obj = $1.obj;
-                                                                    $$.line = $1.line;}
-                ;
-
-bool_factor     :	LOG_OP_NOT bool_factor {$$.sval = " !" + $2.sval; 
-                                                $$.obj = $2.obj;
-                                                $$.line = $1.line;}
-                |	LPAREN bool_exp RPAREN {$$.sval = " ( " + $2.sval + " ) "; 
-                                                $$.obj = $2.obj;
-                                                $$.line = $1.line;}
-                |       arith_exp rel_op arith_exp  {ba.typeTrack.assertNumberOrStringType($1,$3,$2);
-                                                        if($1.obj.toString().equals("string") && $2.sval.equals("=="))
-                                                            $$.sval = "(" +$1.sval + ").equals(" + $3.sval + ")";
-                                                        else if($1.obj.toString().equals("string") && $2.sval.equals("!="))
-                                                            $$.sval = "!((" +$1.sval + ").equals(" + $3.sval + "))";
-                                                        else if($1.obj.toString().equals("string"))
-                                                            throw new Exception("You cannot use " + $2.sval + " with two STRING types.");
-                                                        else
-                                                            $$.sval = $1.sval + $2.sval + $3.sval;
-                                                         $$.obj = "boolean";
-                                                        $$.line = $1.line;}
                 |	TRUE		{$$.sval = $1.sval;
                                                 $$.obj = $1.obj;
                                                 $$.line = $1.line;}
                 |	FALSE		{$$.sval = $1.sval;
-                                                $$.obj = $1.obj;
-                                                $$.line = $1.line;}
-                |       IDENTIFIER      {$$.sval = $1.sval; 
-                                            $1.obj = ba.typeTrack.getType($1, Scope.LOCAL.getName());
-                                            ba.typeTrack.assertBoolType($1);
-                                            $$.obj = $1.obj;
-                                                $$.line = $1.line; }
-                |	function_call { $$.sval = $1.sval;
-                                                $1.obj = ba.typeTrack.getType($1, Scope.GLOBAL.getName());
-                                                ba.typeTrack.assertBoolType($1);
                                                 $$.obj = $1.obj;
                                                 $$.line = $1.line;}
                 ;
