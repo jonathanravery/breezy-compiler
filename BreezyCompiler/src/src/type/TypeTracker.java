@@ -79,6 +79,16 @@ public class TypeTracker {
         id_list.add(temp);
     }
 
+    public void removeLocalID(ParserVal pv){
+        for(int i = 0; i < id_list.size(); i++){
+            if(id_list.get(i).sval.equals(pv.sval) &&
+                    id_list.get(i).scope.equals(Scope.LOCAL.getName())){
+                id_list.removeElementAt(i);
+                return;
+            }
+        }
+    }
+
     public void removeLocals(){
         for(int i = 0; i < id_list.size(); i++){
             if(id_list.get(i).scope.equals(Scope.LOCAL.getName())){
