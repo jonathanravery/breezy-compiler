@@ -54,7 +54,7 @@ public class BreezyAssist {
         System.out.println("*\n*\n*\n\n\nCongratulations!  You've compiled!\n\n\n*\n*\n*");
     }
 
-    public String createFunction(String id, String retType, String params, String body, String id2,int line,String scope)throws Exception{
+    public String createFunction(String id, ParserVal retType, String params, String body, String id2,int line,String scope)throws Exception{
         String retFunction = "";
 
         /*This is only called  when yacc reduces a string
@@ -69,14 +69,14 @@ public class BreezyAssist {
             return "";
 
         //Add function name to id list with it's return type
-        this.addIdentifier(id,retType,line,scope);
+        this.addIdentifier(id,retType.obj.toString(),line,scope);
 
         //TODO: check return value == actual return value
 
         
         if(id.equals("main")){
             if(!mainCreated){
-                return createMain(retType,params,body);
+                return createMain(retType.sval,params,body);
             }
             else{
                 //Error.  User has two main functions
