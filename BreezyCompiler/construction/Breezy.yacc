@@ -12,7 +12,7 @@ import libs.structs.Scope;
 %token BOOLEAN STRING
 %token NUMBER ARRAY HASH
 %token TRUE FALSE
-%token ACCEPTS BEGIN BOOLEAN EACH ELSE ELSEIF END FOR FUNCTION IF NOTHING NUMERIC QUOTE RETURN RETURNS WHILE
+%token ACCEPTS BEGIN BOOLEAN EACH ELSE ELSEIF END FOR FUNCTION IF IN NOTHING NUMERIC QUOTE RETURN RETURNS WHILE
 %token REL_OP_LE REL_OP_LT REL_OP_GE REL_OP_GT EQUALS LOG_OP_EQUAL LOG_OP_AND LOG_OP_OR LOG_OP_NOT
 %token EQUAL
 %left PLUS MINUS
@@ -39,7 +39,7 @@ method	: 	COMMENT
     		ACCEPTS aparams
     		BEGIN
                 body
-                END IDENTIFIER	{ $$.sval = ba.createFunction($3.sval,$5,$7.sval,$9.sval,$11.sval,$3.line,Scope.GLOBAL.getName()); }
+                END IDENTIFIER	{ $$.sval = ba.createFunction($3.sval,$5,$7.sval,$9.sval,$11,$3.line,Scope.GLOBAL.getName()); }
 		;
 
 
@@ -57,23 +57,23 @@ declarations    :   declarations type_declaration  SEMICOLON              {$$.sv
                 ;
 
 
-type_declaration	:	STRING IDENTIFIER	{$$.sval = "String " + $2.sval + "=\"\""; ba.addIdentifier($2.sval,"string",$2.line,Scope.LOCAL.getName());}
-			|	BOOLEAN IDENTIFIER	{$$.sval = "boolean " + $2.sval + "=false"; ba.addIdentifier($2.sval,"boolean",$2.line,Scope.LOCAL.getName());}
-			|	NUMBER IDENTIFIER	{$$.sval = "double " + $2.sval + "=0"; ba.addIdentifier($2.sval,"number",$2.line,Scope.LOCAL.getName());}
-			|	ARRAY IDENTIFIER	{$$.sval = ba.createComplexType("ArrayList", $2.sval); ba.addIdentifier($2.sval,"ArrayList",$2.line,Scope.LOCAL.getName());}
-			|	HASH IDENTIFIER         {$$.sval = ba.createComplexType("HashMap", $2.sval); ba.addIdentifier($2.sval,"HashMap",$2.line,Scope.LOCAL.getName());}
+type_declaration	:	STRING IDENTIFIER	{$$.sval = "String " + $2.sval + "=\"\""; ba.typeTrack.addID($2.sval,"string",$2.line,Scope.LOCAL.getName());}
+			|	BOOLEAN IDENTIFIER	{$$.sval = "boolean " + $2.sval + "=false"; ba.typeTrack.addID($2.sval,"boolean",$2.line,Scope.LOCAL.getName());}
+			|	NUMBER IDENTIFIER	{$$.sval = "double " + $2.sval + "=0"; ba.typeTrack.addID($2.sval,"number",$2.line,Scope.LOCAL.getName());}
+			|	ARRAY IDENTIFIER	{$$.sval = ba.createComplexType("ArrayList", $2.sval); ba.typeTrack.addID($2.sval,"ArrayList",$2.line,Scope.LOCAL.getName());}
+			|	HASH IDENTIFIER         {$$.sval = ba.createComplexType("HashMap", $2.sval); ba.typeTrack.addID($2.sval,"HashMap",$2.line,Scope.LOCAL.getName());}
 			;
 
 
 /*Add all kinds of type assignments here!*/
 type_declaration_assignment :   STRING IDENTIFIER EQUALS exp   {$$.sval = "String " + $2.sval + " = " + $4.sval;
                                                                         ba.typeTrack.assertStringType($4);
-                                                                         ba.addIdentifier($2.sval,"string",$2.line,Scope.LOCAL.getName());}
+                                                                         ba.typeTrack.addID($2.sval,"string",$2.line,Scope.LOCAL.getName());}
                             |   NUMBER IDENTIFIER EQUALS exp {$$.sval = "double " + $2.sval + " = " + $4.sval;
                                                                         ba.typeTrack.assertNumberType($4);
-                                                                         ba.addIdentifier($2.sval,"number",$2.line,Scope.LOCAL.getName());}
+                                                                         ba.typeTrack.addID($2.sval,"number",$2.line,Scope.LOCAL.getName());}
                             |   BOOLEAN IDENTIFIER EQUALS exp  {$$.sval = "boolean " + $2.sval + " = " + $4.sval;
-                                                                          ba.addIdentifier($2.sval,"boolean",$2.line,Scope.LOCAL.getName());}
+                                                                          ba.typeTrack.addID($2.sval,"boolean",$2.line,Scope.LOCAL.getName());}
                             |	ARRAY IDENTIFIER EQUALS LEFT_SQUARE_PAREN params RIGHT_SQUARE_PAREN	
                                         {$$.sval = ba.createComplexType("ArrayList", $2.sval, $5.sval,$2.line,Scope.LOCAL.getName());}
                             |	HASH IDENTIFIER EQUALS LEFT_SQUARE_PAREN hash_params RIGHT_SQUARE_PAREN
@@ -159,9 +159,9 @@ aparams         :	NOTHING				{$$.sval = "";}
                 |       aparams_                        {$$.sval = $1.sval;}
                 ;
 
-aparams_	:	type IDENTIFIER			{ba.addIdentifier($2.sval,$1.obj.toString(),$2.line,Scope.LOCAL.getName());
+aparams_	:	type IDENTIFIER			{ba.typeTrack.addID($2.sval,$1.obj.toString(),$2.line,Scope.LOCAL.getName());
                                                             $$.sval = $1.sval + " " + $2.sval;}
-		|	type IDENTIFIER COMMA aparams_     {ba.addIdentifier($2.sval,$1.obj.toString(),$2.line,Scope.LOCAL.getName());
+		|	type IDENTIFIER COMMA aparams_     {ba.typeTrack.addID($2.sval,$1.obj.toString(),$2.line,Scope.LOCAL.getName());
                                                             $$.sval = $1.sval + " " + $2.sval + ", " + $4.sval;}
 		;
 
