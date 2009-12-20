@@ -54,7 +54,15 @@ private boolean debug = false;
 
         for(TypedParserVal t : id_list){
             if(t.obj.equals(id) && t.scope.equals(scope))
-                throw new Exception("Line: "+line+  
+                if(t.type.equals("not_def") && t.scope.equals(Scope.GLOBAL.getName())){
+                    /*If we had a function that was defined AFTER it was called we would
+                     find it here.  Now we need to assign it's type so that if it is
+                     used later, it will have a type and there can be more type
+                     checking.*/
+                    t.type = type;
+                }
+                else
+                    throw new Exception("Line: "+line+
                                     " Identifier " + id + " is already being used.");
         }
 
@@ -78,11 +86,22 @@ private boolean debug = false;
         for(TypedParserVal t : id_list){
             //if(debug)System.err.println(t.obj + "." + t.scope + "::" + pv.sval+ "." + scope);
 
-            if(((String)t.obj).equals(pv.sval.trim()) && t.scope.equals(scope)){
+            //If the identifier is already in the list, return the type.
+            if(((String)t.obj).equals(pv.sval.trim()) && (t.scope.equals(scope))){
                 if(debug)System.err.println("TypeTracker::getType()::type " + t.type);
                 return t.type;
             }
         }
+
+        /*If the identifier is not in the list, but it might be, say for instance if the
+         function is not defined until later.  Add the identifier name with the scope
+         "not_def".*/
+        if(scope.equals(Scope.GLOBAL.getName())){
+            this.addID(pv.sval, "not_def", pv.line, scope);
+            return "not_def";
+        }
+
+        //Default behavior
         throw new Exception("Line: "+pv.line+  
                                 " Identifier \""+ pv.sval +"\" not found");
     }
@@ -106,7 +125,7 @@ private boolean debug = false;
         String t1 = (String)pv1.obj;
         String t2 = (String)pv2.obj;
 
-        if(!t1.equals(t2))
+        if(!t1.equals(t2) && !t1.equals("not_def") && !t2.equals("not_def") )
             throw new Exception ("Line: "+pv1.line+
                                 " Type Error.  Performed " + t1.toUpperCase() + " " + pvOP.sval + " " + t2.toUpperCase() +
                                 ".\nConfirm the types are both the same.");
@@ -126,7 +145,7 @@ private boolean debug = false;
                     " Type Error.  Performed " + t1.toUpperCase() + " " + pvOP.sval + " " + t2.toUpperCase() +
                     ".\nYou cannot use boolean for this type of operation.");
 
-        if(!t1.equals(t2))
+        if(!t1.equals(t2) && !t1.equals("not_def") && !t2.equals("not_def") )
             throw new Exception ("Line: "+pv1.line+  
                                 " Type Error.  Performed " + t1.toUpperCase() + " " + pvOP.sval + " " + t2.toUpperCase() +
                                 ".\nConfirm the types are both NUMBER or STRING.");
@@ -142,7 +161,7 @@ private boolean debug = false;
         }
         String t1 = (String)pv1.obj;
         String t2 = (String)pv2.obj;
-        if(!t1.equals("number") || !t2.equals("number"))
+        if( (!t1.equals("number") && !t1.equals("not_def")) || (!t2.equals("number") && !t2.equals("not_def")))
             throw new Exception ("Line: "+pv1.line+  
                                 " Type Error.  Performed " + t1.toUpperCase() + " " + pvOP.sval + " " + t2.toUpperCase() +
                                 ".\nConfirm the types are both numbers.");
@@ -153,7 +172,7 @@ private boolean debug = false;
     public void assertStringType(ParserVal pv) throws Exception{
         if(debug)System.err.println("TypeTracker::assertStringType()::type1 " + pv.obj);
 
-        if(!pv.obj.equals("string"))
+        if(!pv.obj.equals("string") && !pv.obj.equals("not_def"))
             throw new Exception ("Line: "+pv.line+  
                                 " Type Error.\nSTRING type required.");
 
@@ -163,7 +182,7 @@ private boolean debug = false;
     public void assertNumberType(ParserVal pv) throws Exception{
         if(debug)System.err.println("TypeTracker::assertNumberType()::type1 " + pv.obj);
 
-        if(!pv.obj.equals("number"))
+        if(!pv.obj.equals("number") && !pv.obj.equals("not_def"))
             throw new Exception ("Line: "+pv.line+  
                                     " Type Error.\nNUMBER type required.");
 
@@ -178,7 +197,7 @@ private boolean debug = false;
         }
         String t1 = (String)pv1.obj;
         String t2 = (String)pv2.obj;
-        if(!t1.equals("boolean") || !t2.equals("boolean"))
+        if((!t1.equals("boolean") && !t1.equals("not_def")) || (!t2.equals("boolean") && !t2.equals("not_def")))
             throw new Exception ("Line: "+pv1.line+
                                 " Type Error.  Performed " + t1.toUpperCase() + " " + pvOP.sval + " " + t2.toUpperCase() +
                                 ".\nConfirm the types are both boolean expressions.");
@@ -189,7 +208,7 @@ private boolean debug = false;
     public void assertBoolType(ParserVal pv) throws Exception{
         if(debug)System.err.println("TypeTracker::assertBool()::type1 " + pv.obj);
         
-        if(!pv.obj.equals("boolean"))
+        if(!pv.obj.equals("boolean") && !pv.obj.equals("not_def"))
             throw new Exception ("Line: "+pv.line+  
                                     " Type Error.\n  Required Boolean and found "+ pv.obj);
     }
