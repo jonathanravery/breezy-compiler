@@ -63,6 +63,7 @@ false				{p("FALSE");	yyparser.yylval = new ParserVal("false",yyline+1,yycolumn)
 for				{p("FOR");	return yyparser.FOR;}
 function			{p("FUNCTION");	return yyparser.FUNCTION;}
 if				{p("IF");	return yyparser.IF;}
+in				{p("IN");	return yyparser.IN;}
 nothing				{p("NOTHING");	return yyparser.NOTHING;}
 number				{p("NUMBER");	return yyparser.NUMBER;}
 return				{p("RETURN");	return yyparser.RETURN;}

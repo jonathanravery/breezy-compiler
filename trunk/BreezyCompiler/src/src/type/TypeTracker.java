@@ -171,10 +171,11 @@ public class TypeTracker {
         }
         String t1 = (String)pv1.obj;
         String t2 = (String)pv2.obj;
-        if(t1.equals("boolean") || t2.equals("boolean"))
+        if( (!t1.equals("string") && !t1.equals("number") && !t1.equals("not_def"))
+                || (!t2.equals("string") && !t2.equals("number") && !t2.equals("not_def")))
             throw new Exception ("Line: "+pv1.line+  
                     " Type Error.  Performed " + t1.toUpperCase() + " " + pvOP.sval + " " + t2.toUpperCase() +
-                    ".\nYou cannot use boolean for this type of operation.");
+                    ".\nYou must use STRING or NUMBER for this type of operation.");
 
         if(!t1.equals(t2) && !t1.equals("not_def") && !t2.equals("not_def") )
             throw new Exception ("Line: "+pv1.line+  
@@ -202,6 +203,25 @@ public class TypeTracker {
             pair.setCanBeNumber(true);
             pair.setCanBeString(true);
             pair_list.add(pair);
+        }
+
+    }
+
+    public void assertArrayOrHashType(ParserVal pv) throws Exception{
+        if(debug)
+            System.err.println("TypeTracker::assertArrayOrHashType()::type1 " + pv.obj);
+
+        String t1 = (String)pv.obj;
+        if((!t1.equals("ArrayList") && !t1.equals("HashMap") && !t1.equals("not_def")))
+            throw new Exception ("Line: "+pv.line+
+                    " Type Error.  You must use ARRAY or HASH for this type of operation.");
+
+        /*If we don't throw a type error, make sure that variables are not "not_def
+        and if they are, record this info so that we can check type later when
+         the programmer defines the function.*/
+        if(pv.obj.equals("not_def")){
+            LateTypeValidation ltv = new LateTypeValidation((pv.sval.split("[(]"))[0],"ArrayListHashMap",pv.line);
+            validate_list.add(ltv);
         }
 
     }
@@ -363,7 +383,7 @@ public class TypeTracker {
         for(int i = 0; i < validate_list.size(); i++){
             LateTypeValidation obj = validate_list.get(i);
             if(obj.name.equals(id)){
-                if(obj.expectedType.equals(type)){
+                if(obj.expectedType.contains(type)){
                     //No error here, just remove the item from the list
                     validate_list.removeElementAt(i);
                     i--;
