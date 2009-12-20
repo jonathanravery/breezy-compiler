@@ -93,6 +93,7 @@ statement	:       COMMENT                                     {$$.sval = "";}
                 |	return_statement SEMICOLON                  {$$.sval = $1.sval + ";\n";}
                 |	if_statement                                {$$.sval = $1.sval;}
                 |       while_loop                                  {$$.sval = $1.sval;}
+                |       for_loop                                    {$$.sval = $1.sval;}
                 |	IDENTIFIER EQUALS exp SEMICOLON             {$1.obj = ba.typeTrack.getType($1,Scope.LOCAL.getName());
                                                                         ba.typeTrack.assertSameType($1,$3,$2);
                                                                         $$.sval = $1.sval + "=" + $3.sval + ";\n" ;}
@@ -128,6 +129,13 @@ while_loop	: 	WHILE LPAREN exp RPAREN
 				control_body
 			END WHILE    { ba.typeTrack.assertBoolType($3);
                                         $$.sval = "while( " + $3.sval + " ){\n" + $6.sval + "}\n";}
+                ;
+
+for_loop        :       FOR EACH LPAREN IDENTIFIER IN exp RPAREN
+                        BEGIN
+                            control_body
+                        END FOR EACH            {ba.typeTrack.assertArrayOrHashType($6);
+                                                    $$.sval = "for(TypedParserVal " +$4.sval+ " : " + $6.sval + "){" + $9.sval + "\n}\n";}
                 ;
 
 return_statement	:	RETURN exp 		{$$.sval = "return " + $2.sval;}
