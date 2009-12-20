@@ -135,7 +135,8 @@ return_statement	:	RETURN exp 		{$$.sval = "return " + $2.sval;}
                         ;
 
 function_call	:	IDENTIFIER LPAREN params RPAREN {$$.sval = $1.sval + "(" + $3.sval + ")";
-                                                            $$.obj = ba.typeTrack.getType($1, Scope.GLOBAL.getName());}
+                                                            $$.obj = ba.typeTrack.getType($1, Scope.GLOBAL.getName());
+                                                            $$.line = $1.line;}
                         ;
 
 
