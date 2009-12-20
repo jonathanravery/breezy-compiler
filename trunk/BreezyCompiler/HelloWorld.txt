@@ -2,11 +2,11 @@
 
 //New Function
 function printHelloWorld
-returns number
+returns number 
 accepts string s, number x
 begin
-	number w
-	if( ( true AND (NOT false) ))
+	number t;
+	if ( true )
 	begin
 		x = 7;
 		
@@ -18,7 +18,7 @@ end printHelloWorld
 
 
 
-/*Main Function*/
+/*Main Function */
 function main
 returns number
 accepts nothing
@@ -38,7 +38,7 @@ begin
                 end else if
 
 		x = 5;
-		x = 7 - 8+(6*9.876 - (-x)%2 );
+		x = 7 - 8-(6*9.876 - (-x)%2 );
 		b = true OR false;
 		y = "hello" + " word";
 		
