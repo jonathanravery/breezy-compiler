@@ -170,6 +170,22 @@ private boolean debug = false;
     }
 
 
+    public void assertBoolType(ParserVal pv1, ParserVal pv2, ParserVal pvOP) throws Exception{
+        if(debug){
+            System.err.println("TypeTracker::assertNumberType()::type1 " + pv1.obj);
+            System.err.println("TypeTracker::assertNumberType()::type2 " + pv2.obj);
+            System.err.println("TypeTracker::assertNumberType()::op " + pvOP.sval);
+        }
+        String t1 = (String)pv1.obj;
+        String t2 = (String)pv2.obj;
+        if(!t1.equals("boolean") || !t2.equals("boolean"))
+            throw new Exception ("Line: "+pv1.line+
+                                " Type Error.  Performed " + t1.toUpperCase() + " " + pvOP.sval + " " + t2.toUpperCase() +
+                                ".\nConfirm the types are both boolean expressions.");
+
+    }
+
+
     public void assertBoolType(ParserVal pv) throws Exception{
         if(debug)System.err.println("TypeTracker::assertBool()::type1 " + pv.obj);
         

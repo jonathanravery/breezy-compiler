@@ -51,7 +51,7 @@ public class BreezyAssist {
             Logger.getLogger(BreezyAssist.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        System.out.println("Congratulations!  You've compiled!");
+        System.out.println("*\n*\n*\n\n\nCongratulations!  You've compiled!\n\n\n*\n*\n*");
     }
 
     public String createFunction(String id, String retType, String params, String body, String id2,int line,String scope){
@@ -111,9 +111,9 @@ public class BreezyAssist {
             systemMain = "public static void main(String[] args){BreezyProg b = new BreezyProg(); b.main();}\n\n";
         }
         else{
-            String[] paramList = params.split(" ");
+            String[] paramList = params.split("[ ]+");
 
-            systemMain = "public static void main(String[] args){main(";
+            systemMain = "public static void main(String[] args){BreezyProg b = new BreezyProg(); b.main(";
             if(paramList[0].equals("String")){
                 systemMain = systemMain.concat("args[0]");
             }
