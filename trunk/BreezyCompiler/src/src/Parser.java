@@ -616,7 +616,7 @@ String yys;    //current token string
 //###############################################################
 // method: yyparse : parse input and execute indicated items
 //###############################################################
-int yyparse() throws Exception
+int yyparse()throws Exception
 {
 boolean doaction;
   init_stacks();
@@ -763,7 +763,7 @@ case 5:
 break;
 case 6:
 //#line 42 "Breezy.yacc"
-{ yyval.sval = ba.createFunction(val_peek(8).sval,val_peek(6).sval,val_peek(4).sval,val_peek(2).sval,val_peek(0).sval,val_peek(8).line,Scope.GLOBAL.getName()); }
+{ yyval.sval = ba.createFunction(val_peek(8).sval,val_peek(6),val_peek(4).sval,val_peek(2).sval,val_peek(0).sval,val_peek(8).line,Scope.GLOBAL.getName()); }
 break;
 case 7:
 //#line 47 "Breezy.yacc"
@@ -1002,11 +1002,11 @@ case 61:
 break;
 case 62:
 //#line 189 "Breezy.yacc"
-{yyval.sval = val_peek(0).sval;}
+{yyval.sval = val_peek(0).sval; yyval.obj = val_peek(0).obj;}
 break;
 case 63:
 //#line 190 "Breezy.yacc"
-{yyval.sval = "void";}
+{yyval.sval = "void"; yyval.obj = "void";}
 break;
 case 64:
 //#line 193 "Breezy.yacc"

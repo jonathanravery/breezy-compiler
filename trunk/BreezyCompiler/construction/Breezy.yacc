@@ -39,7 +39,7 @@ method	: 	COMMENT
     		ACCEPTS aparams
     		BEGIN
                 body
-                END IDENTIFIER	{ $$.sval = ba.createFunction($3.sval,$5.sval,$7.sval,$9.sval,$11.sval,$3.line,Scope.GLOBAL.getName()); }
+                END IDENTIFIER	{ $$.sval = ba.createFunction($3.sval,$5,$7.sval,$9.sval,$11.sval,$3.line,Scope.GLOBAL.getName()); }
 		;
 
 
@@ -186,8 +186,8 @@ type		:       BOOLEAN		{$$.sval = "boolean "; $$.obj = "boolean";}
                 |       HASH            {$$.sval = "HashMap "; $$.obj = "HashMap";}
                 ;
 
-return_type     :       type            {$$.sval = $1.sval;}
-                |       NOTHING         {$$.sval = "void";}
+return_type     :       type            {$$.sval = $1.sval; $$.obj = $1.obj;}
+                |       NOTHING         {$$.sval = "void"; $$.obj = "void";}
                 ;
 
 exp	: 	exp LOG_OP_OR term {ba.typeTrack.assertBoolType($1,$3,$2);
