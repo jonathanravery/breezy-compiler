@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package src.type;
 
 import BreezyExceptions.BreezyException;
@@ -32,46 +31,64 @@ public class TypeTracker {
         pair_list = new Vector<LateTypeValidationPair>();
 
         //TODO: Add our functions to this list
-        TypedParserVal t1 = new TypedParserVal("ReadCharacterFromScreen", "string",Scope.GLOBAL.getName());        id_list.add(t1);
-        TypedParserVal t2 = new TypedParserVal("ReadLineFromScreen", "string",Scope.GLOBAL.getName());        id_list.add(t2);
-        TypedParserVal t3 = new TypedParserVal("ReadAllFromScreen", "string",Scope.GLOBAL.getName());        id_list.add(t3);
-        TypedParserVal t4 = new TypedParserVal("ReadCharacterFromFile", "string",Scope.GLOBAL.getName());        id_list.add(t4);
-        TypedParserVal t5 = new TypedParserVal("ReadLineFromFile", "string",Scope.GLOBAL.getName());        id_list.add(t5);
-        TypedParserVal t6 = new TypedParserVal("ReadAllFromFile", "string",Scope.GLOBAL.getName());        id_list.add(t6);
-        TypedParserVal t7 = new TypedParserVal("WriteToScreen", "nothing",Scope.GLOBAL.getName());        id_list.add(t7);
-        TypedParserVal t8 = new TypedParserVal("WriteToFile", "nothing",Scope.GLOBAL.getName());        id_list.add(t8);
-        TypedParserVal t9 = new TypedParserVal("WriteCharacterToScreen", "nothing",Scope.GLOBAL.getName());        id_list.add(t9);
-        TypedParserVal t10 = new TypedParserVal("WriteLineToScreen", "nothing",Scope.GLOBAL.getName());        id_list.add(t10);
-        TypedParserVal t11 = new TypedParserVal("WriteAllToScreen", "nothing",Scope.GLOBAL.getName());        id_list.add(t11);
-        TypedParserVal t12 = new TypedParserVal("WriteCharacterToFile", "nothing",Scope.GLOBAL.getName());        id_list.add(t12);
-        TypedParserVal t13 = new TypedParserVal("WriteLineToFile", "nothing",Scope.GLOBAL.getName());        id_list.add(t13);
-        TypedParserVal t14 = new TypedParserVal("WriteAllToFile", "nothing",Scope.GLOBAL.getName());        id_list.add(t14);
-        TypedParserVal t15 = new TypedParserVal("StringToNumber", "number",Scope.GLOBAL.getName());        id_list.add(t15);
-        TypedParserVal t16 = new TypedParserVal("NumberToString", "string",Scope.GLOBAL.getName());        id_list.add(t16);
-        TypedParserVal t17 = new TypedParserVal("WriteCharacterToFile", "nothing",Scope.GLOBAL.getName());        id_list.add(t17);
+        TypedParserVal t1 = new TypedParserVal("ReadCharacterFromScreen", "string", Scope.GLOBAL.getName());
+        id_list.add(t1);
+        TypedParserVal t2 = new TypedParserVal("ReadLineFromScreen", "string", Scope.GLOBAL.getName());
+        id_list.add(t2);
+        TypedParserVal t3 = new TypedParserVal("ReadAllFromScreen", "string", Scope.GLOBAL.getName());
+        id_list.add(t3);
+        TypedParserVal t4 = new TypedParserVal("ReadCharacterFromFile", "string", Scope.GLOBAL.getName());
+        id_list.add(t4);
+        TypedParserVal t5 = new TypedParserVal("ReadLineFromFile", "string", Scope.GLOBAL.getName());
+        id_list.add(t5);
+        TypedParserVal t6 = new TypedParserVal("ReadAllFromFile", "string", Scope.GLOBAL.getName());
+        id_list.add(t6);
+        TypedParserVal t7 = new TypedParserVal("WriteToScreen", "nothing", Scope.GLOBAL.getName());
+        id_list.add(t7);
+        TypedParserVal t8 = new TypedParserVal("WriteToFile", "nothing", Scope.GLOBAL.getName());
+        id_list.add(t8);
+        TypedParserVal t9 = new TypedParserVal("WriteCharacterToScreen", "nothing", Scope.GLOBAL.getName());
+        id_list.add(t9);
+        TypedParserVal t10 = new TypedParserVal("WriteLineToScreen", "nothing", Scope.GLOBAL.getName());
+        id_list.add(t10);
+        TypedParserVal t11 = new TypedParserVal("WriteAllToScreen", "nothing", Scope.GLOBAL.getName());
+        id_list.add(t11);
+        TypedParserVal t12 = new TypedParserVal("WriteCharacterToFile", "nothing", Scope.GLOBAL.getName());
+        id_list.add(t12);
+        TypedParserVal t13 = new TypedParserVal("WriteLineToFile", "nothing", Scope.GLOBAL.getName());
+        id_list.add(t13);
+        TypedParserVal t14 = new TypedParserVal("WriteAllToFile", "nothing", Scope.GLOBAL.getName());
+        id_list.add(t14);
+        TypedParserVal t15 = new TypedParserVal("StringToNumber", "number", Scope.GLOBAL.getName());
+        id_list.add(t15);
+        TypedParserVal t16 = new TypedParserVal("NumberToString", "string", Scope.GLOBAL.getName());
+        id_list.add(t16);
+        TypedParserVal t17 = new TypedParserVal("WriteCharacterToFile", "nothing", Scope.GLOBAL.getName());
+        id_list.add(t17);
 
     }
 
-    public void addID(String id, String type, int line, String scope)throws Exception{
-        if(debug){
+    public void addID(String id, String type, int line, String scope) throws Exception {
+        if (debug) {
             System.err.println("TypeTracker::addID()::id " + id);
             System.err.println("TypeTracker::addID()::type " + type);
         }
 
-        for(TypedParserVal t : id_list){
-            if(t.obj.equals(id) && t.scope.equals(scope))
-                if(t.type.equals("not_def") && t.scope.equals(Scope.GLOBAL.getName())){
+        for (TypedParserVal t : id_list) {
+            if (t.obj.equals(id) && t.scope.equals(scope)) {
+                if (t.type.equals("not_def") && t.scope.equals(Scope.GLOBAL.getName())) {
                     /*If we had a function that was defined AFTER it was called we would
-                     find it here.  Now we need to assign it's type so that if it is
-                     used later, it will have a type and there can be more type
-                     checking.  We also need to validate it's previous uses.  If it was
-                     used out of context, throw a type error.*/
+                    find it here.  Now we need to assign it's type so that if it is
+                    used later, it will have a type and there can be more type
+                    checking.  We also need to validate it's previous uses.  If it was
+                    used out of context, throw a type error.*/
                     t.type = type;
                     doLateTypeValidation(id, type);
                     return;
+                } else {
+                    throw new BreezyException(line, ExceptionType.DUPLICATE_ID.getName(), "Identifier \"" + id + "\" is already being used.");
                 }
-                else
-                    throw new BreezyException(line, ExceptionType.DUPLICATE_ID.getName(),"Identifier \"" + id + "\" is already being used.");
+            }
         }
 
         //Add it to the list
@@ -80,100 +97,104 @@ public class TypeTracker {
         id_list.add(temp);
     }
 
-    public void removeLocalID(ParserVal pv){
-        for(int i = 0; i < id_list.size(); i++){
-            if(id_list.get(i).obj.equals(pv.sval) &&
-                    id_list.get(i).scope.equals(Scope.LOCAL.getName())){
+    public void removeLocalID(ParserVal pv) {
+        for (int i = 0; i < id_list.size(); i++) {
+            if (id_list.get(i).obj.equals(pv.sval) &&
+                    id_list.get(i).scope.equals(Scope.LOCAL.getName())) {
                 id_list.removeElementAt(i);
                 return;
             }
         }
     }
 
-    public void removeLocals(){
-        for(int i = 0; i < id_list.size(); i++){
-            if(id_list.get(i).scope.equals(Scope.LOCAL.getName())){
+    public void removeLocals() {
+        for (int i = 0; i < id_list.size(); i++) {
+            if (id_list.get(i).scope.equals(Scope.LOCAL.getName())) {
                 id_list.removeElementAt(i);
                 i--;
             }
         }
     }
 
-    public String getType(ParserVal pv, String scope)throws Exception{
-        if(debug)System.err.println("TypeTracker::getType()::id " + pv.sval);
+    public String getType(ParserVal pv, String scope) throws Exception {
+        if (debug) {
+            System.err.println("TypeTracker::getType()::id " + pv.sval);
+        }
 
-        for(TypedParserVal t : id_list){
+        for (TypedParserVal t : id_list) {
             //if(debug)System.err.println(t.obj + "." + t.scope + "::" + pv.sval+ "." + scope);
 
             //If the identifier is already in the list, return the type.
-            if(((String)t.obj).equals(pv.sval.trim()) && (t.scope.equals(scope))){
-                if(debug)System.err.println("TypeTracker::getType()::type " + t.type);
+            if (((String) t.obj).equals(pv.sval.trim()) && (t.scope.equals(scope))) {
+                if (debug) {
+                    System.err.println("TypeTracker::getType()::type " + t.type);
+                }
                 return t.type;
             }
         }
 
         /*If the identifier is not in the list, but it might be, say for instance if the
-         function is not defined until later.  Add the identifier name with the scope
-         "not_def".*/
-        if(scope.equals(Scope.GLOBAL.getName())){
+        function is not defined until later.  Add the identifier name with the scope
+        "not_def".*/
+        if (scope.equals(Scope.GLOBAL.getName())) {
             this.addID(pv.sval, "not_def", pv.line, scope);
             return "not_def";
         }
 
         //Default behavior
         throw new BreezyException(pv.line,
-                                    ExceptionType.VARIABLE_MISSING.getName(),
-                                    "Identifier \""+ pv.sval +"\" was not found.");
+                ExceptionType.VARIABLE_MISSING.getName(),
+                "Identifier \"" + pv.sval + "\" was not found.");
     }
-    
+
     public String getType(String id, String scope) throws Exception {
-        for(TypedParserVal t : id_list){
-            if(((String)t.obj).equals(id) && t.scope.equals(scope)){
-                if(debug)System.err.println("TypeTracker::getType()::type " + t.type);
+        for (TypedParserVal t : id_list) {
+            if (((String) t.obj).equals(id) && t.scope.equals(scope)) {
+                if (debug) {
+                    System.err.println("TypeTracker::getType()::type " + t.type);
+                }
                 return t.type;
             }
         }
         return null;
     }
 
-    public void assertSameType(ParserVal pv1, ParserVal pv2, ParserVal pvOP) throws Exception{
-        if(debug){
+    public void assertSameType(ParserVal pv1, ParserVal pv2, ParserVal pvOP) throws Exception {
+        if (debug) {
             System.err.println("TypeTracker::assertSameType()::type1 " + pv1.obj);
             System.err.println("TypeTracker::assertSameType()::type2 " + pv2.obj);
             System.err.println("TypeTracker::assertSameType()::op " + pvOP.sval);
         }
-        String t1 = (String)pv1.obj;
-        String t2 = (String)pv2.obj;
+        String t1 = (String) pv1.obj;
+        String t2 = (String) pv2.obj;
 
-        if(!t1.equals(t2) && !t1.equals("not_def") && !t2.equals("not_def") )
-            throw new BreezyException (pv1.line,
-                                        ExceptionType.TYPE.getName(),
-                                        t1.toUpperCase() + " " + pvOP.sval + " " + t2.toUpperCase() + " is not a valid operation." +
-                                            ".\nConfirm the types are both the same.");
+        if (!t1.equals(t2) && !t1.equals("not_def") && !t2.equals("not_def")) {
+            throw new BreezyException(pv1.line,
+                    ExceptionType.TYPE.getName(),
+                    t1.toUpperCase() + " " + pvOP.sval + " " + t2.toUpperCase() + " is not a valid operation." +
+                    ".\nConfirm the types are both the same.");
+        }
 
         /*If we don't throw a type error, make sure that variables are not "not_def
         and if they are, record this info so that we can check type later when
-         the programmer defines the function.*/
-        if(!pv1.obj.equals("not_def") && !pv2.obj.equals("not_def")){
+        the programmer defines the function.*/
+        if (!pv1.obj.equals("not_def") && !pv2.obj.equals("not_def")) {
             /*Here we have to variables that are the same type and
-             have already been defined.  Return.*/
+            have already been defined.  Return.*/
             return;
-        }
-        else if(pv1.obj.equals("not_def") && !pv2.obj.equals("not_def")){
-            LateTypeValidation ltv = new LateTypeValidation((pv1.sval.split("[(]"))[0],pv2.obj.toString(),pv1.line);
+        } else if (pv1.obj.equals("not_def") && !pv2.obj.equals("not_def")) {
+            LateTypeValidation ltv = new LateTypeValidation((pv1.sval.split("[(]"))[0], pv2.obj.toString(), pv1.line);
             validate_list.add(ltv);
-        }
-        else if(pv2.obj.equals("not_def") && !pv1.obj.equals("not_def")){
-            LateTypeValidation ltv = new LateTypeValidation((pv2.sval.split("[(]"))[0],pv1.obj.toString(),pv2.line);
+        } else if (pv2.obj.equals("not_def") && !pv1.obj.equals("not_def")) {
+            LateTypeValidation ltv = new LateTypeValidation((pv2.sval.split("[(]"))[0], pv1.obj.toString(), pv2.line);
             validate_list.add(ltv);
-        }
-        else{
+        } else {
             /*Here we have two function identifiers that have not been declared.  Add them
-             to a LateValidationPair and put them in a vector.  Validate later that they are
-             both the same type.*/
-            LateTypeValidation ltv = new LateTypeValidation((pv1.sval.split("[(]"))[0],"",pv1.line);
-            LateTypeValidation ltv2 = new LateTypeValidation((pv2.sval.split("[(]"))[0],"",pv2.line);
-            LateTypeValidationPair pair = new LateTypeValidationPair(ltv,ltv2);
+            to a LateValidationPair and put them in a vector.  Validate later that they are
+            both the same type.*/
+            LateTypeValidation ltv = new LateTypeValidation((pv1.sval.split("[(]"))[0], "", pv1.line);
+            LateTypeValidation ltv2 = new LateTypeValidation((pv2.sval.split("[(]"))[0], "", pv2.line);
+            LateTypeValidationPair pair = new LateTypeValidationPair(ltv, ltv2);
             pair.setCanBeNumber(true);
             pair.setCanBeString(true);
             pair.setCanBeBoolean(true);
@@ -182,50 +203,48 @@ public class TypeTracker {
 
     }
 
-    public void assertNumberOrStringType(ParserVal pv1, ParserVal pv2, ParserVal pvOP) throws Exception{
-        if(debug){
+    public void assertNumberOrStringType(ParserVal pv1, ParserVal pv2, ParserVal pvOP) throws Exception {
+        if (debug) {
             System.err.println("TypeTracker::assertNumberOrStringType()::type1 " + pv1.obj);
             System.err.println("TypeTracker::assertNumberOrStringType()::type2 " + pv2.obj);
             System.err.println("TypeTracker::assertNumberOrStringType()::op " + pvOP.sval);
         }
-        String t1 = (String)pv1.obj;
-        String t2 = (String)pv2.obj;
-        if( (!t1.equals("string") && !t1.equals("number") && !t1.equals("not_def") && !t1.equals("TypedParserVal"))
-                || (!t2.equals("string") && !t2.equals("number") && !t2.equals("not_def") && !t2.equals("TypedParserVal")))
-            throw new BreezyException (pv1.line,
-                                        ExceptionType.TYPE.getName(),
-                                        t1.toUpperCase() + " " + pvOP.sval + " " + t2.toUpperCase() + " is not a valid operation." +
-                                            "\n\tConfirm the types are both NUMBER or STRING.");
+        String t1 = (String) pv1.obj;
+        String t2 = (String) pv2.obj;
+        if ((!t1.equals("string") && !t1.equals("number") && !t1.equals("not_def") && !t1.equals("TypedParserVal")) || (!t2.equals("string") && !t2.equals("number") && !t2.equals("not_def") && !t2.equals("TypedParserVal"))) {
+            throw new BreezyException(pv1.line,
+                    ExceptionType.TYPE.getName(),
+                    t1.toUpperCase() + " " + pvOP.sval + " " + t2.toUpperCase() + " is not a valid operation." +
+                    "\n\tConfirm the types are both NUMBER or STRING.");
+        }
 
-        if(!t1.equals(t2) && !t1.equals("not_def") && !t2.equals("not_def") && !t2.equals("TypedParserVal") && !t1.equals("TypedParserVal") )
-            throw new BreezyException (pv1.line,
-                                        ExceptionType.TYPE.getName(),
-                                        t1.toUpperCase() + " " + pvOP.sval + " " + t2.toUpperCase() + " is not a valid operation." +
-                                            "\n\tConfirm the types are both the NUMBER or STRING.");
+        if (!t1.equals(t2) && !t1.equals("not_def") && !t2.equals("not_def") && !t2.equals("TypedParserVal") && !t1.equals("TypedParserVal")) {
+            throw new BreezyException(pv1.line,
+                    ExceptionType.TYPE.getName(),
+                    t1.toUpperCase() + " " + pvOP.sval + " " + t2.toUpperCase() + " is not a valid operation." +
+                    "\n\tConfirm the types are both the NUMBER or STRING.");
+        }
 
         /*If we don't throw a type error, make sure that variables are not "not_def
         and if they are, record this info so that we can check type later when
-         the programmer defines the function.*/
-        if(!pv1.obj.equals("not_def") && !pv2.obj.equals("not_def")){
+        the programmer defines the function.*/
+        if (!pv1.obj.equals("not_def") && !pv2.obj.equals("not_def")) {
             /*Here we have to variables that are the same type and
-             have already been defined.  Return.*/
+            have already been defined.  Return.*/
             return;
-        }
-        else if(pv1.obj.equals("not_def") && !pv2.obj.equals("not_def")){
-            LateTypeValidation ltv = new LateTypeValidation((pv1.sval.split("[(]"))[0],pv2.obj.toString(),pv1.line);
+        } else if (pv1.obj.equals("not_def") && !pv2.obj.equals("not_def")) {
+            LateTypeValidation ltv = new LateTypeValidation((pv1.sval.split("[(]"))[0], pv2.obj.toString(), pv1.line);
             validate_list.add(ltv);
-        }
-        else if(pv2.obj.equals("not_def") && !pv1.obj.equals("not_def")){
-            LateTypeValidation ltv = new LateTypeValidation((pv2.sval.split("[(]"))[0],pv1.obj.toString(),pv2.line);
+        } else if (pv2.obj.equals("not_def") && !pv1.obj.equals("not_def")) {
+            LateTypeValidation ltv = new LateTypeValidation((pv2.sval.split("[(]"))[0], pv1.obj.toString(), pv2.line);
             validate_list.add(ltv);
-        }
-        else{
+        } else {
             /*Here we have two function identifiers that have not been declared.  Add them
-             to a LateValidationPair and put them in a vector.  Validate later that they are
-             both the same type.*/
-            LateTypeValidation ltv = new LateTypeValidation((pv1.sval.split("[(]"))[0],"",pv1.line);
-            LateTypeValidation ltv2 = new LateTypeValidation((pv2.sval.split("[(]"))[0],"",pv2.line);
-            LateTypeValidationPair pair = new LateTypeValidationPair(ltv,ltv2);
+            to a LateValidationPair and put them in a vector.  Validate later that they are
+            both the same type.*/
+            LateTypeValidation ltv = new LateTypeValidation((pv1.sval.split("[(]"))[0], "", pv1.line);
+            LateTypeValidation ltv2 = new LateTypeValidation((pv2.sval.split("[(]"))[0], "", pv2.line);
+            LateTypeValidationPair pair = new LateTypeValidationPair(ltv, ltv2);
             pair.setCanBeNumber(true);
             pair.setCanBeString(true);
             pair_list.add(pair);
@@ -233,179 +252,185 @@ public class TypeTracker {
 
     }
 
-    public void assertArrayOrHashType(ParserVal pv) throws Exception{
-        if(debug)
+    public void assertArrayOrHashType(ParserVal pv) throws Exception {
+        if (debug) {
             System.err.println("TypeTracker::assertArrayOrHashType()::type1 " + pv.obj);
+        }
 
-        String t1 = (String)pv.obj;
-        if((!t1.equals("ArrayList") && !t1.equals("HashMap") && !t1.equals("not_def")))
-            throw new BreezyException (pv.line,
-                                        ExceptionType.TYPE.getName(),
-                                        "Expected ARRAY or HASH but found " + pv.obj.toString().toUpperCase() + ".");
+        String t1 = (String) pv.obj;
+        if ((!t1.equals("ArrayList") && !t1.equals("HashMap") && !t1.equals("not_def"))) {
+            throw new BreezyException(pv.line,
+                    ExceptionType.TYPE.getName(),
+                    "Expected ARRAY or HASH but found " + pv.obj.toString().toUpperCase() + ".");
+        }
 
         /*If we don't throw a type error, make sure that variables are not "not_def
         and if they are, record this info so that we can check type later when
-         the programmer defines the function.*/
-        if(pv.obj.equals("not_def")){
-            LateTypeValidation ltv = new LateTypeValidation((pv.sval.split("[(]"))[0],"ArrayListHashMap",pv.line);
+        the programmer defines the function.*/
+        if (pv.obj.equals("not_def")) {
+            LateTypeValidation ltv = new LateTypeValidation((pv.sval.split("[(]"))[0], "ArrayListHashMap", pv.line);
             validate_list.add(ltv);
         }
 
     }
 
-
-    public void assertNumberType(ParserVal pv1, ParserVal pv2, ParserVal pvOP) throws Exception{
-        if(debug){
+    public void assertNumberType(ParserVal pv1, ParserVal pv2, ParserVal pvOP) throws Exception {
+        if (debug) {
             System.err.println("TypeTracker::assertNumberType()::type1 " + pv1.obj);
             System.err.println("TypeTracker::assertNumberType()::type2 " + pv2.obj);
             System.err.println("TypeTracker::assertNumberType()::op " + pvOP.sval);
         }
-        String t1 = (String)pv1.obj;
-        String t2 = (String)pv2.obj;
-        if( (!t1.equals("number") && !t1.equals("not_def")) || (!t2.equals("number") && !t2.equals("not_def")))
-            throw new BreezyException (pv1.line,
-                                        ExceptionType.TYPE.getName(),
-                                        t1.toUpperCase() + " " + pvOP.sval + " " + t2.toUpperCase() + " is not a valid operation." +
-                                            ".\nConfirm that both variables are of the type NUMBER.");
+        String t1 = (String) pv1.obj;
+        String t2 = (String) pv2.obj;
+        if ((!t1.equals("number") && !t1.equals("not_def") && !t1.equals("TypedParserVal")) ||
+                (!t2.equals("number") && !t2.equals("not_def") && !t2.equals("TypedParserVal"))) {
+            throw new BreezyException(pv1.line,
+                    ExceptionType.TYPE.getName(),
+                    t1.toUpperCase() + " " + pvOP.sval + " " + t2.toUpperCase() + " is not a valid operation." +
+                    ".\nConfirm that both variables are of the type NUMBER.");
+        }
 
         /*If we don't throw a type error, make sure that variables are not "not_def
         and if they are, record this info so that we can check type later when
-         the programmer defines the function.*/
-        if(pv1.obj.equals("not_def")){
-            LateTypeValidation ltv = new LateTypeValidation((pv1.sval.split("[(]"))[0],"number",pv1.line);
+        the programmer defines the function.*/
+        if (pv1.obj.equals("not_def") && !t1.equals("TypedParserVal")) {
+            LateTypeValidation ltv = new LateTypeValidation((pv1.sval.split("[(]"))[0], "number", pv1.line);
             validate_list.add(ltv);
         }
-        if(pv2.obj.equals("not_def")){
-            LateTypeValidation ltv = new LateTypeValidation((pv2.sval.split("[(]"))[0],"number",pv2.line);
+        if (pv2.obj.equals("not_def") && !t2.equals("TypedParserVal")) {
+            LateTypeValidation ltv = new LateTypeValidation((pv2.sval.split("[(]"))[0], "number", pv2.line);
             validate_list.add(ltv);
         }
 
     }
 
+    public void assertStringType(ParserVal pv) throws Exception {
+        if (debug) {
+            System.err.println("TypeTracker::assertStringType()::type1 " + pv.obj);
+        }
 
-    public void assertStringType(ParserVal pv) throws Exception{
-        if(debug)System.err.println("TypeTracker::assertStringType()::type1 " + pv.obj);
-
-        if(!pv.obj.equals("string") && !pv.obj.equals("not_def"))
-            throw new BreezyException (pv.line,
-                                        ExceptionType.TYPE.getName(),
-                                        "\""+pv.sval.toUpperCase() + "\" must be type STRING.  Found " +
-                                        pv.obj.toString().toUpperCase() +".");
+        if (!pv.obj.equals("string") && !pv.obj.equals("not_def")) {
+            throw new BreezyException(pv.line,
+                    ExceptionType.TYPE.getName(),
+                    "\"" + pv.sval.toUpperCase() + "\" must be type STRING.  Found " +
+                    pv.obj.toString().toUpperCase() + ".");
+        }
 
         /*If we don't throw a type error, make sure that variables are not "not_def
         and if they are, record this info so that we can check type later when
-         the programmer defines the function.*/
-        if(pv.obj.equals("not_def")){
-            LateTypeValidation ltv = new LateTypeValidation((pv.sval.split("[(]"))[0],"string",pv.line);
+        the programmer defines the function.*/
+        if (pv.obj.equals("not_def")) {
+            LateTypeValidation ltv = new LateTypeValidation((pv.sval.split("[(]"))[0], "string", pv.line);
             validate_list.add(ltv);
         }
 
     }
 
+    public void assertNumberType(ParserVal pv) throws Exception {
+        if (debug) {
+            System.err.println("TypeTracker::assertNumberType()::type1 " + pv.obj);
+        }
 
-    public void assertNumberType(ParserVal pv) throws Exception{
-        if(debug)System.err.println("TypeTracker::assertNumberType()::type1 " + pv.obj);
-
-        if(!pv.obj.equals("number") && !pv.obj.equals("not_def"))
-            throw new BreezyException (pv.line,
-                                        ExceptionType.TYPE.getName(),
-                                        "\""+pv.sval.toUpperCase() + "\" must be type NUMBER.  Found " +
-                                        pv.obj.toString().toUpperCase() +".");
+        if (!pv.obj.equals("number") && !pv.obj.equals("not_def")) {
+            throw new BreezyException(pv.line,
+                    ExceptionType.TYPE.getName(),
+                    "\"" + pv.sval.toUpperCase() + "\" must be type NUMBER.  Found " +
+                    pv.obj.toString().toUpperCase() + ".");
+        }
 
         /*If we don't throw a type error, make sure that variables are not "not_def
         and if they are, record this info so that we can check type later when
-         the programmer defines the function.*/
-        if(pv.obj.equals("not_def")){
-            LateTypeValidation ltv = new LateTypeValidation((pv.sval.split("[(]"))[0],"number",pv.line);
+        the programmer defines the function.*/
+        if (pv.obj.equals("not_def")) {
+            LateTypeValidation ltv = new LateTypeValidation((pv.sval.split("[(]"))[0], "number", pv.line);
             validate_list.add(ltv);
         }
 
     }
 
-
-    public void assertBoolType(ParserVal pv1, ParserVal pv2, ParserVal pvOP) throws Exception{
-        if(debug){
+    public void assertBoolType(ParserVal pv1, ParserVal pv2, ParserVal pvOP) throws Exception {
+        if (debug) {
             System.err.println("TypeTracker::assertNumberType()::type1 " + pv1.obj);
             System.err.println("TypeTracker::assertNumberType()::type2 " + pv2.obj);
             System.err.println("TypeTracker::assertNumberType()::op " + pvOP.sval);
         }
-        String t1 = (String)pv1.obj;
-        String t2 = (String)pv2.obj;
-        if((!t1.equals("boolean") && !t1.equals("not_def")) || (!t2.equals("boolean") && !t2.equals("not_def")))
-            throw new BreezyException (pv1.line,
-                                        ExceptionType.TYPE.getName(),
-                                        t1.toUpperCase() + " " + pvOP.sval + " " + t2.toUpperCase() + " is not a valid operation." +
-                                            ".\nConfirm that both variables are of the type BOOLEAN.");
+        String t1 = (String) pv1.obj;
+        String t2 = (String) pv2.obj;
+        if ((!t1.equals("boolean") && !t1.equals("not_def")) || (!t2.equals("boolean") && !t2.equals("not_def"))) {
+            throw new BreezyException(pv1.line,
+                    ExceptionType.TYPE.getName(),
+                    t1.toUpperCase() + " " + pvOP.sval + " " + t2.toUpperCase() + " is not a valid operation." +
+                    ".\nConfirm that both variables are of the type BOOLEAN.");
+        }
 
         /*If we don't throw a type error, make sure that variables are not "not_def
         and if they are, record this info so that we can check type later when
-         the programmer defines the function.*/
-        if(pv1.obj.equals("not_def")){
-            LateTypeValidation ltv = new LateTypeValidation((pv1.sval.split("[(]"))[0],"boolean",pv1.line);
+        the programmer defines the function.*/
+        if (pv1.obj.equals("not_def")) {
+            LateTypeValidation ltv = new LateTypeValidation((pv1.sval.split("[(]"))[0], "boolean", pv1.line);
             validate_list.add(ltv);
         }
-        if(pv2.obj.equals("not_def")){
-            LateTypeValidation ltv = new LateTypeValidation((pv2.sval.split("[(]"))[0],"boolean",pv2.line);
+        if (pv2.obj.equals("not_def")) {
+            LateTypeValidation ltv = new LateTypeValidation((pv2.sval.split("[(]"))[0], "boolean", pv2.line);
             validate_list.add(ltv);
         }
 
     }
 
+    public void assertBoolType(ParserVal pv) throws Exception {
+        if (debug) {
+            System.err.println("TypeTracker::assertBool()::type1 " + pv.obj);
+        }
 
-    public void assertBoolType(ParserVal pv) throws Exception{
-        if(debug)System.err.println("TypeTracker::assertBool()::type1 " + pv.obj);
-        
-        if(!pv.obj.equals("boolean") && !pv.obj.equals("not_def"))
-            throw new BreezyException (pv.line,
-                                        ExceptionType.TYPE.getName(),
-                                        "\""+pv.sval.toUpperCase() + "\" must be type BOOLEAN.  Found " +
-                                        pv.obj.toString().toUpperCase() +".");
+        if (!pv.obj.equals("boolean") && !pv.obj.equals("not_def")) {
+            throw new BreezyException(pv.line,
+                    ExceptionType.TYPE.getName(),
+                    "\"" + pv.sval.toUpperCase() + "\" must be type BOOLEAN.  Found " +
+                    pv.obj.toString().toUpperCase() + ".");
+        }
 
         /*If we don't throw a type error, make sure that variables are not "not_def
         and if they are, record this info so that we can check type later when
-         the programmer defines the function.*/
-        if(pv.obj.equals("not_def")){
-            LateTypeValidation ltv = new LateTypeValidation((pv.sval.split("[(]"))[0],"boolean",pv.line);
+        the programmer defines the function.*/
+        if (pv.obj.equals("not_def")) {
+            LateTypeValidation ltv = new LateTypeValidation((pv.sval.split("[(]"))[0], "boolean", pv.line);
             validate_list.add(ltv);
         }
 
     }
 
-    private void doLateTypeValidation(String id, String type) throws Exception{
+    private void doLateTypeValidation(String id, String type) throws Exception {
         String errorMsg = "";
         boolean throwError = false;
-        
+
         /*Loop through the LateValidation pairs to see if the id is in any of them.
         if it is then remove it and add the other in the pair to the single set with
         it's expected type*/
-        for(int i = 0; i < pair_list.size(); i++){
+        for (int i = 0; i < pair_list.size(); i++) {
             LateTypeValidationPair pair = pair_list.get(i);
             LateTypeValidation obj1 = pair.ltv1;
             LateTypeValidation obj2 = pair.ltv2;
 
-            if(obj1.name.equals(id)){
-                if(pair.canBeType(type)){
+            if (obj1.name.equals(id)) {
+                if (pair.canBeType(type)) {
                     obj2.expectedType = type;
                     validate_list.add(obj2);
                     pair_list.removeElementAt(i);
                     i--;
-                }
-                else{ //Error with type
-                    errorMsg.concat("Line " + obj2.line + ".  TYPE ERROR :: "  + obj2.name + " is the wrong type.\n");
+                } else { //Error with type
+                    errorMsg.concat("Line " + obj2.line + ".  TYPE ERROR :: " + obj2.name + " is the wrong type.\n");
                     pair_list.removeElementAt(i);
                     i--;
                     throwError = true;
                 }
-            }
-            else if(obj2.name.equals(id)){
-                if(pair.canBeType(type)){
+            } else if (obj2.name.equals(id)) {
+                if (pair.canBeType(type)) {
                     obj1.expectedType = type;
                     validate_list.add(obj1);
                     pair_list.removeElementAt(i);
                     i--;
-                }
-                else{ //Error with type
-                    errorMsg.concat("Line " + obj2.line + ".  TYPE ERROR :: "  + obj2.name + " is the wrong type.\n");
+                } else { //Error with type
+                    errorMsg.concat("Line " + obj2.line + ".  TYPE ERROR :: " + obj2.name + " is the wrong type.\n");
                     pair_list.removeElementAt(i);
                     i--;
                     throwError = true;
@@ -415,19 +440,18 @@ public class TypeTracker {
         }//end for
 
         /*Now loop through the singles and see if there are any type errors*/
-        for(int i = 0; i < validate_list.size(); i++){
+        for (int i = 0; i < validate_list.size(); i++) {
             LateTypeValidation obj = validate_list.get(i);
-            if(obj.name.equals(id)){
-                if(obj.expectedType.contains(type)){
+            if (obj.name.equals(id)) {
+                if (obj.expectedType.contains(type)) {
                     //No error here, just remove the item from the list
                     validate_list.removeElementAt(i);
                     i--;
-                }
-                else{
+                } else {
                     //Error.  Print message.
-                    errorMsg =errorMsg.concat( "Line " + obj.line + ".  TYPE ERROR :: "  +
+                    errorMsg = errorMsg.concat("Line " + obj.line + ".  TYPE ERROR :: " +
                             obj.name + " returns type " + type.toUpperCase() +
-                            " but should return type " + obj.expectedType.toUpperCase() +".\n");
+                            " but should return type " + obj.expectedType.toUpperCase() + ".\n");
                     validate_list.removeElementAt(i);
                     i--;
                     throwError = true;
@@ -436,34 +460,36 @@ public class TypeTracker {
 
         }//end for
 
-        if(throwError)
+        if (throwError) {
             throw new Exception(errorMsg);
+        }
     }
 
-    public void endOfProgramCheck() throws BreezyException{
-        if(!validate_list.isEmpty()){
+    public void endOfProgramCheck() throws BreezyException {
+        if (!validate_list.isEmpty()) {
             LateTypeValidation obj = validate_list.get(0);
             throw new BreezyException(obj.line,
-                                        ExceptionType.FUNCTION_NOT_DEFINED.getName(),
-                                        "Used the function " + obj.name + " without defining it.");
+                    ExceptionType.FUNCTION_NOT_DEFINED.getName(),
+                    "Used the function " + obj.name + " without defining it.");
         }
 
-        for(TypedParserVal pv : id_list){
-            if(pv.type.equals("not_def"))
+        for (TypedParserVal pv : id_list) {
+            if (pv.type.equals("not_def")) {
                 throw new BreezyException(pv.line,
-                                        ExceptionType.FUNCTION_NOT_DEFINED.getName(),
-                                        "Used the function " + pv.obj + " without defining it.");
+                        ExceptionType.FUNCTION_NOT_DEFINED.getName(),
+                        "Used the function " + pv.obj + " without defining it.");
+            }
         }
     }
 }
 
+class LateTypeValidation {
 
-class LateTypeValidation{
     protected String name;
     protected String expectedType;
     protected int line;
 
-    public LateTypeValidation(){
+    public LateTypeValidation() {
     }
 
     public LateTypeValidation(String name, String expectedType, int line) {
@@ -473,37 +499,38 @@ class LateTypeValidation{
     }
 }
 
-class LateTypeValidationPair{
+class LateTypeValidationPair {
+
     protected LateTypeValidation ltv1;
     protected LateTypeValidation ltv2;
-    
     /*These are flags.
-     TRUE means that the unknowns can be that type
-     FALSE means they can't.*/
+    TRUE means that the unknowns can be that type
+    FALSE means they can't.*/
     boolean canBeNumber = false;
     boolean canBeString = false;
     boolean canBeBoolean = false;
     boolean canBeArray = false;
     boolean canBeHash = false;
 
-    public LateTypeValidationPair(LateTypeValidation obj1, LateTypeValidation obj2){
+    public LateTypeValidationPair(LateTypeValidation obj1, LateTypeValidation obj2) {
         this.ltv1 = obj1;
         this.ltv2 = obj2;
     }
 
-    public boolean canBeType(String type){
-        if("string".equals(type))
+    public boolean canBeType(String type) {
+        if ("string".equals(type)) {
             return this.isCanBeString();
-        else if("number".equals(type))
+        } else if ("number".equals(type)) {
             return this.isCanBeNumber();
-        else if("boolean".equals(type))
+        } else if ("boolean".equals(type)) {
             return this.isCanBeBoolean();
-        else if("ArrayList".equals(type))
+        } else if ("ArrayList".equals(type)) {
             return this.isCanBeArray();
-        else if("HashMap".equals(type))
+        } else if ("HashMap".equals(type)) {
             return this.isCanBeHash();
-        else
+        } else {
             return false;
+        }
     }
 
     public boolean isCanBeArray() {
