@@ -24,7 +24,6 @@ import src.type.TypeTracker;
  */
 public class BreezyAssist {
 
-    private static ArrayList<String> errorList = new ArrayList<String>();
     private static boolean mainCreated = false;
 
     public TypeTracker typeTrack = new TypeTracker();
@@ -169,7 +168,7 @@ public class BreezyAssist {
     		Collection<TypedParserVal> parseParams = parseArrayParams(params);
 	    	for (final TypedParserVal value : parseParams) {
 	    		if (value.type.equals("Identifier"))
-	    			temp += name + ".add(" + value.obj + ");\n";
+	    			temp += name + ".add(" + value.convertToCode() + ");\n";
 	    		else
 	    			temp += name + ".add(" + value.convertToCode() + ");\n";
 	    	}
@@ -196,6 +195,8 @@ public class BreezyAssist {
     			for (final TypedParserVal param : parseArrayParams) {
     				returnValue += objectName + "." + methodName + "(" + param.convertToCode() + ");\n";
     			}
+    		} else if (methodName.equals("get")) {
+                        returnValue += objectName + ".get(" + parseArrayParams.get(0).convertToCode() + ");\n";
     		} else if (methodName.equals("remove")) {
     			for (final TypedParserVal param : parseArrayParams) {
     				returnValue += objectName + ".remove(" + param.convertToCode() + ");\n";

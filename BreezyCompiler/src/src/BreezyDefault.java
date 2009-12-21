@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.Hashtable;
+import libs.structs.TypedParserVal;
 
 /**
  * The BreezyDefault class contains all of the built in functions available in
@@ -178,6 +179,17 @@ public class BreezyDefault {
 	}
 
 	/**
+	 * Write a string of text to standard out. This method is used by the character, line, and all versions,
+	 * which would not have been created in the first place, had we thought it through before promising
+	 * them in the tutorial.
+	 *
+	 * @param text The text to write to stdout
+	 */
+	public void WriteToScreen(TypedParserVal text) {
+		System.out.print(text.obj.toString());
+	}
+
+	/**
 	 * Write a string of text to a file. This method is used by the character, line, and all verions, which
 	 * would not have been created in the first place, had we thought it through before promising them in
 	 * the tutorial
@@ -197,12 +209,40 @@ public class BreezyDefault {
 	}
 
 	/**
+	 * Write a string of text to a file. This method is used by the character, line, and all verions, which
+	 * would not have been created in the first place, had we thought it through before promising them in
+	 * the tutorial
+	 *
+	 * @param text The text to write to a file
+	 * @param filename The name of the file to write the text to
+	 */
+	public void WriteToFile(TypedParserVal text, String filename) {
+		PrintWriter pw = null;
+		try {
+			pw = new PrintWriter(new FileOutputStream(filename));
+		} catch (FileNotFoundException fnfe) {
+			// TODO: Error handling
+		}
+
+		pw.write(text.obj.toString());
+	}
+
+	/**
 	 * Write a single character to standard out.
 	 * @param text
 	 */
 	public void WriteCharacterToScreen(String text)
 	{
 		this.WriteToScreen(text.substring(0, 1));
+	}
+
+	/**
+	 * Write a single character to standard out.
+	 * @param text
+	 */
+	public void WriteCharacterToScreen(TypedParserVal text)
+	{
+		this.WriteToScreen(text.obj.toString().substring(0, 1));
 	}
 	
 	/**
@@ -214,12 +254,31 @@ public class BreezyDefault {
 		String[] lines = text.split("\n");
 		this.WriteToScreen(lines[0] + "\n");
 	}
+
+	/**
+	 * Write a line of text to standard out
+	 * @param text
+	 */
+	public void WriteLineToScreen(TypedParserVal text)
+	{
+		String[] lines = text.obj.toString().split("\n");
+		this.WriteToScreen(lines[0] + "\n");
+	}
 	
 	/**
 	 * Write some text to standard out
 	 * @param text
 	 */
 	public void WriteAllToScreen(String text)
+	{
+		this.WriteToScreen(text);
+	}
+
+	/**
+	 * Write some text to standard out
+	 * @param text
+	 */
+	public void WriteAllToScreen(TypedParserVal text)
 	{
 		this.WriteToScreen(text);
 	}
@@ -233,6 +292,16 @@ public class BreezyDefault {
 	{
 		this.WriteToFile(text.substring(0, 1), filename);
 	}
+
+	/**
+	 * Write a single character to a file
+	 * @param text
+	 * @param filename
+	 */
+	public void WriteCharacterToFile(TypedParserVal text, String filename)
+	{
+		this.WriteToFile(text.obj.toString().substring(0, 1), filename);
+	}
 	
 	/**
 	 * Write a line of text to a file
@@ -244,6 +313,17 @@ public class BreezyDefault {
 		String[] lines = text.split("\n");
 		this.WriteToFile(lines[0] + "\n", filename);
 	}
+
+	/**
+	 * Write a line of text to a file
+	 * @param text
+	 * @param filename
+	 */
+	public void WriteLineToFile(TypedParserVal text, String filename)
+	{
+		String[] lines = text.obj.toString().split("\n");
+		this.WriteToFile(lines[0] + "\n", filename);
+	}
 	
 	/**
 	 * Write some text to a file
@@ -251,6 +331,16 @@ public class BreezyDefault {
 	 * @param filename
 	 */
 	public void WriteAllToFile(String text, String filename)
+	{
+		this.WriteToFile(text, filename);
+	}
+
+	/**
+	 * Write some text to a file
+	 * @param text
+	 * @param filename
+	 */
+	public void WriteAllToFile(TypedParserVal text, String filename)
 	{
 		this.WriteToFile(text, filename);
 	}
