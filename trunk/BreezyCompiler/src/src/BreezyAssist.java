@@ -87,7 +87,7 @@ public class BreezyAssist {
         
         if(id.equals("main")){
             if(!mainCreated){
-                return createMain(retType.sval,params,body);
+                return createMain(retType,params,body);
             }
             else{
                 throw new BreezyException(line,ExceptionType.DUPLICATE_MAIN.getName(),"You must have exactly one function named \"main\".");
@@ -100,9 +100,9 @@ public class BreezyAssist {
         return retFunction;
     }
 
-    private String createMain(String retType, String params, String body){
+    private String createMain(ParserVal retType, String params, String body)throws BreezyException{
         String systemMain = "";
-        String userMain = "public " + retType + " main(" + params + ")" + "{\n" + body + "}";
+        String userMain = "public " + retType.sval + " main(" + params + ")" + "{\n" + body + "}";
 
         if(params.equals("")){
             systemMain = "public static void main(String[] args){BreezyProg b = new BreezyProg(); b.main();}\n\n";
@@ -118,7 +118,9 @@ public class BreezyAssist {
                 systemMain = systemMain.concat("Double.parseDouble(args[0])");
             }
             else //error
-                System.out.println("Error:  Accepts parameters in main function");
+                throw new BreezyException(retType.line+1,
+                                            ExceptionType.INVALID_MAIN_PARAMS.getName(),
+                                            "The main function can only accept STRING type and NUMBER type parameters.");
             for(int i = 1; i< (paramList.length)/2; i++){
                 if(paramList[i*2].equals("String")){
                     systemMain = systemMain.concat(",args["+i+"]");
@@ -126,9 +128,10 @@ public class BreezyAssist {
                 else if(paramList[i*2].equals("double")){
                     systemMain = systemMain.concat(",Double.parseDouble(args["+i+"])");
                 }
-                else //error
-                    //TODO;
-                    System.out.println("Error:  Accepts parameters in main function");
+                else
+                    throw new BreezyException(retType.line+1,
+                                        ExceptionType.INVALID_MAIN_PARAMS.getName(),
+                                        "The main function can only accept STRING type and NUMBER type parameters.");
             }
             systemMain = systemMain.concat(");}\n");
         }
