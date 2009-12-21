@@ -71,6 +71,7 @@ in				{p("IN");	return yyparser.IN;}
 nothing				{p("NOTHING");	return yyparser.NOTHING;}
 number				{p("NUMBER");	return yyparser.NUMBER;}
 return				{p("RETURN");	return yyparser.RETURN;}
+print				{p("PRINT");	return yyparser.PRINT;}
 {LineTerminator}returns		{p("RETURNS");	return yyparser.RETURNS;}
 string				{p("STRING");	return yyparser.STRING;}
 true				{p("TRUE");	yyparser.yylval = new ParserVal("true",yyline+1,yycolumn); yyparser.yylval.obj="boolean"; return yyparser.TRUE;}

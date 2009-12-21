@@ -250,4 +250,8 @@ public class BreezyAssist {
     	}
     	return hashMap;
     }
+    
+    public String createPrintCommand(final String identifier) {
+    	return "System.out.println(" + identifier + ".toString());\n";
+    }
 }

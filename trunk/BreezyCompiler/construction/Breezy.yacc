@@ -21,6 +21,7 @@ import libs.structs.Scope;
 %left MUL DIV
 %token LEFT_SQUARE_PAREN RIGHT_SQUARE_PAREN
 %token LPAREN RPAREN COLON SEMICOLON COMMA DOT
+%token PRINT
 
 %%
 
@@ -154,6 +155,7 @@ return_statement	:	RETURN exp 		{$$.sval = "return " + $2.sval;}
 function_call	:	IDENTIFIER LPAREN params RPAREN {$$.sval = $1.sval + "(" + $3.sval + ")";
                                                             $$.obj = ba.typeTrack.getType($1, Scope.GLOBAL.getName());
                                                             $$.line = $1.line;}
+				|	PRINT IDENTIFIER {$$.sval = ba.createPrintCommand($2.sval);}
                         ;
 
 
@@ -302,8 +304,7 @@ rel_op          :       REL_OP_LT		{$$.sval = "<";}
                 |       LOG_OP_EQUAL		{$$.sval = "==";}
                 |       LOG_OP_NOT LOG_OP_EQUAL	{$$.sval = "!=";}
                 ;
-
-
+                
 %%
 
 void yyerror(String s, int i){
