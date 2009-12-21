@@ -148,7 +148,10 @@ public class BreezyAssist {
     }
     
     public String createComplexType(String type, String name) {
-    	return type + " " + name + " = new " + type + "();\n";
+        if(type.equals("ArrayList"))
+            return type + "<TypedParserVal> " + name + " = new " + type + "<TypedParserVal>();";
+        else //hashmap
+            return type + "<TypedParserVal,TypedParserVal> " + name + " = new " + type + "<TypedParserVal,TypedParserVal>();";
     }
     
     public String createComplexType(String type, String name, String params, int line, String scope) throws Exception{
@@ -156,7 +159,11 @@ public class BreezyAssist {
         //Add id to type checker
         this.typeTrack.addID(name, type, line, scope);
 
-    	String temp = type + " " + name + " = new " + type + "();\n";
+    	String temp = "";
+        if(type.equals("ArrayList"))
+            temp = type + "<TypedParserVal> " + name + " = new " + type + "<TypedParserVal>();";
+        else //hashmap
+            temp = type + "<TypedParserVal,TypedParserVal> " + name + " = new " + type + "<TypedParserVal,TypedParserVal>();";
     	
     	if (type.equals("ArrayList")) {
     		Collection<TypedParserVal> parseParams = parseArrayParams(params);
