@@ -41,7 +41,7 @@ method	: 	COMMENT
     		ACCEPTS aparams
     		BEGIN
                 body
-            END IDENTIFIER	{ $$.sval = ba.createFunction($3.sval,$5,$7.sval,$9.sval,$11,$3.line,Scope.GLOBAL.getName()); }
+                END IDENTIFIER	{ $$.sval = ba.createFunction($3.sval,$5,$7.sval,$9.sval,$11,$3.line,Scope.GLOBAL.getName()); }
 		;
 
 
@@ -98,6 +98,8 @@ statement	:       COMMENT                                     {$$.sval = "";}
                 |	if_statement                                {$$.sval = $1.sval;}
                 |       while_loop                                  {$$.sval = $1.sval;}
                 |       for_loop                                    {$$.sval = $1.sval;}
+                |       IDENTIFIER EQUALS complex_type_method_invocation SEMICOLON {$1.obj = ba.typeTrack.getType($1,Scope.LOCAL.getName());
+                                                                                    $$.sval = $1.sval + "=" + $3.sval + ";\n" ;}
                 |	IDENTIFIER EQUALS exp SEMICOLON             {$1.obj = ba.typeTrack.getType($1,Scope.LOCAL.getName());
                                                                         ba.typeTrack.assertSameType($1,$3,$2);
                                                                         $$.sval = $1.sval + "=" + $3.sval + ";\n" ;}
