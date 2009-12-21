@@ -37,8 +37,7 @@ if errorlevel 1 goto :nocompile
 
 REM Get command line arguments
 @echo.
-set /p args= Enter Arguments: 
-@echo %args%
+set /p args= Please Enter Arguments: 
 
 @echo on
 @echo.
