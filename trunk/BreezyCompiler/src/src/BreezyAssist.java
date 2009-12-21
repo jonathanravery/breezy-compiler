@@ -62,7 +62,7 @@ public class BreezyAssist {
             Logger.getLogger(BreezyAssist.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        System.out.println("*****\nCongratulations!  You've compiled!\n*****");
+        System.out.println("_____\n*****\nCongratulations!  You've compiled!\n*****");
     }
 
     public String createFunction(String id, ParserVal retType, String params, String body, ParserVal id2,int line,String scope)throws Exception{
