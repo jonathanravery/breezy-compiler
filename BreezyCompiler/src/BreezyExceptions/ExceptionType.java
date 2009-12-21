@@ -17,6 +17,7 @@ public enum ExceptionType {
         DUPLICATE_ID("duplicate variable name"),
         VARIABLE_MISSING("identifier not found"),
         SYNTAX("syntax error"),
+        INVALID_MAIN_PARAMS("invalid parameter/s"),
         FUNCTION_NOT_DEFINED("function not defined"),
         NO_MAIN("no main");
 
