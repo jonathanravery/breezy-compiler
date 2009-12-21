@@ -22,6 +22,7 @@ if exist BreezyProg.java xcopy BreezyProg.java %BREEZY_HOME%\dist\ /Q /Y > %BREE
 if not exist %BREEZY_HOME%\dist\BreezyProg.java goto :cleanup
 
 
+
 @echo on
 @echo.
 @echo _____
@@ -40,6 +41,7 @@ if errorlevel 1 goto :nocompile
 @echo *****
 @echo Launching Your Program
 @echo ****
+@echo.
 @echo off
 java -cp %BREEZY_HOME%\dist BreezyProg
 
@@ -73,7 +75,7 @@ REM interfere with the next build
 If exist %BREEZY_HOME%\dist\BreezyProg.java  del %BREEZY_HOME%\dist\BreezyProg.java  > %Breezy_Home%\log.txt
 If exist %BREEZY_HOME%\dist\BreezyProg.class del %BREEZY_HOME%\dist\BreezyProg.class > %Breezy_Home%\log.txt
 IF exist oldBreezyProg.java                  del oldBreezyProg.java                  > %Breezy_Home%\log.txt
-IF exist BreezyProg.java                     ren BreezyProg.java oldBreezyProg.java
+IF exist BreezyProg.java                     ren BreezyProg.java oldBreezyProg.java  > %Breezy_Home%\log.txt
 @echo.
 
 
