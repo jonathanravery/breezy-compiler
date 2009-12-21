@@ -3,7 +3,7 @@ package libs.structs;
 import src.ParserVal;
 
 public class TypedParserVal extends ParserVal {
-	
+
 	public TypedParserVal(Object value, String type) {
 		super.obj = value;
 		this.type = type;
@@ -51,5 +51,10 @@ public class TypedParserVal extends ParserVal {
 		} else if (!type.equals(other.type))
 			return false;
 		return true;
+	}
+	
+	@Override
+	public String toString() {
+		return obj.toString();
 	}
 }
