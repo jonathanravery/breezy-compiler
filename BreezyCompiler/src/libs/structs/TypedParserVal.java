@@ -1,9 +1,35 @@
 package libs.structs;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import src.ParserVal;
 
 public class TypedParserVal extends ParserVal {
 
+        public TypedParserVal(HashMap value){
+            super.obj = value;
+        }
+
+        public TypedParserVal(ArrayList<TypedParserVal> value){
+            super.obj = value;
+        }
+
+        public TypedParserVal(String value){
+            super.obj = value;
+        }
+
+        public TypedParserVal(double value){
+            super.obj = value;
+        }
+
+        public TypedParserVal(boolean value){
+            super.obj = value;
+        }
+
+        public TypedParserVal(Object value){
+            super.obj = value;
+        }
+        
 	public TypedParserVal(Object value, String type) {
 		super.obj = value;
 		this.type = type;
@@ -19,7 +45,7 @@ public class TypedParserVal extends ParserVal {
         public String scope;
 	
 	public String convertToCode() {
-		return "new TypedParserVal<" + type + ">(" + obj.toString() + ")";
+		return "new TypedParserVal(" + obj.toString() + ")";
 	}
 	
 	@Override
