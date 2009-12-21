@@ -196,7 +196,7 @@ public class BreezyAssist {
     				returnValue += objectName + "." + methodName + "(" + param.convertToCode() + ");\n";
     			}
     		} else if (methodName.equals("get")) {
-                        returnValue += objectName + ".get(" + parseArrayParams.get(0).convertToCode() + ");\n";
+                        returnValue += objectName + ".get(" + Integer.parseInt(parseArrayParams.get(0).obj.toString()) + ");\n";
     		} else if (methodName.equals("remove")) {
     			for (final TypedParserVal param : parseArrayParams) {
     				returnValue += objectName + ".remove(" + param.convertToCode() + ");\n";
