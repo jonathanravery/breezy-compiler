@@ -156,6 +156,7 @@ function_call	:	IDENTIFIER LPAREN params RPAREN {$$.sval = $1.sval + "(" + $3.sv
                                                             $$.obj = ba.typeTrack.getType($1, Scope.GLOBAL.getName());
                                                             $$.line = $1.line;}
 				|	PRINT IDENTIFIER {$$.sval = ba.createPrintCommand($2.sval);}
+				|	PRINT complex_type_method_invocation	{$$.sval = "System.out.println(" + $2.sval.substring(0, $2.sval.length()-3) + ");\n";}
                         ;
 
 
@@ -165,6 +166,7 @@ complex_type_method_invocation
                                                                         $$.obj = "void";}
 		|	IDENTIFIER DOT IDENTIFIER LPAREN RPAREN {$$.sval = ba.createComplexTypeMethodInvocation($1.sval, $3.sval, Scope.LOCAL.getName(), null);
                                                                         $$.obj = "void";}
+		|	IDENTIFIER LEFT_SQUARE_PAREN NUMERIC RIGHT_SQUARE_PAREN		{$$.sval = ba.createIndexAccess($1.sval, $3.ival);}                                                                        
 		;
 
 
