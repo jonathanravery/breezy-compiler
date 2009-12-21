@@ -41,10 +41,11 @@ public class BreezyAssist {
     public void DumpFile(String s, String fileName)throws Exception{
         if(!mainCreated)
             throw new BreezyException(0,ExceptionType.NO_MAIN.getName(),"Must have exactly one function named \"main\".");
-        if(errors){
-        	
+        if(errors)
             throw new Exception("Total syntax erros: " +caught_syntax_erros.size());
-        } 	
+
+        typeTrack.endOfProgramCheck();
+
         try {
             File f = new File(fileName + ".java");
             f.createNewFile();

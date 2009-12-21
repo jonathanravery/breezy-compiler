@@ -17,6 +17,7 @@ public enum ExceptionType {
         DUPLICATE_ID("duplicate variable name"),
         VARIABLE_MISSING("identifier not found"),
         SYNTAX("syntax error"),
+        FUNCTION_NOT_DEFINED("function not defined"),
         NO_MAIN("no main");
 
         private final String name;

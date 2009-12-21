@@ -76,6 +76,7 @@ public class TypeTracker {
 
         //Add it to the list
         TypedParserVal temp = new TypedParserVal(id, type, scope);
+        temp.line = line;
         id_list.add(temp);
     }
 
@@ -437,6 +438,22 @@ public class TypeTracker {
 
         if(throwError)
             throw new Exception(errorMsg);
+    }
+
+    public void endOfProgramCheck() throws BreezyException{
+        if(!validate_list.isEmpty()){
+            LateTypeValidation obj = validate_list.get(0);
+            throw new BreezyException(obj.line,
+                                        ExceptionType.FUNCTION_NOT_DEFINED.getName(),
+                                        "Used the function " + obj.name + " without defining it.");
+        }
+
+        for(TypedParserVal pv : id_list){
+            if(pv.type.equals("not_def"))
+                throw new BreezyException(pv.line,
+                                        ExceptionType.FUNCTION_NOT_DEFINED.getName(),
+                                        "Used the function " + pv.obj + " without defining it.");
+        }
     }
 }
 
