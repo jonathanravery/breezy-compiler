@@ -35,6 +35,11 @@ if errorlevel 1 goto :nocompile
 
 
 
+REM Get command line arguments
+@echo.
+set /p args= Enter Arguments: 
+@echo %args%
+
 @echo on
 @echo.
 @echo _____
@@ -43,7 +48,7 @@ if errorlevel 1 goto :nocompile
 @echo ****
 @echo.
 @echo off
-java -cp %BREEZY_HOME%\dist BreezyProg
+java -cp %BREEZY_HOME%\dist BreezyProg %args%
 
 
 
