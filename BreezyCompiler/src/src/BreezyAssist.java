@@ -254,4 +254,8 @@ public class BreezyAssist {
     public String createPrintCommand(final String identifier) {
     	return "System.out.println(" + identifier + ".toString());\n";
     }
+    
+    public String createIndexAccess(final String identifier, final int index) {
+    	return identifier + ".getItemAt(" + index + ");\n";
+    }
 }
